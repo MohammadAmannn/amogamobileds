@@ -30,7 +30,6 @@ export function ComponentPreviewModal({
   const mutedColor = useColor('mutedForeground');
   const cardColor = useColor('card');
   const borderColor = useColor('border');
-  const primaryColor = useColor('primary');
 
   if (!component) return null;
 

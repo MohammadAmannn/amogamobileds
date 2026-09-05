@@ -14,7 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { useToast } from '@/components/ui/toast';
-import { Mail, Lock, Heart, Check, Sparkles, AlertCircle, Search, User } from 'lucide-react-native';
+import { Mail, Lock, Sparkles } from 'lucide-react-native';
 
 export type ComponentCategory = 'Primitives' | 'Inputs' | 'Feedback' | 'Layout' | 'Display';
 
@@ -26,6 +26,7 @@ export interface ComponentItem {
   tag: string;
   description: string;
   Preview: React.ComponentType;
+  codeSnippet?: string;
 }
 
 // 1. Button Preview
@@ -334,7 +335,9 @@ function TypographyPreview() {
         <Text variant="subtitle">Subtitle Section (18px)</Text>
         <Text variant="body">Body standard text for paragraphs and reading experience.</Text>
         <Text variant="caption">Caption small notes and secondary descriptions.</Text>
-        <Text variant="caption" style={{ fontFamily: 'monospace' }}>const amoga = "Design System";</Text>
+        <Text variant="caption" style={{ fontFamily: 'monospace' }}>
+          {'const amoga = "Design System";'}
+        </Text>
       </Card>
     </View>
   );
@@ -378,6 +381,19 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'BUTTON',
     description: 'Trigger actions with multiple variants (default, secondary, outline, ghost, destructive) and sizes.',
     Preview: ButtonPreview,
+    codeSnippet: `import { Button } from '@/components/ui/button';
+
+export function Example() {
+  return (
+    <Button 
+      variant="default" 
+      size="default" 
+      onPress={() => console.log('Pressed')}
+    >
+      Primary Button
+    </Button>
+  );
+}`,
   },
   {
     id: 'input',
@@ -387,6 +403,17 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'INPUT',
     description: 'Text inputs with labels, helper text, error validations, icons, and password toggles.',
     Preview: InputPreview,
+    codeSnippet: `import { Input } from '@/components/ui/input';
+
+export function Example() {
+  return (
+    <Input
+      label="Email Address"
+      placeholder="you@company.com"
+      helper="We never share your personal information."
+    />
+  );
+}`,
   },
   {
     id: 'badge',
@@ -396,6 +423,15 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'BADGE',
     description: 'Visual status indicator tags with multiple tone variants (default, secondary, destructive, success).',
     Preview: BadgePreview,
+    codeSnippet: `import { Badge } from '@/components/ui/badge';
+
+export function Example() {
+  return (
+    <Badge variant="success">
+      Active
+    </Badge>
+  );
+}`,
   },
   {
     id: 'avatar',
@@ -405,6 +441,16 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'AVATAR',
     description: 'User avatar images with automatic initial fallbacks and responsive sizing.',
     Preview: AvatarPreview,
+    codeSnippet: `import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+
+export function Example() {
+  return (
+    <Avatar size={48}>
+      <AvatarImage source={{ uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb' }} />
+      <AvatarFallback>JD</AvatarFallback>
+    </Avatar>
+  );
+}`,
   },
   {
     id: 'card',
@@ -414,6 +460,17 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'CARD',
     description: 'Surface cards providing elevation, border rounding, and structured layout grouping.',
     Preview: CardPreview,
+    codeSnippet: `import { Card } from '@/components/ui/card';
+import { Text } from '@/components/ui/text';
+
+export function Example() {
+  return (
+    <Card style={{ padding: 16 }}>
+      <Text variant="title">Card Title</Text>
+      <Text variant="body">Card content with clean elevation.</Text>
+    </Card>
+  );
+}`,
   },
   {
     id: 'checkbox',
@@ -423,6 +480,18 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'CHECKBOX',
     description: 'Toggleable multi-state checkboxes with animated checks and label integration.',
     Preview: CheckboxPreview,
+    codeSnippet: `import { Checkbox } from '@/components/ui/checkbox';
+
+export function Example() {
+  const [checked, setChecked] = useState(false);
+  return (
+    <Checkbox
+      checked={checked}
+      onCheckedChange={setChecked}
+      label="Accept terms and conditions"
+    />
+  );
+}`,
   },
   {
     id: 'switch',
@@ -432,6 +501,18 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'SWITCH',
     description: 'Fluid sliding toggle switches for binary preferences and settings.',
     Preview: SwitchPreview,
+    codeSnippet: `import { Switch } from '@/components/ui/switch';
+
+export function Example() {
+  const [enabled, setEnabled] = useState(true);
+  return (
+    <Switch
+      value={enabled}
+      onValueChange={setEnabled}
+      label="Enable Notifications"
+    />
+  );
+}`,
   },
   {
     id: 'input-otp',
@@ -441,6 +522,18 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'OTP INPUT',
     description: 'Segmented pin code inputs for 2FA, phone verification, and security verification.',
     Preview: InputOTPPreview,
+    codeSnippet: `import { InputOTP } from '@/components/ui/input-otp';
+
+export function Example() {
+  const [otp, setOtp] = useState('');
+  return (
+    <InputOTP
+      length={6}
+      value={otp}
+      onChangeText={setOtp}
+    />
+  );
+}`,
   },
   {
     id: 'toast',
@@ -450,6 +543,17 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'TOAST',
     description: 'Global floating notification banners for successes, errors, and announcements.',
     Preview: ToastPreview,
+    codeSnippet: `import { useToast } from '@/components/ui/toast';
+import { Button } from '@/components/ui/button';
+
+export function Example() {
+  const toast = useToast();
+  return (
+    <Button onPress={() => toast.success('Saved', 'Your changes have been saved.')}>
+      Show Toast
+    </Button>
+  );
+}`,
   },
   {
     id: 'spinner',
@@ -459,6 +563,11 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'SPINNER',
     description: 'Hardware-accelerated spinning indicators for asynchronous operations and loading states.',
     Preview: SpinnerPreview,
+    codeSnippet: `import { Spinner } from '@/components/ui/spinner';
+
+export function Example() {
+  return <Spinner size="default" variant="default" />;
+}`,
   },
   {
     id: 'skeleton',
@@ -468,6 +577,11 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'SKELETON',
     description: 'Animated placeholder shapes to represent content while data is fetching.',
     Preview: SkeletonPreview,
+    codeSnippet: `import { Skeleton } from '@/components/ui/skeleton';
+
+export function Example() {
+  return <Skeleton style={{ width: '100%', height: 48, borderRadius: 8 }} />;
+}`,
   },
   {
     id: 'text',
@@ -477,6 +591,16 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'TEXT',
     description: 'Curated hierarchy of font sizes, weights, line heights, and typography tokens.',
     Preview: TypographyPreview,
+    codeSnippet: `import { Text } from '@/components/ui/text';
+
+export function Example() {
+  return (
+    <>
+      <Text variant="title">Heading Title</Text>
+      <Text variant="body">Standard body text.</Text>
+    </>
+  );
+}`,
   },
   {
     id: 'separator',
@@ -486,6 +610,11 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'SEPARATOR',
     description: 'Subtle divider lines to delineate sections and content blocks.',
     Preview: SeparatorPreview,
+    codeSnippet: `import { Separator } from '@/components/ui/separator';
+
+export function Example() {
+  return <Separator style={{ marginVertical: 16 }} />;
+}`,
   },
   {
     id: 'mode-toggle',
@@ -495,6 +624,11 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'THEME',
     description: 'Quick switcher between light, dark, and system theme palettes.',
     Preview: ModeTogglePreview,
+    codeSnippet: `import { ModeToggle } from '@/components/ui/mode-toggle';
+
+export function Example() {
+  return <ModeToggle />;
+}`,
   },
 ];
 

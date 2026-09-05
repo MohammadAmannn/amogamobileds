@@ -10,7 +10,6 @@ import {
   useWindowDimensions
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useColor } from '@/hooks/useColor';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import {
   Search,
@@ -22,7 +21,6 @@ import {
   AlertCircle,
   Columns,
   Eye,
-  SlidersHorizontal,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -339,7 +337,7 @@ export default function DesignSystemScreen() {
                 No components found
               </Text>
               <Text style={[styles.emptySub, { color: mutedText }]}>
-                No results matching "{searchQuery}"
+                {`No results matching "${searchQuery}"`}
               </Text>
             </View>
           )}
