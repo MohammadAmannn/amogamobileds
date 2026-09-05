@@ -7,6 +7,7 @@ import {
   Platform,
   View,
   Text,
+  useWindowDimensions
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColor } from '@/hooks/useColor';
@@ -47,6 +48,8 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
 
 export default function DesignSystemScreen() {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
   const theme = useColorScheme();
   const isDark = theme === 'dark';
 
@@ -265,7 +268,16 @@ export default function DesignSystemScreen() {
         </View>
 
         {/* 4. Component Cards List (Compact, Clean, Exact Match to Screenshot 1) */}
-        <View style={styles.cardsContainer}>
+        <View
+          style={[
+            styles.cardsContainer,
+            isDesktop && {
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+            },
+          ]}
+        >
           {filteredComponents.map((comp: ComponentItem, index: number) => {
             const badge = getBadgeColors(comp.tag);
             const isFirst = index === 0 && !searchQuery && selectedCategory === 'All';
@@ -278,6 +290,7 @@ export default function DesignSystemScreen() {
                   {
                     backgroundColor: cardBg,
                     borderColor: cardBorder,
+                    width: isDesktop ? '49.2%' : '100%',
                   },
                   isFirst && styles.activeCardAccent,
                 ]}
@@ -356,6 +369,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingBottom: 10,
+    width: '100%',
+    ...Platform.select({
+      web: {
+        maxWidth: 860,
+        alignSelf: 'center',
+      },
+    }),
   },
   headerLeft: {
     flexDirection: 'row',
@@ -394,6 +414,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 16,
     paddingBottom: 40,
+    width: '100%',
+    ...Platform.select({
+      web: {
+        maxWidth: 860,
+        alignSelf: 'center',
+      },
+    }),
   },
   searchContainer: {
     paddingVertical: 10,

@@ -105,6 +105,19 @@ export function ComponentPreviewModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    ...Platform.select({
+      web: {
+        maxWidth: 640,
+        maxHeight: '88%',
+        marginHorizontal: 'auto',
+        marginTop: '3%',
+        borderRadius: 16,
+        borderWidth: 1,
+        borderColor: '#E2E8F0',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.18)',
+        overflow: 'hidden',
+      },
+    }),
   },
   header: {
     paddingHorizontal: 20,
