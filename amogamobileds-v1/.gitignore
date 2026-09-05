@@ -1,14 +1,12 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
 # dependencies
 node_modules/
-**/node_modules/
 
 # Expo
 .expo/
-**/.expo/
 dist/
-**/dist/
 web-build/
-**/web-build/
 expo-env.d.ts
 
 # Native
@@ -20,27 +18,31 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
+# Metro
+.metro-health-check*
+
 # debug
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# OS
+# macOS
 .DS_Store
-Thumbs.db
 *.pem
 
-# local env files (NEVER commit secrets)
+# local env files
 .env*.local
-**/.env*.local
 
 # typescript
 *.tsbuildinfo
+
+app-example
 
 # generated native folders
 /ios
 /android
 
 # Supabase CLI
+# `link` writes your project ref and a temp database URL here.
 supabase/.temp/
 supabase/.branches/
