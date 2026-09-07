@@ -18,6 +18,12 @@ import {
   ChatEmptyState,
   ContactManager,
   GroupManager,
+  ChatActionMenu,
+  ChatIconBar,
+  FileUploadProgress,
+  UploadedFileCard,
+  ChatAttachmentMenu,
+  ChatLocationCard,
 } from '@/components/chat'
 import { useTheme } from '@/providers/theme-provider'
 
@@ -447,6 +453,89 @@ export function ChatPreviews({ entry }: ChatPreviewsProps) {
         />
       </ScrollView>
     )
+  }
+
+  // ──────────────────────── 11. 3-DOT ACTION MENU ────────────────────────
+  if (entryId === 'chat-action-menu' || entryId === 'three-dot-menu') {
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ gap: 16, alignItems: 'center' }}>
+          <ChatActionMenu onSelect={() => {}} />
+        </View>
+      </View>
+    );
+  }
+
+  // ──────────────────────── 12. CHAT ICON BAR ────────────────────────
+  if (entryId === 'chat-icon-bar' || entryId === 'message-action-bar') {
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ alignItems: 'center' }}>
+          <ChatIconBar initialLiked={false} />
+        </View>
+      </View>
+    );
+  }
+
+  // ──────────────────────── 13. FILE UPLOAD WITH PROGRESS BAR ────────────────────────
+  if (entryId === 'file-upload-progress') {
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ width: '100%', maxWidth: 380, alignItems: 'center' }}>
+          <FileUploadProgress
+            fileName="quarterly_financial_report.pdf"
+            fileSize="3.6 MB"
+            fileType="PDF"
+            initialProgress={68}
+            status="uploading"
+          />
+        </View>
+      </View>
+    );
+  }
+
+  // ──────────────────────── 14. UPLOADED FILE CARD ────────────────────────
+  if (entryId === 'uploaded-file-card' || entryId === 'chat-file-card') {
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ width: '100%', maxWidth: 380, alignItems: 'center' }}>
+          <UploadedFileCard
+            fileName="bank-full.csv"
+            fileSize="3.6 MB"
+            fileType="CSV"
+            extension="csv"
+          />
+        </View>
+      </View>
+    );
+  }
+
+  // ──────────────────────── 15. ATTACHMENT MENU ────────────────────────
+  if (entryId === 'chat-attachment-menu' || entryId === 'attachment-menu') {
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ alignItems: 'center' }}>
+          <ChatAttachmentMenu selectedId="location" />
+        </View>
+      </View>
+    );
+  }
+
+  // ──────────────────────── 16. LOCATION SHARING CARD ────────────────────────
+  if (entryId === 'chat-location-card' || entryId === 'location-sharing-card') {
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ width: '100%', maxWidth: 380, alignItems: 'center' }}>
+          <ChatLocationCard
+            title="Amoga Tech Hub"
+            address="Building 10, Cyber City, Gurugram, India"
+            latitude={28.4595}
+            longitude={77.0266}
+            isLive={true}
+          />
+        </View>
+      </View>
+    );
   }
 
   return null

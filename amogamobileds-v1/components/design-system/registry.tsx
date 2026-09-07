@@ -2571,6 +2571,115 @@ export function Example() {
   return <GroupManager groups={[{ id: 'g1', name: 'Design Team', membersCount: 4, isEnabled: true }]} />;
 }`,
   },
+  {
+    id: 'chat-action-menu',
+    name: '3-Dot Message Action Menu',
+    file: 'chat-action-menu.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Interactive dropdown context menu for chat messages featuring Reply, Forward, Pin Message, Star, Favorite, Archive, Action This, and Delete.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-action-menu' }} />,
+    codeSnippet: `import { ChatActionMenu } from '@/components/chat';
+
+export function Example() {
+  return <ChatActionMenu onSelect={(actionId) => console.log(actionId)} />;
+}`,
+  },
+  {
+    id: 'chat-icon-bar',
+    name: 'Chat Icon Bar (Action Pill)',
+    file: 'chat-icon-bar.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Floating pill action bar for message feedback and reactions featuring Thumbs Up, Thumbs Down, Copy, Share, and More options.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-icon-bar' }} />,
+    codeSnippet: `import { ChatIconBar } from '@/components/chat';
+
+export function Example() {
+  return <ChatIconBar onThumbUp={() => {}} onCopy={() => {}} />;
+}`,
+  },
+  {
+    id: 'file-upload-progress',
+    name: 'File Upload with Progress Bar',
+    file: 'file-upload-progress.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Dynamic file upload progress indicator card supporting upload states (Uploading, Paused, Completed, Error), smooth percentage bar, and pause/cancel/retry controls.',
+    Preview: () => <ChatPreviews entry={{ id: 'file-upload-progress' }} />,
+    codeSnippet: `import { FileUploadProgress } from '@/components/chat';
+
+export function Example() {
+  return (
+    <FileUploadProgress
+      fileName="quarterly_financial_report.pdf"
+      fileSize="3.6 MB"
+      fileType="PDF"
+      initialProgress={68}
+      status="uploading"
+    />
+  );
+}`,
+  },
+  {
+    id: 'uploaded-file-card',
+    name: 'Uploaded File Card',
+    file: 'uploaded-file-card.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Compact attachment card displaying file type icon badge, document name, file size/extension metadata, and direct View/Preview and Download actions.',
+    Preview: () => <ChatPreviews entry={{ id: 'uploaded-file-card' }} />,
+    codeSnippet: `import { UploadedFileCard } from '@/components/chat';
+
+export function Example() {
+  return (
+    <UploadedFileCard
+      fileName="bank-full.csv"
+      fileSize="3.6 MB"
+      fileType="CSV"
+      extension="csv"
+      onPreview={() => {}}
+      onDownload={() => {}}
+    />
+  );
+}`,
+  },
+  {
+    id: 'chat-attachment-menu',
+    name: 'Chat Attachment Menu',
+    file: 'chat-attachment-menu.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Interactive popup attachment menu featuring Images, Videos, Documents, Location, Image Converter, Doc Converter, Doc Scanner, Scan Document, and Extract Text.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-attachment-menu' }} />,
+    codeSnippet: `import { ChatAttachmentMenu } from '@/components/chat';
+
+export function Example() {
+  return <ChatAttachmentMenu onSelect={(type) => console.log(type)} selectedId="location" />;
+}`,
+  },
+  {
+    id: 'chat-location-card',
+    name: 'Location Sharing Card',
+    file: 'chat-location-card.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Rich location sharing card with animated radar map canvas, map pin marker, coordinates, live tracking badge, and direct Navigate & View actions.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-location-card' }} />,
+    codeSnippet: `import { ChatLocationCard } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatLocationCard
+      title="Amoga Tech Hub"
+      address="Building 10, Cyber City, Gurugram"
+      latitude={28.4595}
+      longitude={77.0266}
+      isLive
+    />
+  );
+}`,
+  },
 ];
 
 export const COMPONENTS = DESIGN_SYSTEM_COMPONENTS;
