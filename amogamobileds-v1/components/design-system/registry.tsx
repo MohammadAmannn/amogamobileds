@@ -109,6 +109,12 @@ import {
 import { AppThemesPreview } from './previews/AppThemesPreview';
 import { LucideIconsPreview } from './previews/LucideIconsPreview';
 import { ChatPreviews } from './previews/ChatPreviews';
+import {
+  SignInPreview,
+  SignUpPreview,
+  VerifyOtpPreview,
+  ForgotPasswordPreview,
+} from './previews/AuthPreviews';
 
 export type ComponentCategory =
   | 'Primitives'
@@ -121,7 +127,8 @@ export type ComponentCategory =
   | 'Data'
   | 'Themes'
   | 'Icons'
-  | 'Chat';
+  | 'Chat'
+  | 'Auth';
 
 export interface ComponentItem {
   id: string;
@@ -2678,6 +2685,65 @@ export function Example() {
       isLive
     />
   );
+}`,
+  },
+  /* =========================================================================
+     13. AUTHENTICATION & ONBOARDING
+     ========================================================================= */
+  {
+    id: 'auth-sign-in',
+    name: 'Sign In Screen',
+    file: 'sign-in.tsx',
+    category: 'Auth',
+    tag: 'AUTH',
+    description: 'Complete user authentication card with email & password inputs, password visibility toggle, active sign-in validation, forgot password link, and Google/Apple OAuth triggers.',
+    Preview: SignInPreview,
+    codeSnippet: `import { SignInScreen } from '@/app/(auth)/sign-in';
+
+export function Example() {
+  return <SignInScreen />;
+}`,
+  },
+  {
+    id: 'auth-sign-up',
+    name: 'Sign Up Screen',
+    file: 'sign-up.tsx',
+    category: 'Auth',
+    tag: 'AUTH',
+    description: 'User registration screen with full name, work email, password strength indicator bar, terms & privacy agreement checkbox, and account creation validation.',
+    Preview: SignUpPreview,
+    codeSnippet: `import { SignUpScreen } from '@/app/(auth)/sign-up';
+
+export function Example() {
+  return <SignUpScreen />;
+}`,
+  },
+  {
+    id: 'auth-verify-otp',
+    name: 'OTP Verification',
+    file: 'verify-otp.tsx',
+    category: 'Auth',
+    tag: 'AUTH',
+    description: 'Two-factor / OTP verification screen with 6-digit verification code input blocks, automated code verification, and resend countdown timer trigger.',
+    Preview: VerifyOtpPreview,
+    codeSnippet: `import { VerifyOtpScreen } from '@/app/(auth)/verify-otp';
+
+export function Example() {
+  return <VerifyOtpScreen />;
+}`,
+  },
+  {
+    id: 'auth-forgot-password',
+    name: 'Forgot Password',
+    file: 'forgot-password.tsx',
+    category: 'Auth',
+    tag: 'AUTH',
+    description: 'Password recovery card with email input, reset instructions notification banner, and back to sign in navigation action.',
+    Preview: ForgotPasswordPreview,
+    codeSnippet: `import { ForgotPasswordScreen } from '@/app/(auth)/forgot-password';
+
+export function Example() {
+  return <ForgotPasswordScreen />;
 }`,
   },
 ];

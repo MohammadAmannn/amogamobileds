@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {
   ChevronsUpDown,
@@ -17,27 +18,38 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react-native';
+import { useAuth } from '@/providers/auth-provider';
+import { useToast } from '@/components/ui/toast';
+import { useRouter } from 'expo-router';
 
 interface NavUserProps {
-  user?: {
-    name: string;
-    email: string;
-    initials: string;
-  };
   onOpenThemeSettings: () => void;
   isDark?: boolean;
 }
 
+const initialsOf = (value: string) =>
+  value
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('') || 'U';
+
 export function NavUser({
-  user = {
-    name: 'Mohammed Aman',
-    email: 'mohammed@amoga.io',
-    initials: 'MA',
-  },
   onOpenThemeSettings,
   isDark = false,
 }: NavUserProps) {
+  const { user, profile, signOut } = useAuth();
+  const toast = useToast();
+  const router = useRouter();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+
+  // Compute display properties from authenticated session/profile
+  const displayName = profile?.display_name || user?.email?.split('@')[0] || 'User';
+  const email = user?.email || 'user@amoga.io';
+  const initials = initialsOf(displayName);
 
   const bg = isDark ? '#141721' : '#ffffff';
   const border = isDark ? '#232734' : '#e4e4e7';
@@ -46,6 +58,23 @@ export function NavUser({
   const itemHover = isDark ? '#1e2230' : '#f4f4f5';
   const avatarBg = isDark ? '#272a38' : '#f1f5f9';
   const avatarText = isDark ? '#f4f4f5' : '#09090b';
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+    try {
+      setIsOpen(false);
+      await signOut();
+      toast.success('Signed out successfully');
+    } catch (error) {
+      toast.error('Could not sign out', (error as Error).message);
+      setSigningOut(false);
+    }
+  };
+
+  const handleNavigateSettings = () => {
+    setIsOpen(false);
+    router.push('/(tabs)/settings');
+  };
 
   return (
     <View style={styles.container}>
@@ -73,15 +102,15 @@ export function NavUser({
           <View style={styles.popoverHeader}>
             <View style={[styles.avatarBox, { backgroundColor: avatarBg }]}>
               <Text style={[styles.avatarText, { color: avatarText }]}>
-                {user.initials}
+                {initials}
               </Text>
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
               <Text style={[styles.userNameText, { color: text }]} numberOfLines={1}>
-                {user.name}
+                {displayName}
               </Text>
               <Text style={[styles.userEmailText, { color: muted }]} numberOfLines={1}>
-                {user.email}
+                {email}
               </Text>
             </View>
           </View>
@@ -91,7 +120,7 @@ export function NavUser({
           {/* Menu Section 1 */}
           <View style={{ gap: 2 }}>
             <TouchableOpacity
-              onPress={() => setIsOpen(false)}
+              onPress={handleNavigateSettings}
               activeOpacity={0.7}
               style={[styles.menuItem]}
             >
@@ -156,7 +185,7 @@ export function NavUser({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => setIsOpen(false)}
+              onPress={handleNavigateSettings}
               activeOpacity={0.7}
               style={[styles.menuItem]}
             >
@@ -169,13 +198,18 @@ export function NavUser({
 
           {/* Sign out */}
           <TouchableOpacity
-            onPress={() => setIsOpen(false)}
+            onPress={handleSignOut}
+            disabled={signingOut}
             activeOpacity={0.7}
             style={[styles.menuItem]}
           >
-            <LogOut size={15} color="#ef4444" />
+            {signingOut ? (
+              <ActivityIndicator size="small" color="#ef4444" style={{ width: 15, height: 15 }} />
+            ) : (
+              <LogOut size={15} color="#ef4444" />
+            )}
             <Text style={[styles.menuItemText, { color: '#ef4444', fontWeight: '500' }]}>
-              Sign out
+              {signingOut ? 'Signing out...' : 'Sign out'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -195,12 +229,12 @@ export function NavUser({
       >
         <View style={[styles.avatarBox, { backgroundColor: avatarBg }]}>
           <Text style={[styles.avatarText, { color: avatarText }]}>
-            {user.initials}
+            {initials}
           </Text>
         </View>
 
         <Text style={[styles.triggerName, { color: text }]} numberOfLines={1}>
-          {user.name}
+          {displayName}
         </Text>
 
         <ChevronsUpDown size={15} color={muted} />

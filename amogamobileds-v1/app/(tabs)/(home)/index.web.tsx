@@ -27,6 +27,7 @@ import {
   MessageSquare,
   Smartphone,
   ChevronRight,
+  ShieldCheck,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -63,6 +64,7 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Themes', label: 'Themes', Icon: Palette },
   { name: 'Icons', label: 'Icons', Icon: Compass },
   { name: 'Chat', label: 'Chat', Icon: MessageSquare },
+  { name: 'Auth', label: 'Auth', Icon: ShieldCheck },
 ];
 
 export default function WebPlaygroundScreen() {
@@ -178,6 +180,8 @@ export default function WebPlaygroundScreen() {
         return { bg: isDark ? '#0c3547' : '#E0F2FE', text: isDark ? '#7dd3fc' : '#0284C7' };
       case 'CHAT':
         return { bg: isDark ? '#0e3a24' : '#DCFCE7', text: isDark ? '#86efac' : '#15803D' };
+      case 'AUTH':
+        return { bg: isDark ? '#1e293b' : '#EDE9FE', text: isDark ? '#c084fc' : '#7c3aed' };
       default:
         return { bg: isDark ? '#1e293b' : '#F1F5F9', text: isDark ? '#94a3b8' : '#475569' };
     }

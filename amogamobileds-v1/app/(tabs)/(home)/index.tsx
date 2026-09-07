@@ -27,6 +27,7 @@ import {
   Palette,
   Compass,
   MessageSquare,
+  ShieldCheck,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -55,6 +56,7 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Themes', label: 'Themes', Icon: Palette },
   { name: 'Icons', label: 'Icons', Icon: Compass },
   { name: 'Chat', label: 'Chat', Icon: MessageSquare },
+  { name: 'Auth', label: 'Auth', Icon: ShieldCheck },
 ];
 
 export default function DesignSystemScreen() {
@@ -136,6 +138,8 @@ export default function DesignSystemScreen() {
         return { bg: '#E0F2FE', text: '#0284C7' };
       case 'CHAT':
         return { bg: '#DCFCE7', text: '#15803D' };
+      case 'AUTH':
+        return { bg: '#EDE9FE', text: '#7C3AED' };
       default:
         return { bg: '#F1F5F9', text: '#475569' };
     }
