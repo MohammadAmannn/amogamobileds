@@ -59,37 +59,41 @@ export function PreviewToolbar({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
         paddingVertical: 10,
         backgroundColor: bg,
         borderBottomWidth: 1,
         borderBottomColor: border,
         zIndex: 40,
-        flexWrap: 'wrap',
-        gap: 12,
+        flexWrap: 'nowrap',
+        gap: 10,
+        minHeight: 52,
       }}
     >
       {/* Left: Component title and Tag badge */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <Text style={{ fontSize: 16, fontWeight: '700', color: text }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1, minWidth: 100 }}>
+        <Text
+          style={{ fontSize: 15, fontWeight: '700', color: text }}
+          numberOfLines={1}
+        >
           {component.name}
         </Text>
         <View
           style={{
-            paddingHorizontal: 8,
-            paddingVertical: 2.5,
+            paddingHorizontal: 7,
+            paddingVertical: 2,
             borderRadius: 6,
             backgroundColor: isDark ? '#27272a' : '#f4f4f5',
           }}
         >
-          <Text style={{ fontSize: 10, fontWeight: '700', color: '#8b5cf6', letterSpacing: 0.5 }}>
+          <Text style={{ fontSize: 9.5, fontWeight: '700', color: '#8b5cf6', letterSpacing: 0.5 }}>
             {component.tag}
           </Text>
         </View>
       </View>
 
       {/* Center: Modes & Device Type */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 0 }}>
         {/* View Mode Segmented Control: Preview | Code */}
         <View
           style={{

@@ -27,7 +27,23 @@ export function DeviceSelector({
   const activeItemBg = isDark ? '#27272a' : '#f4f4f5';
 
   return (
-    <View style={{ position: 'relative', zIndex: 100 }}>
+    <View style={{ position: 'relative', zIndex: 1000 }}>
+      {/* Invisible backdrop to close on outside click */}
+      {isOpen && (
+        <TouchableOpacity
+          style={{
+            position: 'fixed' as any,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 9999,
+          }}
+          onPress={() => setIsOpen(false)}
+          activeOpacity={1}
+        />
+      )}
+
       {/* Trigger Button */}
       <TouchableOpacity
         onPress={() => setIsOpen(!isOpen)}
@@ -41,7 +57,8 @@ export function DeviceSelector({
           borderRadius: 7,
           backgroundColor: bg,
           borderWidth: 1,
-          borderColor: border,
+          borderColor: isOpen ? '#8b5cf6' : border,
+          zIndex: 10000,
         }}
       >
         {selectedDevice.type === 'tablet' ? (
@@ -72,8 +89,8 @@ export function DeviceSelector({
             shadowOffset: { width: 0, height: 8 },
             shadowOpacity: 0.25,
             shadowRadius: 16,
-            elevation: 12,
-            zIndex: 1000,
+            elevation: 100,
+            zIndex: 10001,
             padding: 6,
           }}
         >

@@ -22,6 +22,8 @@ import {
   AlertCircle,
   Columns,
   Eye,
+  Film,
+  Database,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -44,6 +46,8 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Feedback', label: 'Feedback', Icon: AlertCircle },
   { name: 'Layout', label: 'Layout', Icon: Columns },
   { name: 'Display', label: 'Display', Icon: Eye },
+  { name: 'Media', label: 'Media', Icon: Film },
+  { name: 'Data', label: 'Data', Icon: Database },
 ];
 
 export default function DesignSystemScreen() {

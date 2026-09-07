@@ -46,7 +46,9 @@
         {
           "photosPermission": "Allow $(PRODUCT_NAME) to access your photos so you can set an avatar."
         }
-      ]
+      ],
+      "expo-audio",
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
