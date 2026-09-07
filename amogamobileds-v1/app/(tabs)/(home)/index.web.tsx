@@ -11,6 +11,7 @@ import {
 import { useColorScheme } from '@/hooks/useColorScheme';
 import {
   Search,
+  Bell,
   X,
   LayoutGrid,
   Sparkles,
@@ -24,7 +25,8 @@ import {
   Palette,
   Compass,
   MessageSquare,
-  Settings,
+  Smartphone,
+  ChevronRight,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -37,6 +39,7 @@ import { DeviceFrame } from '@/components/web/DeviceFrame.web';
 import { PreviewToolbar } from '@/components/web/PreviewToolbar.web';
 import { CodePanel } from '@/components/web/CodePanel.web';
 import { FullscreenModal } from '@/components/web/FullscreenModal.web';
+import { MobileEmulatorModal } from '@/components/web/MobileEmulatorModal.web';
 import { ConfigDrawer } from '@/components/web/ConfigDrawer.web';
 import { NavUser } from '@/components/web/NavUser.web';
 import { useColorTheme } from '@/providers/color-theme-provider';
@@ -67,13 +70,10 @@ export default function WebPlaygroundScreen() {
   const isDark = systemTheme === 'dark';
   const { currentTheme } = useColorTheme();
   const activeAccent = currentTheme?.preview || (isDark ? '#818cf8' : '#4f46e5');
-  const { height: windowHeight } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
-  // Compute adaptive initial scale so mobile phone fits viewport comfortably
-  const initialScale = useMemo(() => {
-    const available = (windowHeight || 800) - 140;
-    return Math.min(0.76, Math.max(0.55, Number((available / 920).toFixed(2))));
-  }, [windowHeight]);
+  // Screen breakpoint: Mobile viewport on web is < 768px
+  const isMobileView = windowWidth < 768;
 
   // State
   const [activeComponent, setActiveComponent] = useState<ComponentItem>(COMPONENTS[0]);
@@ -84,9 +84,20 @@ export default function WebPlaygroundScreen() {
   const [selectedDevice, setSelectedDevice] = useState<DeviceConfig>(DEFAULT_MOBILE_DEVICE);
   const [simulatorTheme, setSimulatorTheme] = useState<'light' | 'dark'>(isDark ? 'dark' : 'light');
   const [userScale, setUserScale] = useState<number | null>(null);
-  const scale = userScale ?? initialScale;
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isEmulatorModalOpen, setIsEmulatorModalOpen] = useState(false);
   const [isThemeDrawerOpen, setIsThemeDrawerOpen] = useState(false);
+
+  // Compute adaptive initial scale so mobile phone simulator fits viewport comfortably on 14-inch & Mac displays
+  const initialScale = useMemo(() => {
+    const totalDeviceHeight = (selectedDevice?.height || 852) + (selectedDevice?.bezel || 10) * 2;
+    // Available height on canvas = windowHeight - toolbar (54px) - padding/margins (46px)
+    const availableHeight = Math.max(360, (windowHeight || 800) - 100);
+    const computed = Number((availableHeight / totalDeviceHeight).toFixed(2));
+    return Math.min(0.78, Math.max(0.48, computed));
+  }, [windowHeight, selectedDevice]);
+
+  const scale = userScale ?? initialScale;
 
   // Colors
   const sidebarBg = isDark ? '#0e1017' : '#ffffff';
@@ -122,12 +133,13 @@ export default function WebPlaygroundScreen() {
     });
   }, [searchQuery, selectedCategory]);
 
-  // Handle device type switch
+  // Handle device type switch (Desktop playground)
   const handleDeviceTypeChange = (type: DeviceType) => {
     setDeviceType(type);
     if (type === 'tablet') {
       setSelectedDevice(DEFAULT_TABLET_DEVICE);
-      setUserScale(0.55);
+      const tabletFit = Math.min(0.55, Math.max(0.38, Number(((windowHeight - 110) / 1222).toFixed(2))));
+      setUserScale(tabletFit);
     } else if (type === 'mobile') {
       setSelectedDevice(DEFAULT_MOBILE_DEVICE);
       setUserScale(null);
@@ -136,43 +148,445 @@ export default function WebPlaygroundScreen() {
     }
   };
 
-  // Badge colors matching screenshot 1
+  // Tag Badge Colors
   const getBadgeColors = (tag: string) => {
     switch (tag) {
       case 'BUTTON':
-        return { bg: '#F3E8FF', text: '#9333EA' };
+        return { bg: isDark ? '#3b1c54' : '#F3E8FF', text: isDark ? '#d8b4fe' : '#9333EA' };
       case 'INPUT':
       case 'OTP INPUT':
-        return { bg: '#E0F2FE', text: '#0284C7' };
+        return { bg: isDark ? '#0c3547' : '#E0F2FE', text: isDark ? '#7dd3fc' : '#0284C7' };
       case 'BADGE':
-        return { bg: '#FCE7F3', text: '#DB2777' };
+        return { bg: isDark ? '#4a1532' : '#FCE7F3', text: isDark ? '#f472b6' : '#DB2777' };
       case 'AVATAR':
-        return { bg: '#FEF3C7', text: '#D97706' };
+        return { bg: isDark ? '#452b0d' : '#FEF3C7', text: isDark ? '#fcd34d' : '#D97706' };
       case 'CARD':
-        return { bg: '#EDE9FE', text: '#6366F1' };
+        return { bg: isDark ? '#262153' : '#EDE9FE', text: isDark ? '#a5b4fc' : '#6366F1' };
       case 'CHECKBOX':
       case 'SWITCH':
-        return { bg: '#F1F5F9', text: '#475569' };
+        return { bg: isDark ? '#1e293b' : '#F1F5F9', text: isDark ? '#94a3b8' : '#475569' };
       case 'TOAST':
       case 'NOTIFICATION':
-        return { bg: '#FCE7F3', text: '#BE185D' };
+        return { bg: isDark ? '#4a1532' : '#FCE7F3', text: isDark ? '#f472b6' : '#BE185D' };
       case 'SPINNER':
       case 'SKELETON':
-        return { bg: '#DCFCE7', text: '#16A34A' };
+        return { bg: isDark ? '#0e3a24' : '#DCFCE7', text: isDark ? '#86efac' : '#16A34A' };
       case 'THEMES':
       case 'TWEAKCN':
-        return { bg: '#F3E8FF', text: '#9333EA' };
+        return { bg: isDark ? '#3b1c54' : '#F3E8FF', text: isDark ? '#d8b4fe' : '#9333EA' };
       case 'ICONS':
-        return { bg: '#E0F2FE', text: '#0284C7' };
+        return { bg: isDark ? '#0c3547' : '#E0F2FE', text: isDark ? '#7dd3fc' : '#0284C7' };
       case 'CHAT':
-        return { bg: '#DCFCE7', text: '#15803D' };
+        return { bg: isDark ? '#0e3a24' : '#DCFCE7', text: isDark ? '#86efac' : '#15803D' };
       default:
-        return { bg: '#F1F5F9', text: '#475569' };
+        return { bg: isDark ? '#1e293b' : '#F1F5F9', text: isDark ? '#94a3b8' : '#475569' };
     }
   };
 
   const PreviewComponent = activeComponent.Preview;
 
+  // Open mobile emulator modal when clicking a card in mobile view
+  const handleCardClick = (comp: ComponentItem) => {
+    setActiveComponent(comp);
+    if (isMobileView) {
+      setIsEmulatorModalOpen(true);
+    }
+  };
+
+  // =========================================================================
+  // MOBILE VIEW ON WEB (< 768px): Responsive full design page + Emulator Modal
+  // =========================================================================
+  if (isMobileView) {
+    return (
+      <View style={{ flex: 1, backgroundColor: canvasBg }}>
+        {/* Mobile Header (Matching Screenshot 2) */}
+        <View
+          style={{
+            backgroundColor: sidebarBg,
+            borderBottomWidth: 1,
+            borderBottomColor: sidebarBorder,
+            paddingHorizontal: 16,
+            paddingTop: 14,
+            paddingBottom: 10,
+          }}
+        >
+          {/* Top Bar: Logo, Title, Search, Notification, Theme */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: 12,
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <View
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 9,
+                  backgroundColor: activeAccent,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text style={{ color: '#ffffff', fontSize: 18, fontWeight: '700' }}>⌘</Text>
+              </View>
+              <Text style={{ fontSize: 17, fontWeight: '700', color: text }}>
+                App Settings
+              </Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              {/* Notification Bell with Badge */}
+              <TouchableOpacity
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: sidebarBorder,
+                  backgroundColor: isDark ? '#141721' : '#f8fafc',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                }}
+                activeOpacity={0.7}
+              >
+                <Bell size={16} color={muted} />
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: -2,
+                    right: -2,
+                    minWidth: 15,
+                    height: 15,
+                    borderRadius: 8,
+                    backgroundColor: '#ef4444',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingHorizontal: 3,
+                  }}
+                >
+                  <Text style={{ color: '#ffffff', fontSize: 9, fontWeight: '700' }}>5</Text>
+                </View>
+              </TouchableOpacity>
+
+              {/* Theme customizer */}
+              <TouchableOpacity
+                onPress={() => setIsThemeDrawerOpen(true)}
+                style={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: sidebarBorder,
+                  backgroundColor: isDark ? '#141721' : '#f8fafc',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                activeOpacity={0.7}
+              >
+                <Palette size={16} color={activeAccent} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Search Bar */}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              height: 38,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: sidebarBorder,
+              backgroundColor: isDark ? '#141721' : '#f8fafc',
+              paddingHorizontal: 10,
+              gap: 8,
+              marginBottom: 10,
+            }}
+          >
+            <Search size={15} color="#94a3b8" />
+            <TextInput
+              placeholder="Search components, files..."
+              placeholderTextColor="#94a3b8"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              style={{
+                flex: 1,
+                fontSize: 13,
+                color: text,
+                padding: 0,
+              }}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')} style={{ padding: 2 }}>
+                <X size={14} color="#94a3b8" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Category Filter Chips - Wrapped Vertically across rows */}
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: 6,
+              paddingVertical: 2,
+            }}
+          >
+            {CATEGORY_ITEMS.map((item) => {
+              const isSelected = selectedCategory === item.name;
+              const count = categoryCounts[item.name] || 0;
+              const IconComp = item.Icon;
+
+              return (
+                <TouchableOpacity
+                  key={item.name}
+                  onPress={() => setSelectedCategory(item.name)}
+                  activeOpacity={0.8}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 5,
+                    paddingHorizontal: 9,
+                    paddingVertical: 4,
+                    borderRadius: 16,
+                    borderWidth: 1,
+                    borderColor: isSelected ? activeAccent : sidebarBorder,
+                    backgroundColor: isSelected
+                      ? isDark
+                        ? activeAccent + '30'
+                        : activeAccent + '15'
+                      : isDark
+                      ? '#141721'
+                      : '#f8fafc',
+                  }}
+                >
+                  <IconComp size={12} color={isSelected ? activeAccent : '#64748b'} />
+                  <Text
+                    style={{
+                      color: isSelected ? activeAccent : text,
+                      fontSize: 11.5,
+                      fontWeight: isSelected ? '600' : '500',
+                    }}
+                  >
+                    {item.label}
+                  </Text>
+                  <View
+                    style={{
+                      paddingHorizontal: 5,
+                      paddingVertical: 1,
+                      borderRadius: 8,
+                      backgroundColor: isSelected
+                        ? isDark
+                          ? activeAccent + '40'
+                          : activeAccent + '25'
+                        : isDark
+                        ? '#27272a'
+                        : '#e2e8f0',
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 9.5,
+                        fontWeight: '600',
+                        color: isSelected ? (isDark ? '#f4f4f5' : activeAccent) : muted,
+                      }}
+                    >
+                      {count}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Mobile View Component Cards List */}
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ padding: 14, paddingBottom: 90, gap: 10 }}
+          showsVerticalScrollIndicator={true}
+        >
+          {filteredComponents.map((comp) => {
+            const isCurrent = comp.id === activeComponent.id;
+            const badge = getBadgeColors(comp.tag);
+
+            return (
+              <TouchableOpacity
+                key={comp.id}
+                onPress={() => handleCardClick(comp)}
+                activeOpacity={0.7}
+                style={{
+                  padding: 14,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: isCurrent ? activeAccent : cardBorder,
+                  backgroundColor: cardBg,
+                  borderLeftWidth: isCurrent ? 4 : 1,
+                  borderLeftColor: isCurrent ? activeAccent : cardBorder,
+                }}
+              >
+                {/* Title & Tag */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: 4,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontWeight: '600',
+                      color: isCurrent ? (isDark ? '#f8fafc' : activeAccent) : text,
+                      flex: 1,
+                      paddingRight: 8,
+                    }}
+                    numberOfLines={1}
+                  >
+                    {comp.name}
+                  </Text>
+                  <View
+                    style={{
+                      paddingHorizontal: 7,
+                      paddingVertical: 2.5,
+                      borderRadius: 10,
+                      backgroundColor: badge.bg,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 9.5,
+                        fontWeight: '700',
+                        color: badge.text,
+                        letterSpacing: 0.4,
+                      }}
+                    >
+                      {comp.tag}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Description */}
+                <Text
+                  style={{
+                    fontSize: 12.5,
+                    color: muted,
+                    lineHeight: 17,
+                    marginBottom: 6,
+                  }}
+                  numberOfLines={2}
+                >
+                  {comp.description}
+                </Text>
+
+                {/* Bottom Row: File + Live Preview Button */}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginTop: 4,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+                      color: muted,
+                    }}
+                  >
+                    {comp.file}
+                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 4,
+                    }}
+                  >
+                    <Smartphone size={12} color={activeAccent} />
+                    <Text
+                      style={{
+                        fontSize: 11.5,
+                        fontWeight: '600',
+                        color: activeAccent,
+                      }}
+                    >
+                      Preview
+                    </Text>
+                    <ChevronRight size={12} color={activeAccent} />
+                  </View>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+
+          {filteredComponents.length === 0 && (
+            <Text style={{ padding: 24, textAlign: 'center', color: muted, fontSize: 13 }}>
+              {`No components matching "${searchQuery}"`}
+            </Text>
+          )}
+        </ScrollView>
+
+        {/* Floating Action Button: Purple Preview Pill (Matching Screenshot 2) */}
+        <TouchableOpacity
+          onPress={() => setIsEmulatorModalOpen(true)}
+          activeOpacity={0.85}
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 7,
+            paddingHorizontal: 16,
+            paddingVertical: 10,
+            borderRadius: 24,
+            backgroundColor: activeAccent,
+            zIndex: 50,
+            ...Platform.select({
+              web: {
+                boxShadow: `0 6px 20px ${activeAccent}60`,
+                cursor: 'pointer',
+              } as any,
+            }),
+          }}
+          accessibilityLabel="Preview in mobile emulator"
+        >
+          <Smartphone size={16} color="#ffffff" />
+          <Text style={{ color: '#ffffff', fontSize: 13.5, fontWeight: '700' }}>
+            Preview
+          </Text>
+        </TouchableOpacity>
+
+        {/* Live Mobile Emulator Modal (Matching Screenshot 1) */}
+        <MobileEmulatorModal
+          isOpen={isEmulatorModalOpen}
+          onClose={() => setIsEmulatorModalOpen(false)}
+          component={activeComponent}
+          isDark={isDark}
+        />
+
+        {/* Theme Settings Drawer */}
+        <ConfigDrawer
+          isOpen={isThemeDrawerOpen}
+          onClose={() => setIsThemeDrawerOpen(false)}
+          isDark={isDark}
+        />
+      </View>
+    );
+  }
+
+  // =========================================================================
+  // DESKTOP / TABLET PLAYGROUND VIEW (Screen width >= 768px)
+  // Reverted exactly as it was: Left Sidebar + Right Canvas / Simulator Toolbar
+  // =========================================================================
   return (
     <View
       style={{
@@ -268,9 +682,25 @@ export default function WebPlaygroundScreen() {
           </View>
         </View>
 
-        {/* Category Filter Chips */}
-        <View style={{ paddingHorizontal: 18, paddingBottom: 12 }}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
+        {/* Category Filter Chips - Scrollable 3-Row View */}
+        <View style={{ paddingHorizontal: 18, paddingBottom: 10 }}>
+          <ScrollView
+            style={{
+              maxHeight: 104,
+              ...Platform.select({
+                web: {
+                  overflowY: 'auto',
+                } as any,
+              }),
+            }}
+            contentContainerStyle={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: 6,
+              paddingRight: 4,
+            }}
+            showsVerticalScrollIndicator={true}
+          >
             {CATEGORY_ITEMS.map((item) => {
               const isSelected = selectedCategory === item.name;
               const count = categoryCounts[item.name] || 0;
@@ -291,7 +721,9 @@ export default function WebPlaygroundScreen() {
                     borderWidth: 1,
                     borderColor: isSelected ? activeAccent : sidebarBorder,
                     backgroundColor: isSelected
-                      ? (isDark ? activeAccent + '30' : activeAccent + '15')
+                      ? isDark
+                        ? activeAccent + '30'
+                        : activeAccent + '15'
                       : isDark
                       ? '#141721'
                       : '#f8fafc',
@@ -313,7 +745,9 @@ export default function WebPlaygroundScreen() {
                       paddingVertical: 1,
                       borderRadius: 8,
                       backgroundColor: isSelected
-                        ? (isDark ? activeAccent + '40' : activeAccent + '25')
+                        ? isDark
+                          ? activeAccent + '40'
+                          : activeAccent + '25'
                         : isDark
                         ? '#27272a'
                         : '#e2e8f0',
@@ -332,7 +766,7 @@ export default function WebPlaygroundScreen() {
                 </TouchableOpacity>
               );
             })}
-          </View>
+          </ScrollView>
         </View>
 
         {/* Scrollable Component Cards List */}
@@ -357,7 +791,9 @@ export default function WebPlaygroundScreen() {
                   borderWidth: 1,
                   borderColor: isCurrent ? activeAccent : cardBorder,
                   backgroundColor: isCurrent
-                    ? (isDark ? activeAccent + '22' : activeAccent + '10')
+                    ? isDark
+                      ? activeAccent + '22'
+                      : activeAccent + '10'
                     : cardBg,
                   borderLeftWidth: isCurrent ? 4 : 1,
                   borderLeftColor: isCurrent ? activeAccent : cardBorder,
@@ -473,12 +909,13 @@ export default function WebPlaygroundScreen() {
           isDark={isDark}
         />
 
-        {/* Scrollable Canvas Area with Proper Fit */}
+        {/* Scrollable Canvas Area with Adaptive Fit for 14-inch & Mac Displays */}
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={{
             alignItems: 'center',
-            paddingVertical: 28,
+            justifyContent: 'center',
+            paddingVertical: windowHeight < 820 ? 14 : 24,
             paddingHorizontal: 16,
             minHeight: '100%',
           }}
