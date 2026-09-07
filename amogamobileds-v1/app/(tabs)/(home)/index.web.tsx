@@ -212,6 +212,7 @@ export default function WebPlaygroundScreen() {
             paddingHorizontal: 16,
             paddingTop: 14,
             paddingBottom: 10,
+            zIndex: 50,
           }}
         >
           {/* Top Bar: Logo, Title, Search, Notification, Theme */}
@@ -241,40 +242,14 @@ export default function WebPlaygroundScreen() {
               </Text>
             </View>
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              {/* Notification Bell with Badge */}
-              <TouchableOpacity
-                style={{
-                  width: 34,
-                  height: 34,
-                  borderRadius: 8,
-                  borderWidth: 1,
-                  borderColor: sidebarBorder,
-                  backgroundColor: isDark ? '#141721' : '#f8fafc',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                }}
-                activeOpacity={0.7}
-              >
-                <Bell size={16} color={muted} />
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: -2,
-                    right: -2,
-                    minWidth: 15,
-                    height: 15,
-                    borderRadius: 8,
-                    backgroundColor: '#ef4444',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    paddingHorizontal: 3,
-                  }}
-                >
-                  <Text style={{ color: '#ffffff', fontSize: 9, fontWeight: '700' }}>5</Text>
-                </View>
-              </TouchableOpacity>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, zIndex: 100 }}>
+              {/* Profile Menu Icon Trigger (Sign out, My Profile, Settings) */}
+              <NavUser
+                onOpenThemeSettings={() => setIsThemeDrawerOpen(true)}
+                isDark={isDark}
+                compact={true}
+                placement="bottom"
+              />
 
               {/* Theme customizer */}
               <TouchableOpacity
