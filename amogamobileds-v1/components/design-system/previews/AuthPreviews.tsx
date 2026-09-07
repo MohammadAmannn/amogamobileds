@@ -28,7 +28,12 @@ import { useColorTheme } from '@/providers/color-theme-provider';
 export function SignInPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent = currentTheme?.preview || (isDark ? '#818cf8' : '#4f46e5');
+  const accent =
+    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+      ? currentTheme.preview
+      : isDark
+      ? '#818cf8'
+      : '#4f46e5';
 
   const [email, setEmail] = useState('alex.rivera@example.com');
   const [password, setPassword] = useState('••••••••••••');
@@ -223,7 +228,12 @@ export function SignInPreview() {
 export function SignUpPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent = currentTheme?.preview || (isDark ? '#818cf8' : '#4f46e5');
+  const accent =
+    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+      ? currentTheme.preview
+      : isDark
+      ? '#818cf8'
+      : '#4f46e5';
 
   const [name, setName] = useState('Alex Rivera');
   const [email, setEmail] = useState('alex.rivera@example.com');
@@ -429,7 +439,12 @@ export function SignUpPreview() {
 export function VerifyOtpPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent = currentTheme?.preview || (isDark ? '#818cf8' : '#4f46e5');
+  const accent =
+    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+      ? currentTheme.preview
+      : isDark
+      ? '#818cf8'
+      : '#4f46e5';
 
   const [otp, setOtp] = useState(['4', '8', '2', '9', '1', '7']);
   const [loading, setLoading] = useState(false);
@@ -538,7 +553,12 @@ export function VerifyOtpPreview() {
 export function ForgotPasswordPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent = currentTheme?.preview || (isDark ? '#818cf8' : '#4f46e5');
+  const accent =
+    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+      ? currentTheme.preview
+      : isDark
+      ? '#818cf8'
+      : '#4f46e5';
 
   const [email, setEmail] = useState('alex.rivera@example.com');
   const [loading, setLoading] = useState(false);

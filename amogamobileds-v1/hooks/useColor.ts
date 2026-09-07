@@ -15,7 +15,8 @@ export function useColor(
 
   try {
     const { currentTheme } = useColorTheme();
-    if (currentTheme?.preview) {
+    // Only use custom theme accent if theme is not zinc and has a valid preview color
+    if (currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview) {
       if (
         colorName === 'primary' ||
         colorName === 'tint' ||
