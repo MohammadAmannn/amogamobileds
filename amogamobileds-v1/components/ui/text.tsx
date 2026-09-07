@@ -5,6 +5,7 @@ import {
   Text as RNText,
   TextProps as RNTextProps,
   TextStyle,
+  Platform,
 } from 'react-native';
 
 type TextVariant =
@@ -18,6 +19,16 @@ interface TextProps extends RNTextProps {
 }
 
 const headingVariants: TextVariant[] = ['heading', 'title', 'subtitle'];
+
+const OPEN_SANS_REGULAR = Platform.select({
+  web: 'var(--font-open-sans), "Open Sans", sans-serif',
+  default: 'OpenSans_400Regular',
+});
+
+const OPEN_SANS_MEDIUM = Platform.select({
+  web: 'var(--font-open-sans), "Open Sans", sans-serif',
+  default: 'OpenSans_500Medium',
+});
 
 export const Text = React.memo(
   forwardRef<RNText, TextProps>(
@@ -37,31 +48,37 @@ export const Text = React.memo(
       const getTextStyle = (): TextStyle => {
         const baseStyle: TextStyle = {
           color: textColor,
+          fontFamily: OPEN_SANS_REGULAR,
+          fontWeight: '400',
         };
 
         switch (variant) {
           case 'heading':
             return {
               ...baseStyle,
-              fontSize: 28,
-              fontWeight: '700',
+              fontSize: 26,
+              fontFamily: OPEN_SANS_MEDIUM,
+              fontWeight: '500',
             };
           case 'title':
             return {
               ...baseStyle,
-              fontSize: 24,
-              fontWeight: '700',
+              fontSize: 22,
+              fontFamily: OPEN_SANS_MEDIUM,
+              fontWeight: '500',
             };
           case 'subtitle':
             return {
               ...baseStyle,
-              fontSize: 19,
-              fontWeight: '600',
+              fontSize: 18,
+              fontFamily: OPEN_SANS_REGULAR,
+              fontWeight: '400',
             };
           case 'caption':
             return {
               ...baseStyle,
               fontSize: FONT_SIZE,
+              fontFamily: OPEN_SANS_REGULAR,
               fontWeight: '400',
               color: mutedColor,
             };
@@ -69,13 +86,15 @@ export const Text = React.memo(
             return {
               ...baseStyle,
               fontSize: FONT_SIZE,
-              fontWeight: '500',
+              fontFamily: OPEN_SANS_REGULAR,
+              fontWeight: '400',
               textDecorationLine: 'underline',
             };
           default: // 'body'
             return {
               ...baseStyle,
               fontSize: FONT_SIZE,
+              fontFamily: OPEN_SANS_REGULAR,
               fontWeight: '400',
             };
         }

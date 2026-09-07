@@ -8,6 +8,7 @@ import { useMemo } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/theme/colors';
 import { Mode, ModeProvider, ModeStorage } from '@/providers/mode-provider';
+import { useColorTheme } from '@/providers/color-theme-provider';
 
 type Props = {
   children: React.ReactNode;
@@ -41,6 +42,8 @@ export const ThemeProvider = ({
 
 const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
   const colorScheme = useColorScheme();
+  const { currentTheme } = useColorTheme();
+  const dynamicPrimary = currentTheme?.preview;
 
   // Rebuilding this on every render invalidates every useTheme() consumer
   // app-wide, since ThemeProvider is mounted at the root — memoize on the
@@ -51,7 +54,7 @@ const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
         ...DarkTheme,
         colors: {
           ...DarkTheme.colors,
-          primary: Colors.dark.primary,
+          primary: dynamicPrimary || Colors.dark.primary,
           background: Colors.dark.background,
           card: Colors.dark.card,
           text: Colors.dark.text,
@@ -65,7 +68,7 @@ const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
       ...DefaultTheme,
       colors: {
         ...DefaultTheme.colors,
-        primary: Colors.light.primary,
+        primary: dynamicPrimary || Colors.light.primary,
         background: Colors.light.background,
         card: Colors.light.card,
         text: Colors.light.text,
@@ -73,7 +76,35 @@ const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
         notification: Colors.light.red,
       },
     };
-  }, [colorScheme]);
+  }, [colorScheme, dynamicPrimary]);
 
   return <RNThemeProvider value={theme}>{children}</RNThemeProvider>;
 };
+
+export function useTheme() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  let primaryColor = isDark ? Colors.dark.primary : Colors.light.primary;
+
+  try {
+    const { currentTheme } = useColorTheme();
+    if (currentTheme?.preview) {
+      primaryColor = currentTheme.preview;
+    }
+  } catch {}
+
+  const baseColors = isDark ? Colors.dark : Colors.light;
+
+  return {
+    colors: {
+      ...baseColors,
+      primary: primaryColor,
+      tint: primaryColor,
+      tabIconSelected: primaryColor,
+    },
+    resolvedMode: (isDark ? 'dark' : 'light') as 'dark' | 'light',
+    isDark,
+  };
+}
+
+

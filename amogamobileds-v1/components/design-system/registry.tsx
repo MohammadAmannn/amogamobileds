@@ -106,6 +106,10 @@ import {
   Activity
 } from 'lucide-react-native';
 
+import { AppThemesPreview } from './previews/AppThemesPreview';
+import { LucideIconsPreview } from './previews/LucideIconsPreview';
+import { ChatPreviews } from './previews/ChatPreviews';
+
 export type ComponentCategory =
   | 'Primitives'
   | 'Inputs'
@@ -114,7 +118,10 @@ export type ComponentCategory =
   | 'Layout'
   | 'Display'
   | 'Media'
-  | 'Data';
+  | 'Data'
+  | 'Themes'
+  | 'Icons'
+  | 'Chat';
 
 export interface ComponentItem {
   id: string;
@@ -2346,6 +2353,222 @@ export function Example() {
 export function Example() {
   const data = [{ label: 'Engine', value: 300, color: '#3b82f6' }];
   return <TreemapChart data={data} />;
+}`,
+  },
+  // ─── THEMES ─────────────────────────────────────────────────────────────
+  {
+    id: 'app-themes',
+    name: 'App Themes & Tokens Showcase',
+    file: 'color-themes.ts',
+    category: 'Themes',
+    tag: 'THEMES',
+    description: 'Dynamic theme explorer featuring 50+ curated themes, base palettes, and live mode preview.',
+    Preview: AppThemesPreview,
+    codeSnippet: `import { useColorTheme } from '@/providers/color-theme-provider';
+
+export function Example() {
+  const { colorTheme, setColorTheme, colorThemes } = useColorTheme();
+  return (
+    <button onClick={() => setColorTheme('supabase')}>
+      Current Theme: {colorTheme}
+    </button>
+  );
+}`,
+  },
+
+  // ─── ICONS ──────────────────────────────────────────────────────────────
+  {
+    id: 'lucide-icons',
+    name: 'Lucide React Icons Explorer',
+    file: 'icon.tsx',
+    category: 'Icons',
+    tag: 'ICONS',
+    description: 'Comprehensive searchable icon gallery with live stroke, size & color customization.',
+    Preview: LucideIconsPreview,
+    codeSnippet: `import { Search, Sparkles, Heart, Settings } from 'lucide-react-native';
+
+export function Example() {
+  return <Sparkles size={24} color="#8b5cf6" strokeWidth={2} />;
+}`,
+  },
+
+  // ─── CHAT ───────────────────────────────────────────────────────────────
+  {
+    id: 'chat-sidebar',
+    name: 'Chat Sidebar',
+    file: 'chat-sidebar.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Master sidebar container with subtabs (Chats, Contact, Groups, Folder), search bar, category divider line with count, and a scrollable conversation list.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-sidebar' }} />,
+    codeSnippet: `import { ChatSidebar, ChatCardItem } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatSidebar tabs={[{ id: 'chats', label: 'Chats' }]} activeTab="chats">
+      <ChatCardItem id="1" title="Aman" lastMessage="Hey there!" isActive />
+    </ChatSidebar>
+  );
+}`,
+  },
+  {
+    id: 'chat-card-item',
+    name: 'Chat Card Item',
+    file: 'chat-card-item.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Conversation preview card for sidebar list. Displays contact name, pill badge (💬 Chat), timestamp, member & online counter, and last message snippet with active left accent stripe.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-card-item' }} />,
+    codeSnippet: `import { ChatCardItem } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatCardItem
+      id="c1"
+      title="Aman"
+      badgeLabel="Chat"
+      time="about 3 hours ago"
+      membersCount={2}
+      lastMessage="images (1).jpg"
+      isActive
+    />
+  );
+}`,
+  },
+  {
+    id: 'chat-input',
+    name: 'Chat Input (Composer)',
+    file: 'chat-input.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Modern messaging pill input container with emoji picker, attachment clip, camera trigger, and circular emerald green microphone/send button.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-input' }} />,
+    codeSnippet: `import { ChatInput } from '@/components/chat';
+
+export function Example() {
+  const [msg, setMsg] = React.useState('');
+  return <ChatInput value={msg} onChange={setMsg} onSend={() => setMsg('')} placeholder="Message" />;
+}`,
+  },
+  {
+    id: 'chat-header',
+    name: 'Chat Header',
+    file: 'chat-header.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Conversation header bar with user avatar, status/presence, and exact HeaderActions (Act on this bell, Quick Flag, and 3-dot dropdown menu).',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-header' }} />,
+    codeSnippet: `import { ChatHeader } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatHeader
+      title="Mohammed Aman"
+      subtitle="Last seen today at 04:58 PM"
+      status="online"
+    />
+  );
+}`,
+  },
+  {
+    id: 'chat-message-list',
+    name: 'Chat Message List',
+    file: 'chat-message-list.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Scrollable message viewport container with automatic auto-scroll to bottom, infinite scroll top loader for history, and rich bubble rendering for text, live location cards, and media attachments.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-message-list' }} />,
+    codeSnippet: `import { ChatMessageList, ChatBubble } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatMessageList>
+      <ChatBubble senderName="Mohammed Aman" content="Hello!" time="09:06 AM" status="read" />
+    </ChatMessageList>
+  );
+}`,
+  },
+  {
+    id: 'chat-bubble',
+    name: 'Message Bubble',
+    file: 'chat-bubble.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Pure, customizable message bubble. Supports text, file/PDF attachments, location cards, status delivery receipts (sent, delivered, read), and interactive reactions.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-bubble' }} />,
+    codeSnippet: `import { ChatBubble } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatBubble
+      senderName="Aman"
+      content="Got it! Looks super clean."
+      time="09:55 AM"
+      status="read"
+      reactions={[{ emoji: '👍', count: 2 }]}
+    />
+  );
+}`,
+  },
+  {
+    id: 'typing-indicator',
+    name: 'Typing Indicator',
+    file: 'typing-indicator.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Smooth 3-dot pulse animation indicating live incoming message activity.',
+    Preview: () => <ChatPreviews entry={{ id: 'typing-indicator' }} />,
+    codeSnippet: `import { TypingIndicator } from '@/components/chat';
+
+export function Example() {
+  return <TypingIndicator label="Aman is typing..." />;
+}`,
+  },
+  {
+    id: 'chat-empty-state',
+    name: 'Chat Empty State',
+    file: 'chat-empty-state.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Clean placeholder screen displayed when no conversation is selected or a message thread is empty.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-empty-state' }} />,
+    codeSnippet: `import { ChatEmptyState } from '@/components/chat';
+
+export function Example() {
+  return (
+    <ChatEmptyState
+      title="No conversation selected"
+      description="Choose a chat from the sidebar or start a new conversation to begin messaging."
+    />
+  );
+}`,
+  },
+  {
+    id: 'contact-manager',
+    name: 'Contact Manager',
+    file: 'contact-manager.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Standalone contact management interface. Displays saved contacts with avatar initials, email, status toggle switch, and direct actions for Chat, Edit, and Delete.',
+    Preview: () => <ChatPreviews entry={{ id: 'contact-manager' }} />,
+    codeSnippet: `import { ContactManager } from '@/components/chat';
+
+export function Example() {
+  return <ContactManager contacts={[{ id: '1', name: 'Aman', email: 'aman@amoga.io', initials: 'AM', isEnabled: true }]} />;
+}`,
+  },
+  {
+    id: 'group-manager',
+    name: 'Groups Manager',
+    file: 'group-manager.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Group channel manager for creating, searching, and managing team chat groups with member counts and instant chat triggers.',
+    Preview: () => <ChatPreviews entry={{ id: 'group-manager' }} />,
+    codeSnippet: `import { GroupManager } from '@/components/chat';
+
+export function Example() {
+  return <GroupManager groups={[{ id: 'g1', name: 'Design Team', membersCount: 4, isEnabled: true }]} />;
 }`,
   },
 ];

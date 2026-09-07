@@ -12,6 +12,7 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
+  Palette,
 } from 'lucide-react-native';
 import { ComponentItem } from '@/components/design-system/registry';
 import { DeviceConfig, DeviceType, ViewMode } from './types';
@@ -30,6 +31,7 @@ interface PreviewToolbarProps {
   scale: number;
   onChangeScale: (scale: number) => void;
   onOpenFullscreen: () => void;
+  onOpenThemeSettings?: () => void;
   isDark?: boolean;
 }
 
@@ -46,6 +48,7 @@ export function PreviewToolbar({
   scale,
   onChangeScale,
   onOpenFullscreen,
+  onOpenThemeSettings,
   isDark = false,
 }: PreviewToolbarProps) {
   const bg = isDark ? '#14171f' : '#ffffff';
@@ -73,7 +76,7 @@ export function PreviewToolbar({
       {/* Left: Component title and Tag badge */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 1, minWidth: 100 }}>
         <Text
-          style={{ fontSize: 15, fontWeight: '700', color: text }}
+          style={{ fontSize: 15, fontWeight: '500', color: text }}
           numberOfLines={1}
         >
           {component.name}
@@ -86,7 +89,7 @@ export function PreviewToolbar({
             backgroundColor: isDark ? '#27272a' : '#f4f4f5',
           }}
         >
-          <Text style={{ fontSize: 9.5, fontWeight: '700', color: '#8b5cf6', letterSpacing: 0.5 }}>
+          <Text style={{ fontSize: 9.5, fontWeight: '500', color: '#8b5cf6', letterSpacing: 0.5 }}>
             {component.tag}
           </Text>
         </View>
@@ -122,7 +125,7 @@ export function PreviewToolbar({
             <Text
               style={{
                 fontSize: 12,
-                fontWeight: '600',
+                fontWeight: '500',
                 color: viewMode === 'preview' ? text : muted,
               }}
             >
@@ -146,7 +149,7 @@ export function PreviewToolbar({
             <Text
               style={{
                 fontSize: 12,
-                fontWeight: '600',
+                fontWeight: '500',
                 color: viewMode === 'code' ? text : muted,
               }}
             >
@@ -181,7 +184,7 @@ export function PreviewToolbar({
               }}
             >
               <Monitor size={13} color={deviceType === 'desktop' ? text : muted} />
-              <Text style={{ fontSize: 12, fontWeight: '600', color: deviceType === 'desktop' ? text : muted }}>
+              <Text style={{ fontSize: 12, fontWeight: '500', color: deviceType === 'desktop' ? text : muted }}>
                 Desktop
               </Text>
             </TouchableOpacity>
@@ -199,7 +202,7 @@ export function PreviewToolbar({
               }}
             >
               <Tablet size={13} color={deviceType === 'tablet' ? text : muted} />
-              <Text style={{ fontSize: 12, fontWeight: '600', color: deviceType === 'tablet' ? text : muted }}>
+              <Text style={{ fontSize: 12, fontWeight: '500', color: deviceType === 'tablet' ? text : muted }}>
                 Tablet
               </Text>
             </TouchableOpacity>
@@ -217,7 +220,7 @@ export function PreviewToolbar({
               }}
             >
               <Smartphone size={13} color={deviceType === 'mobile' ? text : muted} />
-              <Text style={{ fontSize: 12, fontWeight: '600', color: deviceType === 'mobile' ? text : muted }}>
+              <Text style={{ fontSize: 12, fontWeight: '500', color: deviceType === 'mobile' ? text : muted }}>
                 Mobile
               </Text>
             </TouchableOpacity>
@@ -234,6 +237,26 @@ export function PreviewToolbar({
             onSelectDevice={onSelectDevice}
             isDark={isDark}
           />
+        )}
+
+        {/* Tweakcn Theme Settings Drawer Trigger */}
+        {onOpenThemeSettings && (
+          <TouchableOpacity
+            onPress={onOpenThemeSettings}
+            activeOpacity={0.7}
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 32,
+              height: 32,
+              borderRadius: 7,
+              backgroundColor: isDark ? '#1f222a' : '#ffffff',
+              borderWidth: 1,
+              borderColor: border,
+            }}
+          >
+            <Palette size={15} color={muted} />
+          </TouchableOpacity>
         )}
 
         {/* Simulator Theme Toggle */}
@@ -281,7 +304,7 @@ export function PreviewToolbar({
             <Text
               style={{
                 fontSize: 11,
-                fontWeight: '600',
+                fontWeight: '500',
                 color: text,
                 minWidth: 36,
                 textAlign: 'center',

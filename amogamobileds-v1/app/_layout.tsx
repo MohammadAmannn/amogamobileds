@@ -5,6 +5,7 @@ import { View } from '@/components/ui/view';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { ThemeProvider } from '@/providers/theme-provider';
+import { ColorThemeProvider } from '@/providers/color-theme-provider';
 import { Colors } from '@/theme/colors';
 import { osName } from 'expo-device';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
@@ -18,6 +19,9 @@ import React, { useEffect } from 'react';
 import { Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import { useFonts } from 'expo-font';
+import { OpenSans_400Regular } from '@expo-google-fonts/open-sans/400Regular';
+import { OpenSans_500Medium } from '@expo-google-fonts/open-sans/500Medium';
 
 SplashScreen.setOptions({
   duration: 200,
@@ -148,19 +152,58 @@ function SystemChrome() {
 }
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+  });
+
+  useEffect(() => {
+    if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      if (!document.getElementById('open-sans-web-font')) {
+        const link = document.createElement('link');
+        link.id = 'open-sans-web-font';
+        link.rel = 'stylesheet';
+        link.href =
+          'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..600;1,300..600&display=swap';
+        document.head.appendChild(link);
+      }
+
+      if (!document.getElementById('open-sans-global-css')) {
+        const style = document.createElement('style');
+        style.id = 'open-sans-global-css';
+        style.textContent = `
+          :root {
+            --font-open-sans: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+          }
+          * {
+            font-family: var(--font-open-sans) !important;
+            font-weight: 400 !important;
+          }
+          h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-open-sans) !important;
+            font-weight: 500 !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+  }, []);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/* `storage` makes the light/dark choice survive a restart. SecureStore
           has no web implementation, so on web this degrades to no persistence
           rather than erroring — the toggle itself still works there. */}
       <ThemeProvider storage={SecureStore}>
-        <SystemChrome />
+        <ColorThemeProvider>
+          <SystemChrome />
 
-        <AuthProvider>
-          <ToastProvider>
-            <RootNavigator />
-          </ToastProvider>
-        </AuthProvider>
+          <AuthProvider>
+            <ToastProvider>
+              <RootNavigator />
+            </ToastProvider>
+          </AuthProvider>
+        </ColorThemeProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

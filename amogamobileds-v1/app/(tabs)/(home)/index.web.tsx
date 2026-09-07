@@ -21,6 +21,10 @@ import {
   Eye,
   Film,
   Database,
+  Palette,
+  Compass,
+  MessageSquare,
+  Settings,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -33,6 +37,9 @@ import { DeviceFrame } from '@/components/web/DeviceFrame.web';
 import { PreviewToolbar } from '@/components/web/PreviewToolbar.web';
 import { CodePanel } from '@/components/web/CodePanel.web';
 import { FullscreenModal } from '@/components/web/FullscreenModal.web';
+import { ConfigDrawer } from '@/components/web/ConfigDrawer.web';
+import { NavUser } from '@/components/web/NavUser.web';
+import { useColorTheme } from '@/providers/color-theme-provider';
 
 interface CategoryConfig {
   name: 'All' | ComponentCategory;
@@ -50,11 +57,16 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Display', label: 'Display', Icon: Eye },
   { name: 'Media', label: 'Media', Icon: Film },
   { name: 'Data', label: 'Data', Icon: Database },
+  { name: 'Themes', label: 'Themes', Icon: Palette },
+  { name: 'Icons', label: 'Icons', Icon: Compass },
+  { name: 'Chat', label: 'Chat', Icon: MessageSquare },
 ];
 
 export default function WebPlaygroundScreen() {
   const systemTheme = useColorScheme();
   const isDark = systemTheme === 'dark';
+  const { currentTheme } = useColorTheme();
+  const activeAccent = currentTheme?.preview || (isDark ? '#818cf8' : '#4f46e5');
   const { height: windowHeight } = useWindowDimensions();
 
   // Compute adaptive initial scale so mobile phone fits viewport comfortably
@@ -74,6 +86,7 @@ export default function WebPlaygroundScreen() {
   const [userScale, setUserScale] = useState<number | null>(null);
   const scale = userScale ?? initialScale;
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isThemeDrawerOpen, setIsThemeDrawerOpen] = useState(false);
 
   // Colors
   const sidebarBg = isDark ? '#0e1017' : '#ffffff';
@@ -146,6 +159,13 @@ export default function WebPlaygroundScreen() {
       case 'SPINNER':
       case 'SKELETON':
         return { bg: '#DCFCE7', text: '#16A34A' };
+      case 'THEMES':
+      case 'TWEAKCN':
+        return { bg: '#F3E8FF', text: '#9333EA' };
+      case 'ICONS':
+        return { bg: '#E0F2FE', text: '#0284C7' };
+      case 'CHAT':
+        return { bg: '#DCFCE7', text: '#15803D' };
       default:
         return { bg: '#F1F5F9', text: '#475569' };
     }
@@ -194,15 +214,15 @@ export default function WebPlaygroundScreen() {
                 width: 36,
                 height: 36,
                 borderRadius: 9,
-                backgroundColor: '#059669',
+                backgroundColor: activeAccent,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
-              <Text style={{ color: '#ffffff', fontSize: 19, fontWeight: '700' }}>⌘</Text>
+              <Text style={{ color: '#ffffff', fontSize: 19, fontWeight: '500' }}>⌘</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 17, fontWeight: '700', color: text, letterSpacing: -0.2 }}>
+              <Text style={{ fontSize: 17, fontWeight: '500', color: text, letterSpacing: -0.2 }}>
                 Design System
               </Text>
               <Text style={{ fontSize: 11, color: muted, marginTop: 1 }}>
@@ -269,16 +289,20 @@ export default function WebPlaygroundScreen() {
                     paddingVertical: 4,
                     borderRadius: 16,
                     borderWidth: 1,
-                    borderColor: isSelected ? '#86efac' : sidebarBorder,
-                    backgroundColor: isSelected ? '#dcfce7' : isDark ? '#141721' : '#f8fafc',
+                    borderColor: isSelected ? activeAccent : sidebarBorder,
+                    backgroundColor: isSelected
+                      ? (isDark ? activeAccent + '30' : activeAccent + '15')
+                      : isDark
+                      ? '#141721'
+                      : '#f8fafc',
                   }}
                 >
-                  <IconComp size={12} color={isSelected ? '#15803d' : '#64748b'} />
+                  <IconComp size={12} color={isSelected ? activeAccent : '#64748b'} />
                   <Text
                     style={{
-                      color: isSelected ? '#15803d' : text,
+                      color: isSelected ? activeAccent : text,
                       fontSize: 11.5,
-                      fontWeight: isSelected ? '600' : '500',
+                      fontWeight: '500',
                     }}
                   >
                     {item.label}
@@ -288,14 +312,18 @@ export default function WebPlaygroundScreen() {
                       paddingHorizontal: 5,
                       paddingVertical: 1,
                       borderRadius: 8,
-                      backgroundColor: isSelected ? '#bbf7d0' : isDark ? '#27272a' : '#e2e8f0',
+                      backgroundColor: isSelected
+                        ? (isDark ? activeAccent + '40' : activeAccent + '25')
+                        : isDark
+                        ? '#27272a'
+                        : '#e2e8f0',
                     }}
                   >
                     <Text
                       style={{
                         fontSize: 10,
-                        fontWeight: '600',
-                        color: isSelected ? '#166534' : muted,
+                        fontWeight: '500',
+                        color: isSelected ? (isDark ? '#f4f4f5' : activeAccent) : muted,
                       }}
                     >
                       {count}
@@ -327,12 +355,12 @@ export default function WebPlaygroundScreen() {
                   paddingVertical: 10,
                   borderRadius: 9,
                   borderWidth: 1,
-                  borderColor: isCurrent ? '#8b5cf6' : cardBorder,
+                  borderColor: isCurrent ? activeAccent : cardBorder,
                   backgroundColor: isCurrent
-                    ? (isDark ? '#1c1833' : '#f5f3ff')
+                    ? (isDark ? activeAccent + '22' : activeAccent + '10')
                     : cardBg,
                   borderLeftWidth: isCurrent ? 4 : 1,
-                  borderLeftColor: isCurrent ? '#6366f1' : cardBorder,
+                  borderLeftColor: isCurrent ? activeAccent : cardBorder,
                 }}
               >
                 {/* Line 1: Title & Tag */}
@@ -347,8 +375,8 @@ export default function WebPlaygroundScreen() {
                   <Text
                     style={{
                       fontSize: 13.5,
-                      fontWeight: isCurrent ? '700' : '600',
-                      color: isCurrent ? (isDark ? '#e0e7ff' : '#4338ca') : text,
+                      fontWeight: isCurrent ? '500' : '400',
+                      color: isCurrent ? (isDark ? '#f8fafc' : activeAccent) : text,
                       flex: 1,
                       paddingRight: 8,
                     }}
@@ -367,7 +395,7 @@ export default function WebPlaygroundScreen() {
                     <Text
                       style={{
                         fontSize: 9.5,
-                        fontWeight: '700',
+                        fontWeight: '500',
                         color: badge.text,
                         letterSpacing: 0.4,
                       }}
@@ -398,17 +426,20 @@ export default function WebPlaygroundScreen() {
           )}
         </ScrollView>
 
-        {/* Footer */}
+        {/* Footer with NavUser Profile Card & Popover Menu */}
         <View
           style={{
-            paddingHorizontal: 18,
-            paddingVertical: 12,
+            paddingHorizontal: 12,
+            paddingVertical: 10,
             borderTopWidth: 1,
             borderTopColor: sidebarBorder,
-            alignItems: 'center',
+            backgroundColor: sidebarBg,
           }}
         >
-         
+          <NavUser
+            onOpenThemeSettings={() => setIsThemeDrawerOpen(true)}
+            isDark={isDark}
+          />
         </View>
       </View>
 
@@ -438,6 +469,7 @@ export default function WebPlaygroundScreen() {
           scale={scale}
           onChangeScale={setUserScale}
           onOpenFullscreen={() => setIsFullscreen(true)}
+          onOpenThemeSettings={() => setIsThemeDrawerOpen(true)}
           isDark={isDark}
         />
 
@@ -552,6 +584,13 @@ export default function WebPlaygroundScreen() {
           </DeviceFrame>
         )}
       </FullscreenModal>
+
+      {/* Tweakcn Theme Settings Drawer */}
+      <ConfigDrawer
+        isOpen={isThemeDrawerOpen}
+        onClose={() => setIsThemeDrawerOpen(false)}
+        isDark={isDark}
+      />
     </View>
   );
 }

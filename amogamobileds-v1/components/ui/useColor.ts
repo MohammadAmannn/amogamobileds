@@ -1,5 +1,6 @@
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/theme/colors';
+import { useColorTheme } from '@/providers/color-theme-provider';
 
 export function useColor(
   colorName: keyof typeof Colors.light & keyof typeof Colors.dark,
@@ -10,7 +11,22 @@ export function useColor(
 
   if (colorFromProps) {
     return colorFromProps;
-  } else {
-    return Colors[theme][colorName];
   }
+
+  try {
+    const { currentTheme } = useColorTheme();
+    if (currentTheme?.preview) {
+      if (
+        colorName === 'primary' ||
+        colorName === 'tint' ||
+        colorName === 'tabIconSelected' ||
+        colorName === 'ring'
+      ) {
+        return currentTheme.preview;
+      }
+    }
+  } catch {}
+
+  return Colors[theme][colorName];
 }
+

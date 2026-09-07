@@ -24,6 +24,9 @@ import {
   Eye,
   Film,
   Database,
+  Palette,
+  Compass,
+  MessageSquare,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -31,6 +34,7 @@ import {
   ComponentCategory,
 } from '@/components/design-system/registry';
 import { ComponentPreviewModal } from '@/components/design-system/component-preview-modal';
+import { ConfigDrawer } from '@/components/web/ConfigDrawer.web';
 
 interface CategoryConfig {
   name: 'All' | ComponentCategory;
@@ -48,6 +52,9 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Display', label: 'Display', Icon: Eye },
   { name: 'Media', label: 'Media', Icon: Film },
   { name: 'Data', label: 'Data', Icon: Database },
+  { name: 'Themes', label: 'Themes', Icon: Palette },
+  { name: 'Icons', label: 'Icons', Icon: Compass },
+  { name: 'Chat', label: 'Chat', Icon: MessageSquare },
 ];
 
 export default function DesignSystemScreen() {
@@ -60,6 +67,7 @@ export default function DesignSystemScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<'All' | ComponentCategory>('All');
   const [activeComponent, setActiveComponent] = useState<ComponentItem | null>(null);
+  const [isThemeDrawerOpen, setIsThemeDrawerOpen] = useState(false);
 
   // Theme-adaptive colors matching screenshot 1
   const bg = isDark ? '#0B0F19' : '#FFFFFF';
@@ -120,8 +128,14 @@ export default function DesignSystemScreen() {
       case 'SKELETON':
         return { bg: '#DCFCE7', text: '#16A34A' }; // Soft emerald
       case 'THEME':
+      case 'THEMES':
+      case 'TWEAKCN':
       case 'TYPOGRAPHY':
         return { bg: '#E0E7FF', text: '#4F46E5' }; // Soft violet
+      case 'ICONS':
+        return { bg: '#E0F2FE', text: '#0284C7' };
+      case 'CHAT':
+        return { bg: '#DCFCE7', text: '#15803D' };
       default:
         return { bg: '#F1F5F9', text: '#475569' };
     }
@@ -150,6 +164,14 @@ export default function DesignSystemScreen() {
         </View>
 
         <View style={styles.headerRight}>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={() => setIsThemeDrawerOpen(true)}
+            activeOpacity={0.7}
+            accessibilityLabel="Theme Settings"
+          >
+            <Palette size={20} color={mutedText} />
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.iconButton}
             onPress={() => {}}
@@ -358,6 +380,13 @@ export default function DesignSystemScreen() {
         component={activeComponent}
         visible={!!activeComponent}
         onClose={() => setActiveComponent(null)}
+      />
+
+      {/* Tweakcn Theme Settings Drawer */}
+      <ConfigDrawer
+        isOpen={isThemeDrawerOpen}
+        onClose={() => setIsThemeDrawerOpen(false)}
+        isDark={isDark}
       />
     </View>
   );

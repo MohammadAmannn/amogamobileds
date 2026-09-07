@@ -50,9 +50,9 @@ export function FullscreenModal({
             borderBottomColor: border,
           }}
         >
-          <Text style={{ fontSize: 16, fontWeight: '700', color: text }}>
+          <Text style={{ fontSize: 16, fontWeight: '500', color: text }}>
             {title}{' '}
-            <Text style={{ fontSize: 13, fontWeight: '500', opacity: 0.6 }}>
+            <Text style={{ fontSize: 13, fontWeight: '400', opacity: 0.6 }}>
               — Fullscreen Preview
             </Text>
           </Text>
