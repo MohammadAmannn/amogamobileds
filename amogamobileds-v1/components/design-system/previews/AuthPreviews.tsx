@@ -28,12 +28,13 @@ import { useColorTheme } from '@/providers/color-theme-provider';
 export function SignInPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent =
-    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+  const accent = isDark
+    ? currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
       ? currentTheme.preview
-      : isDark
-      ? '#818cf8'
-      : '#4f46e5';
+      : '#818cf8'
+    : currentTheme?.name && currentTheme.name !== 'zinc'
+    ? currentTheme.preview
+    : '#18181b';
 
   const [email, setEmail] = useState('alex.rivera@example.com');
   const [password, setPassword] = useState('••••••••••••');
@@ -228,12 +229,13 @@ export function SignInPreview() {
 export function SignUpPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent =
-    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+  const accent = isDark
+    ? currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
       ? currentTheme.preview
-      : isDark
-      ? '#818cf8'
-      : '#4f46e5';
+      : '#818cf8'
+    : currentTheme?.name && currentTheme.name !== 'zinc'
+    ? currentTheme.preview
+    : '#18181b';
 
   const [name, setName] = useState('Alex Rivera');
   const [email, setEmail] = useState('alex.rivera@example.com');
@@ -439,12 +441,13 @@ export function SignUpPreview() {
 export function VerifyOtpPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent =
-    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+  const accent = isDark
+    ? currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
       ? currentTheme.preview
-      : isDark
-      ? '#818cf8'
-      : '#4f46e5';
+      : '#818cf8'
+    : currentTheme?.name && currentTheme.name !== 'zinc'
+    ? currentTheme.preview
+    : '#18181b';
 
   const [otp, setOtp] = useState(['4', '8', '2', '9', '1', '7']);
   const [loading, setLoading] = useState(false);
@@ -553,12 +556,13 @@ export function VerifyOtpPreview() {
 export function ForgotPasswordPreview() {
   const isDark = useColorScheme() === 'dark';
   const { currentTheme } = useColorTheme();
-  const accent =
-    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+  const accent = isDark
+    ? currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
       ? currentTheme.preview
-      : isDark
-      ? '#818cf8'
-      : '#4f46e5';
+      : '#818cf8'
+    : currentTheme?.name && currentTheme.name !== 'zinc'
+    ? currentTheme.preview
+    : '#18181b';
 
   const [email, setEmail] = useState('alex.rivera@example.com');
   const [loading, setLoading] = useState(false);

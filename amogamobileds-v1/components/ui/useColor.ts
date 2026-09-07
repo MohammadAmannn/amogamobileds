@@ -15,8 +15,11 @@ export function useColor(
 
   try {
     const { currentTheme } = useColorTheme();
-    // Only use custom theme accent if theme is not zinc and has a valid preview color
-    if (currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview) {
+    if (currentTheme?.preview) {
+      // In dark mode, if the theme is zinc, use dark system tokens so text/buttons are readable on dark bg
+      if (theme === 'dark' && currentTheme.name === 'zinc') {
+        return Colors.dark[colorName];
+      }
       if (
         colorName === 'primary' ||
         colorName === 'tint' ||

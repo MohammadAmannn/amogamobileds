@@ -41,12 +41,11 @@ export function MobileEmulatorModal({
 }: MobileEmulatorModalProps) {
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
   const { currentTheme } = useColorTheme();
-  const activeAccent =
-    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+  const activeAccent = isDark
+    ? currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
       ? currentTheme.preview
-      : isDark
-      ? '#818cf8'
-      : '#4f46e5';
+      : '#818cf8'
+    : currentTheme?.preview || '#18181b';
 
   const [selectedDevice, setSelectedDevice] = useState<DeviceConfig>(DEFAULT_MOBILE_DEVICE);
   const [simulatorTheme, setSimulatorTheme] = useState<'light' | 'dark'>(isDark ? 'dark' : 'light');

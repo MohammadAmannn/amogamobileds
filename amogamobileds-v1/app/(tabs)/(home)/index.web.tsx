@@ -69,13 +69,13 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
 
 export default function WebPlaygroundScreen() {
   const systemTheme = useColorScheme();
+  const isDark = systemTheme === 'dark';
   const { currentTheme } = useColorTheme();
-  const activeAccent =
-    currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
+  const activeAccent = isDark
+    ? currentTheme?.name && currentTheme.name !== 'zinc' && currentTheme.preview
       ? currentTheme.preview
-      : isDark
-      ? '#818cf8'
-      : '#4f46e5';
+      : '#818cf8'
+    : currentTheme?.preview || '#18181b';
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
   // Screen breakpoint: Mobile viewport on web is < 768px
