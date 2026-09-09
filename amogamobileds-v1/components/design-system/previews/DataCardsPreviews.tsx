@@ -25,7 +25,7 @@ import {
   ChevronRight,
   Check,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../../providers/theme-provider'
 import type { GalleryEntry } from '../../types'
 
 // ─── 1. INTEGRATION CARD (SLACK) ────────────────────────────────────────────

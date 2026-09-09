@@ -24,8 +24,10 @@ import {
   UploadedFileCard,
   ChatAttachmentMenu,
   ChatLocationCard,
-} from '@/components/chat'
-import { useTheme } from '@/providers/theme-provider'
+  ChatProfileModal,
+} from '../../chat'
+import { Button } from '../../ui/button'
+import { useTheme } from '../../../providers/theme-provider'
 
 export interface GalleryEntry {
   id: string
@@ -80,6 +82,9 @@ export function ChatPreviews({ entry }: ChatPreviewsProps) {
       description: 'General announcements',
     },
   ])
+
+  // State for profile modal preview
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   // ──────────────────────── 1. CHAT SIDEBAR ────────────────────────
   if (entryId === 'chat-sidebar') {
@@ -532,6 +537,104 @@ export function ChatPreviews({ entry }: ChatPreviewsProps) {
             latitude={28.4595}
             longitude={77.0266}
             isLive={true}
+          />
+        </View>
+      </View>
+    );
+  }
+
+  // ──────────────────────── 17. CHAT PROFILE MODAL (MEDIA, DOCS, AUDIO, LINKS) ────────────────────────
+  if (entryId === 'chat-profile-modal' || entryId === 'profile-header-ui') {
+    const mockConversation = {
+      id: 'demo-conv-1',
+      name: 'Amoga Product Team',
+      is_group: true,
+      avatar_url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=150',
+      description: 'Design system, mobile chat primitives, and cross-platform UI sync.',
+      members_count: 8,
+    };
+
+    const mockMessages = [
+      {
+        id: 'msg-1',
+        conversation_id: 'demo-conv-1',
+        sender_id: 'user-1',
+        content: 'Check out our new documentation link: https://amoga.io/docs and the repository https://github.com/amoga-corp',
+        created_at: new Date(Date.now() - 3600000).toISOString(),
+        sender: { name: 'Aman' },
+        attachments: [
+          {
+            id: 'att-1',
+            name: 'Mobile_Design_System_Spec.pdf',
+            size: 1420000,
+            type: 'pdf',
+            url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+          },
+        ],
+      },
+      {
+        id: 'msg-2',
+        conversation_id: 'demo-conv-1',
+        sender_id: 'user-2',
+        content: 'Here is the UI screenshot and the new voice note briefing!',
+        created_at: new Date(Date.now() - 1800000).toISOString(),
+        sender: { name: 'Sarah' },
+        attachments: [
+          {
+            id: 'att-2',
+            name: 'app_preview.png',
+            size: 850000,
+            type: 'image',
+            url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600',
+          },
+          {
+            id: 'att-3',
+            name: 'voice_note_update.m4a',
+            size: 320000,
+            type: 'audio',
+            url: 'https://actions.google.com/sounds/v1/ambiences/coffee_shop.ogg',
+          },
+        ],
+      },
+    ];
+
+    return (
+      <View style={styles.singleComponentContainer}>
+        <View style={{ width: '100%', maxWidth: 420, alignItems: 'center', gap: 16 }}>
+          <View
+            style={{
+              padding: 24,
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: isDark ? '#18181b' : '#ffffff',
+              width: '100%',
+              alignItems: 'center',
+              gap: 12,
+            }}
+          >
+            <Text style={{ fontSize: 18, fontWeight: '700', color: colors.foreground }}>
+              Profile & Shared Media Drawer
+            </Text>
+            <Text style={{ fontSize: 13, color: colors.mutedForeground, textAlign: 'center', lineHeight: 18 }}>
+              Interactive Telegram-style profile drawer featuring Media, Docs, Audio, and Links tabs with instant search & downloads.
+            </Text>
+            <Button
+              variant="default"
+              onPress={() => setProfileModalOpen(true)}
+              style={{ marginTop: 8 }}
+            >
+              Open Profile Drawer Preview
+            </Button>
+          </View>
+
+          <ChatProfileModal
+            visible={profileModalOpen}
+            onClose={() => setProfileModalOpen(false)}
+            conversation={mockConversation as any}
+            messages={mockMessages as any}
+            onOpenMedia={(url) => console.log('Open media:', url)}
+            onOpenDoc={(url) => console.log('Open doc:', url)}
           />
         </View>
       </View>

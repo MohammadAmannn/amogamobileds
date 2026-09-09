@@ -16,11 +16,12 @@ import {
   Bell,
   Trash2,
   ChevronRight,
+  ChevronLeft,
   MoreVertical,
   Check,
 } from 'lucide-react-native';
-import { useColor } from '@/hooks/useColor';
-import { useTheme } from '@/providers/theme-provider';
+import { useColor } from '../../hooks/useColor';
+import { useTheme } from '../../providers/theme-provider';
 
 export interface ChatActionMenuItem {
   id: string;
@@ -41,6 +42,7 @@ export interface ChatActionMenuProps {
   isArchived?: boolean;
   showTrigger?: boolean;
   isOpen?: boolean;
+  isOwnMessage?: boolean;
   onClose?: () => void;
 }
 
@@ -52,6 +54,7 @@ export function ChatActionMenu({
   isArchived = false,
   showTrigger = false,
   isOpen = true,
+  isOwnMessage = true,
   onClose,
 }: ChatActionMenuProps) {
   const { colors, resolvedMode } = useTheme();
@@ -62,6 +65,7 @@ export function ChatActionMenu({
   const [starred, setStarred] = useState(isStarred);
   const [favorite, setFavorite] = useState(isFavorite);
   const [archived, setArchived] = useState(isArchived);
+  const [showDeleteChoices, setShowDeleteChoices] = useState(false);
 
   const cardBg = isDark ? '#121216' : '#ffffff';
   const borderColor = isDark ? '#27272a' : '#e4e4e7';
@@ -71,6 +75,11 @@ export function ChatActionMenu({
   const dividerColor = isDark ? '#27272a' : '#f1f5f9';
 
   const handleAction = (id: string) => {
+    if (id === 'delete') {
+      setShowDeleteChoices(true);
+      return;
+    }
+
     setActiveItem(id);
     if (id === 'pin') setPinned(!pinned);
     if (id === 'star') setStarred(!starred);
@@ -175,6 +184,81 @@ export function ChatActionMenu({
     );
   };
 
+  if (showDeleteChoices) {
+    return (
+      <View
+        style={[
+          styles.cardContainer,
+          {
+            backgroundColor: cardBg,
+            borderColor,
+            shadowColor: isDark ? '#000000' : '#64748b',
+            width: 220,
+          },
+        ]}
+      >
+        <View style={styles.submenuHeader}>
+          <TouchableOpacity
+            onPress={() => setShowDeleteChoices(false)}
+            hitSlop={8}
+            style={styles.backButton}
+          >
+            <ChevronLeft size={16} color={textColor} />
+          </TouchableOpacity>
+          <Text style={[styles.submenuTitle, { color: textColor }]}>
+            Delete message?
+          </Text>
+        </View>
+
+        <View style={[styles.divider, { backgroundColor: dividerColor }]} />
+
+        <TouchableOpacity
+          onPress={() => {
+            setShowDeleteChoices(false);
+            onSelect?.('delete-for-me');
+          }}
+          activeOpacity={0.7}
+          style={[styles.menuItem, { paddingVertical: 10 }]}
+        >
+          <View style={styles.itemLeft}>
+            <Trash2 size={16} color="#ef4444" strokeWidth={2} />
+            <Text style={[styles.itemLabel, { color: '#ef4444' }]}>
+              Delete for me
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        {isOwnMessage !== false && (
+          <TouchableOpacity
+            onPress={() => {
+              setShowDeleteChoices(false);
+              onSelect?.('delete-for-everyone');
+            }}
+            activeOpacity={0.7}
+            style={[styles.menuItem, { paddingVertical: 10 }]}
+          >
+            <View style={styles.itemLeft}>
+              <Trash2 size={16} color="#ef4444" strokeWidth={2} />
+              <Text style={[styles.itemLabel, { color: '#ef4444' }]}>
+                Delete for everyone
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        <View style={[styles.divider, { backgroundColor: dividerColor }]} />
+
+        <TouchableOpacity
+          onPress={() => setShowDeleteChoices(false)}
+          activeOpacity={0.7}
+          style={[styles.menuItem, { justifyContent: 'center' }]}
+        >
+          <Text style={[styles.itemLabel, { color: mutedColor }]}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View
       style={[
@@ -213,6 +297,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.12,
     shadowRadius: 16,
     elevation: 8,
+  },
+  submenuHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    gap: 8,
+  },
+  backButton: {
+    padding: 2,
+  },
+  submenuTitle: {
+    fontSize: 13,
+    fontWeight: '600',
+    fontFamily: 'Open Sans',
   },
   itemsGroup: {
     gap: 1,

@@ -17,7 +17,7 @@ import {
   Sliders,
   Eye,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../../providers/theme-provider'
 import { ComponentBadge } from '../ComponentBadge'
 import type { GalleryEntry } from '../../types'
 

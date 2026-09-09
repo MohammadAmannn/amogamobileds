@@ -8,8 +8,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { supabase } from '@/lib/supabase';
-import type { Profile } from '@/lib/database.types';
+import { supabase } from '../lib/supabase';
+import type { Profile } from '../lib/database.types';
 
 interface AuthContextType {
   /** `null` once resolved and signed out; the session while signed in. */
@@ -31,16 +31,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const userId = session?.user.id ?? null;
 
-  const loadProfile = useCallback(async (id: string) => {
-    const { data } = await supabase
+  const loadProfile = useCallback(async (id: string, currentUser?: User | null) => {
+    let { data } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', id)
       .maybeSingle();
 
-    // `maybeSingle` rather than `single`: the row is created by a trigger on
-    // auth.users, and on a fast device the first read can land before the
-    // trigger commits. A null profile means "not yet", not "error".
+    // If profile row doesn't exist yet in public.profiles, automatically create/upsert it
+    if (!data && currentUser) {
+      const displayName =
+        currentUser.user_metadata?.name ||
+        currentUser.user_metadata?.full_name ||
+        currentUser.user_metadata?.display_name ||
+        currentUser.email?.split('@')[0] ||
+        'User';
+
+      const fallback = {
+        id: currentUser.id,
+        email: currentUser.email || '',
+        name: displayName,
+        online: true,
+        offline: false,
+        updated_at: new Date().toISOString(),
+      };
+
+      const { data: created } = await supabase
+        .from('profiles')
+        .upsert(fallback as any)
+        .select()
+        .maybeSingle();
+
+      data = created ?? (fallback as any);
+    }
+
     setProfile(data ?? null);
   }, []);
 
@@ -74,8 +98,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!userId) return;
-    loadProfile(userId);
-  }, [userId, loadProfile]);
+    loadProfile(userId, session?.user);
+  }, [userId, session?.user, loadProfile]);
 
   useEffect(() => {
     if (!userId) return;

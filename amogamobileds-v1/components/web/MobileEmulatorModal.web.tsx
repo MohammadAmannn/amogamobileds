@@ -20,11 +20,11 @@ import {
   Tablet,
   CheckCircle2,
 } from 'lucide-react-native';
-import { ComponentItem } from '@/components/design-system/registry';
+import { ComponentItem } from '../design-system/registry';
 import { DeviceConfig } from './types';
 import { DEVICES, DEFAULT_MOBILE_DEVICE } from './devices';
 import { DeviceFrame } from './DeviceFrame.web';
-import { useColorTheme } from '@/providers/color-theme-provider';
+import { useColorTheme } from '../../providers/color-theme-provider';
 
 interface MobileEmulatorModalProps {
   isOpen: boolean;

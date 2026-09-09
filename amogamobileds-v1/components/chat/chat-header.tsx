@@ -19,8 +19,10 @@ import {
   Archive,
   Trash2,
   ChevronRight,
+  Sun,
+  Moon,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
 
 export interface ChatHeaderProps {
   title?: string
@@ -67,7 +69,7 @@ export function ChatHeader({
   onDelete,
   style,
 }: ChatHeaderProps) {
-  const { colors, resolvedMode } = useTheme()
+  const { colors, resolvedMode, toggleMode } = useTheme()
   const isDark = resolvedMode === 'dark'
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
@@ -104,13 +106,13 @@ export function ChatHeader({
       ]}
     >
       {/* Left Column: Avatar + Info */}
-      <View style={styles.leftInfo}>
-        <Pressable
-          onPress={onAvatarClick}
-          style={styles.avatarWrapper}
-          accessibilityRole="button"
-          accessibilityLabel="User avatar"
-        >
+      <Pressable
+        onPress={onAvatarClick}
+        style={styles.leftInfo}
+        accessibilityRole="button"
+        accessibilityLabel="Chat info"
+      >
+        <View style={styles.avatarWrapper}>
           <View
             style={[
               styles.avatarBox,
@@ -142,7 +144,7 @@ export function ChatHeader({
               ]}
             />
           )}
-        </Pressable>
+        </View>
 
         <View style={styles.titleInfo}>
           <Text
@@ -162,7 +164,7 @@ export function ChatHeader({
               : status}
           </Text>
         </View>
-      </View>
+      </Pressable>
 
       {/* Right Column: Actions */}
       <View style={styles.rightActions}>

@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { Button } from './button';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import React, {
   createContext,
   ReactNode,

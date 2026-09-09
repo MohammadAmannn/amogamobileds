@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { useColor } from '@/hooks/useColor';
+import { useColor } from '../../hooks/useColor';
 import Feather from '@expo/vector-icons/Feather';
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 

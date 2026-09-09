@@ -9,22 +9,27 @@ import {
 import {
   ThumbsUp,
   ThumbsDown,
+  CornerUpLeft,
   Copy,
   Share2,
   MoreHorizontal,
+  Trash2,
   Check,
 } from 'lucide-react-native';
-import { useTheme } from '@/providers/theme-provider';
+import { useTheme } from '../../providers/theme-provider';
 
 export interface ChatIconBarProps {
   onThumbUp?: () => void;
   onThumbDown?: () => void;
+  onReply?: () => void;
   onCopy?: () => void;
   onShare?: () => void;
+  onDelete?: () => void;
   onMore?: () => void;
   initialLiked?: boolean;
   initialDisliked?: boolean;
 }
+
 
 export function ChatIconBar({
   onThumbUp,
@@ -75,12 +80,11 @@ export function ChatIconBar({
   };
 
   const handleShare = () => {
-    triggerFeedback('Share triggered');
+    triggerFeedback('Share');
     onShare?.();
   };
 
   const handleMore = () => {
-    triggerFeedback('More options');
     onMore?.();
   };
 
@@ -102,7 +106,7 @@ export function ChatIconBar({
           },
         ]}
       >
-        {/* 1. Thumbs Up */}
+        {/* 1. Like */}
         <TouchableOpacity
           onPress={handleThumbUp}
           activeOpacity={0.7}
@@ -110,7 +114,7 @@ export function ChatIconBar({
             styles.iconBtn,
             isLiked && { backgroundColor: isDark ? '#064e3b' : '#ecfdf5' },
           ]}
-          accessibilityLabel="Thumb up"
+          accessibilityLabel="Like"
         >
           <ThumbsUp
             size={16}
@@ -119,7 +123,7 @@ export function ChatIconBar({
           />
         </TouchableOpacity>
 
-        {/* 2. Thumbs Down */}
+        {/* 2. Dislike */}
         <TouchableOpacity
           onPress={handleThumbDown}
           activeOpacity={0.7}
@@ -127,7 +131,7 @@ export function ChatIconBar({
             styles.iconBtn,
             isDisliked && { backgroundColor: isDark ? '#4c0519' : '#fff1f2' },
           ]}
-          accessibilityLabel="Thumb down"
+          accessibilityLabel="Dislike"
         >
           <ThumbsDown
             size={16}
@@ -158,19 +162,19 @@ export function ChatIconBar({
           onPress={handleShare}
           activeOpacity={0.7}
           style={styles.iconBtn}
-          accessibilityLabel="Share message"
+          accessibilityLabel="Share"
         >
           <Share2 size={16} color={iconMuted} strokeWidth={1.8} />
         </TouchableOpacity>
 
-        {/* 5. More Actions */}
+        {/* 5. 3-Dot Menu */}
         <TouchableOpacity
           onPress={handleMore}
           activeOpacity={0.7}
           style={styles.iconBtn}
-          accessibilityLabel="More actions"
+          accessibilityLabel="More options"
         >
-          <MoreHorizontal size={16} color={iconMuted} strokeWidth={1.8} />
+          <MoreHorizontal size={17} color={iconMuted} strokeWidth={2.2} />
         </TouchableOpacity>
       </View>
     </View>

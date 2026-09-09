@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View } from '@/components/ui/view';
-import { Text } from '@/components/ui/text';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { View } from '../ui/view';
+import { Text } from '../ui/text';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
 import {
   Card,
   CardHeader,
@@ -10,28 +10,28 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { InputOTP } from '@/components/ui/input-otp';
-import { Switch } from '@/components/ui/switch';
-import { Separator } from '@/components/ui/separator';
-import { Spinner } from '@/components/ui/spinner';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ModeToggle } from '@/components/ui/mode-toggle';
-import { useToast } from '@/components/ui/toast';
-import { ColorPicker } from '@/components/ui/color-picker';
-import { Accordion, AccordionItem } from '@/components/ui/accordion';
-import { Progress } from '@/components/ui/progress';
-import { Slider } from '@/components/ui/slider';
-import { Toggle, ToggleGroup } from '@/components/ui/toggle';
-import { Tooltip } from '@/components/ui/tooltip';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { AlertDialog } from '@/components/ui/alert-dialog';
-import { ActionSheet } from '@/components/ui/action-sheet';
-import { BottomSheet } from '@/components/ui/bottom-sheet';
-import { Collapsible } from '@/components/ui/collapsible';
+} from '../ui/card';
+import { Checkbox } from '../ui/checkbox';
+import { Input } from '../ui/input';
+import { InputOTP } from '../ui/input-otp';
+import { Switch } from '../ui/switch';
+import { Separator } from '../ui/separator';
+import { Spinner } from '../ui/spinner';
+import { Skeleton } from '../ui/skeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { ModeToggle } from '../ui/mode-toggle';
+import { useToast } from '../ui/toast';
+import { ColorPicker } from '../ui/color-picker';
+import { Accordion, AccordionItem } from '../ui/accordion';
+import { Progress } from '../ui/progress';
+import { Slider } from '../ui/slider';
+import { Toggle, ToggleGroup } from '../ui/toggle';
+import { Tooltip } from '../ui/tooltip';
+import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
+import { AlertDialog } from '../ui/alert-dialog';
+import { ActionSheet } from '../ui/action-sheet';
+import { BottomSheet } from '../ui/bottom-sheet';
+import { Collapsible } from '../ui/collapsible';
 import {
   Combobox,
   ComboboxTrigger,
@@ -41,54 +41,54 @@ import {
   ComboboxList,
   ComboboxItem,
   OptionType,
-} from '@/components/ui/combobox';
-import { DatePicker } from '@/components/ui/date-picker';
-import { FilePicker } from '@/components/ui/file-picker';
-import { MediaPicker } from '@/components/ui/media-picker';
-import { Gallery } from '@/components/ui/gallery';
-import { HelloWave } from '@/components/ui/hello-wave';
-import { Icon } from '@/components/ui/icon';
-import { Image } from '@/components/ui/image';
-import { Link } from '@/components/ui/link';
-import { ParallaxScrollView } from '@/components/ui/parallax-scrollview';
-import { Picker } from '@/components/ui/picker';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import { RadioGroup, RadioOption } from '@/components/ui/radio';
-import { ScrollView } from '@/components/ui/scroll-view';
-import { SearchBar } from '@/components/ui/searchbar';
-import { ShareButton } from '@/components/ui/share';
-import { Sheet } from '@/components/ui/sheet';
-import { Table, TableColumn } from '@/components/ui/table';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Video } from '@/components/ui/video';
-import { AudioPlayer } from '@/components/ui/audio-player';
-import { AudioRecorder } from '@/components/ui/audio-recorder';
-import { AudioWaveform } from '@/components/ui/audio-waveform';
-import { Camera } from '@/components/ui/camera';
-import { CameraPreview as CameraPreviewComponent } from '@/components/ui/camera-preview';
-import { Carousel } from '@/components/ui/carousel';
-import { AvoidKeyboard } from '@/components/ui/avoid-keyboard';
-import { Onboarding } from '@/components/ui/onboarding';
+} from '../ui/combobox';
+import { DatePicker } from '../ui/date-picker';
+import { FilePicker } from '../ui/file-picker';
+import { MediaPicker } from '../ui/media-picker';
+import { Gallery } from '../ui/gallery';
+import { HelloWave } from '../ui/hello-wave';
+import { Icon } from '../ui/icon';
+import { Image } from '../ui/image';
+import { Link } from '../ui/link';
+import { ParallaxScrollView } from '../ui/parallax-scrollview';
+import { Picker } from '../ui/picker';
+import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover';
+import { RadioGroup, RadioOption } from '../ui/radio';
+import { ScrollView } from '../ui/scroll-view';
+import { SearchBar } from '../ui/searchbar';
+import { ShareButton } from '../ui/share';
+import { Sheet } from '../ui/sheet';
+import { Table, TableColumn } from '../ui/table';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
+import { Video } from '../ui/video';
+import { AudioPlayer } from '../ui/audio-player';
+import { AudioRecorder } from '../ui/audio-recorder';
+import { AudioWaveform } from '../ui/audio-waveform';
+import { Camera } from '../ui/camera';
+import { CameraPreview as CameraPreviewComponent } from '../ui/camera-preview';
+import { Carousel } from '../ui/carousel';
+import { AvoidKeyboard } from '../ui/avoid-keyboard';
+import { Onboarding } from '../ui/onboarding';
 
 // CHARTS
-import { ChartContainer } from '@/components/charts/chart-container';
-import { BarChart } from '@/components/charts/bar-chart';
-import { LineChart } from '@/components/charts/line-chart';
-import { AreaChart } from '@/components/charts/area-chart';
-import { PieChart } from '@/components/charts/pie-chart';
-import { ProgressRingChart } from '@/components/charts/progress-ring-chart';
-import { BubbleChart } from '@/components/charts/bubble-chart';
-import { CandlestickChart } from '@/components/charts/candlestick-chart';
-import { ColumnChart } from '@/components/charts/column-chart';
-import { DoughnutChart } from '@/components/charts/doughnut-chart';
-import { HeatmapChart } from '@/components/charts/heatmap-chart';
-import { PolarAreaChart } from '@/components/charts/polar-area-chart';
-import { RadarChart } from '@/components/charts/radar-chart';
-import { RadialBarChart } from '@/components/charts/radial-bar-chart';
-import { ScatterChart } from '@/components/charts/scatter-chart';
-import { StackedAreaChart } from '@/components/charts/stacked-area-chart';
-import { StackedBarChart } from '@/components/charts/stacked-bar-chart';
-import { TreemapChart } from '@/components/charts/treemap-chart';
+import { ChartContainer } from '../charts/chart-container';
+import { BarChart } from '../charts/bar-chart';
+import { LineChart } from '../charts/line-chart';
+import { AreaChart } from '../charts/area-chart';
+import { PieChart } from '../charts/pie-chart';
+import { ProgressRingChart } from '../charts/progress-ring-chart';
+import { BubbleChart } from '../charts/bubble-chart';
+import { CandlestickChart } from '../charts/candlestick-chart';
+import { ColumnChart } from '../charts/column-chart';
+import { DoughnutChart } from '../charts/doughnut-chart';
+import { HeatmapChart } from '../charts/heatmap-chart';
+import { PolarAreaChart } from '../charts/polar-area-chart';
+import { RadarChart } from '../charts/radar-chart';
+import { RadialBarChart } from '../charts/radial-bar-chart';
+import { ScatterChart } from '../charts/scatter-chart';
+import { StackedAreaChart } from '../charts/stacked-area-chart';
+import { StackedBarChart } from '../charts/stacked-bar-chart';
+import { TreemapChart } from '../charts/treemap-chart';
 
 import {
   Mail,
@@ -1269,7 +1269,7 @@ export const DESIGN_SYSTEM_COMPONENTS: ComponentItem[] = [
     tag: 'BUTTON',
     description: 'Versatile button with multiple variants, sizes, and interactive animations.',
     Preview: ButtonPreview,
-    codeSnippet: `import { Button } from '@/components/ui/button';
+    codeSnippet: `import { Button } from '../ui/button';
 
 export function Example() {
   return <Button variant="default">Click Me</Button>;
@@ -1283,7 +1283,7 @@ export function Example() {
     tag: 'BADGE',
     description: 'A small status descriptor for UI elements with color indicators.',
     Preview: BadgePreview,
-    codeSnippet: `import { Badge } from '@/components/ui/badge';
+    codeSnippet: `import { Badge } from '../ui/badge';
 
 export function Example() {
   return <Badge variant="success">Active</Badge>;
@@ -1297,7 +1297,7 @@ export function Example() {
     tag: 'AVATAR',
     description: 'An image element with initials fallback for representing user profiles.',
     Preview: AvatarPreview,
-    codeSnippet: `import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+    codeSnippet: `import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 
 export function Example() {
   return (
@@ -1316,7 +1316,7 @@ export function Example() {
     tag: 'ICON',
     description: 'Themed icon component with support for Lucide React Native icons.',
     Preview: IconPreview,
-    codeSnippet: `import { Icon } from '@/components/ui/icon';
+    codeSnippet: `import { Icon } from '../ui/icon';
 import { Heart } from 'lucide-react-native';
 
 export function Example() {
@@ -1331,7 +1331,7 @@ export function Example() {
     tag: 'IMAGE',
     description: 'Responsive image component with loading states and error handling.',
     Preview: ImagePreview,
-    codeSnippet: `import { Image } from '@/components/ui/image';
+    codeSnippet: `import { Image } from '../ui/image';
 
 export function Example() {
   return <Image source={{ uri: 'https://example.com/hero.jpg' }} style={{ width: '100%', height: 200 }} />;
@@ -1345,7 +1345,7 @@ export function Example() {
     tag: 'TEXT',
     description: 'Typography component with preconfigured headings, weights, and color tokens.',
     Preview: TextPreview,
-    codeSnippet: `import { Text } from '@/components/ui/text';
+    codeSnippet: `import { Text } from '../ui/text';
 
 export function Example() {
   return <Text variant="title">Heading Text</Text>;
@@ -1359,7 +1359,7 @@ export function Example() {
     tag: 'VIEW',
     description: 'Foundational View component with theme tokens and ref forwarding.',
     Preview: ViewPreview,
-    codeSnippet: `import { View } from '@/components/ui/view';
+    codeSnippet: `import { View } from '../ui/view';
 
 export function Example() {
   return <View style={{ padding: 16 }}>Container</View>;
@@ -1373,7 +1373,7 @@ export function Example() {
     tag: 'HELLO WAVE',
     description: 'Animated waving hand emoji with smooth rotation animation.',
     Preview: HelloWavePreview,
-    codeSnippet: `import { HelloWave } from '@/components/ui/hello-wave';
+    codeSnippet: `import { HelloWave } from '../ui/hello-wave';
 
 export function Example() {
   return <HelloWave />;
@@ -1387,7 +1387,7 @@ export function Example() {
     tag: 'LINK',
     description: 'Accessible navigation link for internal and external URLs.',
     Preview: LinkPreview,
-    codeSnippet: `import { Link } from '@/components/ui/link';
+    codeSnippet: `import { Link } from '../ui/link';
 
 export function Example() {
   return <Link href="https://ui.ahmedbna.com">Visit Documentation</Link>;
@@ -1401,7 +1401,7 @@ export function Example() {
     tag: 'SEPARATOR',
     description: 'Subtle divider lines to delineate sections and content blocks.',
     Preview: SeparatorPreview,
-    codeSnippet: `import { Separator } from '@/components/ui/separator';
+    codeSnippet: `import { Separator } from '../ui/separator';
 
 export function Example() {
   return <Separator style={{ marginVertical: 16 }} />;
@@ -1417,7 +1417,7 @@ export function Example() {
     tag: 'INPUT',
     description: 'Styled text input component with labels, validation errors, and icon slots.',
     Preview: InputPreview,
-    codeSnippet: `import { Input } from '@/components/ui/input';
+    codeSnippet: `import { Input } from '../ui/input';
 
 export function Example() {
   const [value, setValue] = useState('');
@@ -1432,7 +1432,7 @@ export function Example() {
     tag: 'INPUT OTP',
     description: 'Secure segmented verification pin input for one-time passwords.',
     Preview: InputOTPPreview,
-    codeSnippet: `import { InputOTP } from '@/components/ui/input-otp';
+    codeSnippet: `import { InputOTP } from '../ui/input-otp';
 
 export function Example() {
   const [otp, setOtp] = useState('');
@@ -1447,7 +1447,7 @@ export function Example() {
     tag: 'CHECKBOX',
     description: 'Accessible toggle for boolean values and multi-select lists.',
     Preview: CheckboxPreview,
-    codeSnippet: `import { Checkbox } from '@/components/ui/checkbox';
+    codeSnippet: `import { Checkbox } from '../ui/checkbox';
 
 export function Example() {
   const [checked, setChecked] = useState(false);
@@ -1462,7 +1462,7 @@ export function Example() {
     tag: 'SWITCH',
     description: 'Smooth toggle switch for switching settings and binary preferences.',
     Preview: SwitchPreview,
-    codeSnippet: `import { Switch } from '@/components/ui/switch';
+    codeSnippet: `import { Switch } from '../ui/switch';
 
 export function Example() {
   const [val, setVal] = useState(true);
@@ -1477,7 +1477,7 @@ export function Example() {
     tag: 'RADIO',
     description: 'Set of checkable radio buttons where only one option can be selected.',
     Preview: RadioPreview,
-    codeSnippet: `import { RadioGroup } from '@/components/ui/radio';
+    codeSnippet: `import { RadioGroup } from '../ui/radio';
 
 export function Example() {
   const [val, setVal] = useState('monthly');
@@ -1498,7 +1498,7 @@ export function Example() {
     tag: 'TOGGLE',
     description: 'Two-state button and multi-button segmented groups.',
     Preview: TogglePreview,
-    codeSnippet: `import { Toggle, ToggleGroup } from '@/components/ui/toggle';
+    codeSnippet: `import { Toggle, ToggleGroup } from '../ui/toggle';
 
 export function Example() {
   const [active, setActive] = useState(false);
@@ -1513,7 +1513,7 @@ export function Example() {
     tag: 'SEARCHBAR',
     description: 'Customizable search input with debouncing and clear action.',
     Preview: SearchbarPreview,
-    codeSnippet: `import { SearchBar } from '@/components/ui/searchbar';
+    codeSnippet: `import { SearchBar } from '../ui/searchbar';
 
 export function Example() {
   const [q, setQ] = useState('');
@@ -1528,7 +1528,7 @@ export function Example() {
     tag: 'COMBOBOX',
     description: 'Searchable dropdown combining an input with a searchable list of items.',
     Preview: ComboboxPreview,
-    codeSnippet: `import { Combobox } from '@/components/ui/combobox';
+    codeSnippet: `import { Combobox } from '../ui/combobox';
 
 export function Example() {
   const [item, setItem] = useState('');
@@ -1543,7 +1543,7 @@ export function Example() {
     tag: 'PICKER',
     description: 'Dropdown selection menu with search and section support.',
     Preview: PickerPreview,
-    codeSnippet: `import { Picker } from '@/components/ui/picker';
+    codeSnippet: `import { Picker } from '../ui/picker';
 
 export function Example() {
   const [val, setVal] = useState('');
@@ -1558,7 +1558,7 @@ export function Example() {
     tag: 'DATE PICKER',
     description: 'Date and time selection sheet with calendar and time wheel.',
     Preview: DatePickerPreview,
-    codeSnippet: `import { DatePicker } from '@/components/ui/date-picker';
+    codeSnippet: `import { DatePicker } from '../ui/date-picker';
 
 export function Example() {
   const [date, setDate] = useState(new Date());
@@ -1573,7 +1573,7 @@ export function Example() {
     tag: 'FILE PICKER',
     description: 'Upload files and documents with validation and size checks.',
     Preview: FilePickerPreview,
-    codeSnippet: `import { FilePicker } from '@/components/ui/file-picker';
+    codeSnippet: `import { FilePicker } from '../ui/file-picker';
 
 export function Example() {
   return <FilePicker onFilesSelected={(files) => console.log(files)} />;
@@ -1587,7 +1587,7 @@ export function Example() {
     tag: 'MEDIA PICKER',
     description: 'Select images and videos from device gallery or camera.',
     Preview: MediaPickerPreview,
-    codeSnippet: `import { MediaPicker } from '@/components/ui/media-picker';
+    codeSnippet: `import { MediaPicker } from '../ui/media-picker';
 
 export function Example() {
   return <MediaPicker onSelectionChange={(media) => console.log(media)} />;
@@ -1601,7 +1601,7 @@ export function Example() {
     tag: 'COLOR PICKER',
     description: 'HSV visual color palette and swatch selector.',
     Preview: ColorPickerPreview,
-    codeSnippet: `import { ColorPicker } from '@/components/ui/color-picker';
+    codeSnippet: `import { ColorPicker } from '../ui/color-picker';
 
 export function Example() {
   const [color, setColor] = useState('#6366f1');
@@ -1616,7 +1616,7 @@ export function Example() {
     tag: 'SLIDER',
     description: 'Smooth slider control for choosing a value within a numeric range.',
     Preview: SliderPreview,
-    codeSnippet: `import { Slider } from '@/components/ui/slider';
+    codeSnippet: `import { Slider } from '../ui/slider';
 
 export function Example() {
   const [val, setVal] = useState(50);
@@ -1633,7 +1633,7 @@ export function Example() {
     tag: 'ALERT',
     description: 'Inline callout messages for status notifications and warnings.',
     Preview: AlertPreview,
-    codeSnippet: `import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+    codeSnippet: `import { Alert, AlertTitle, AlertDescription } from '../ui/alert';
 
 export function Example() {
   return (
@@ -1652,7 +1652,7 @@ export function Example() {
     tag: 'ALERT DIALOG',
     description: 'Modal confirmation dialog that interrupts the user for critical decisions.',
     Preview: AlertDialogPreview,
-    codeSnippet: `import { AlertDialog } from '@/components/ui/alert-dialog';
+    codeSnippet: `import { AlertDialog } from '../ui/alert-dialog';
 
 export function Example() {
   const [open, setOpen] = useState(false);
@@ -1667,7 +1667,7 @@ export function Example() {
     tag: 'TOAST',
     description: 'Floating notification alerts with iOS Dynamic Island animation.',
     Preview: ToastPreview,
-    codeSnippet: `import { useToast } from '@/components/ui/toast';
+    codeSnippet: `import { useToast } from '../ui/toast';
 
 export function Example() {
   const toast = useToast();
@@ -1682,7 +1682,7 @@ export function Example() {
     tag: 'SPINNER',
     description: 'Indicates background activity and asynchronous loading states.',
     Preview: SpinnerPreview,
-    codeSnippet: `import { Spinner } from '@/components/ui/spinner';
+    codeSnippet: `import { Spinner } from '../ui/spinner';
 
 export function Example() {
   return <Spinner size="default" />;
@@ -1696,7 +1696,7 @@ export function Example() {
     tag: 'PROGRESS',
     description: 'Animated linear completion bar with smooth width transitions.',
     Preview: ProgressPreview,
-    codeSnippet: `import { Progress } from '@/components/ui/progress';
+    codeSnippet: `import { Progress } from '../ui/progress';
 
 export function Example() {
   return <Progress value={65} />;
@@ -1710,7 +1710,7 @@ export function Example() {
     tag: 'SKELETON',
     description: 'Placeholder shapes representing content during fetching.',
     Preview: SkeletonPreview,
-    codeSnippet: `import { Skeleton } from '@/components/ui/skeleton';
+    codeSnippet: `import { Skeleton } from '../ui/skeleton';
 
 export function Example() {
   return <Skeleton style={{ width: '100%', height: 48, borderRadius: 8 }} />;
@@ -1726,7 +1726,7 @@ export function Example() {
     tag: 'CARD',
     description: 'Elevated surfaces grouping related headers, contents, and actions.',
     Preview: CardPreview,
-    codeSnippet: `import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+    codeSnippet: `import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 
 export function Example() {
   return (
@@ -1745,7 +1745,7 @@ export function Example() {
     tag: 'ACCORDION',
     description: 'Collapsible header sections with smooth height animations.',
     Preview: AccordionPreview,
-    codeSnippet: `import { Accordion, AccordionItem } from '@/components/ui/accordion';
+    codeSnippet: `import { Accordion, AccordionItem } from '../ui/accordion';
 
 export function Example() {
   return (
@@ -1763,7 +1763,7 @@ export function Example() {
     tag: 'COLLAPSIBLE',
     description: 'Interactive component which expands and collapses custom content.',
     Preview: CollapsiblePreview,
-    codeSnippet: `import { Collapsible } from '@/components/ui/collapsible';
+    codeSnippet: `import { Collapsible } from '../ui/collapsible';
 
 export function Example() {
   return (
@@ -1781,7 +1781,7 @@ export function Example() {
     tag: 'SHEET',
     description: 'Side modal sheet for navigation drawers and filter settings.',
     Preview: SheetPreview,
-    codeSnippet: `import { Sheet } from '@/components/ui/sheet';
+    codeSnippet: `import { Sheet } from '../ui/sheet';
 
 export function Example() {
   const [open, setOpen] = useState(false);
@@ -1796,7 +1796,7 @@ export function Example() {
     tag: 'BOTTOM SHEET',
     description: 'Modal sheet sliding up from bottom with gesture snap points.',
     Preview: BottomSheetPreview,
-    codeSnippet: `import { BottomSheet } from '@/components/ui/bottom-sheet';
+    codeSnippet: `import { BottomSheet } from '../ui/bottom-sheet';
 
 export function Example() {
   const [open, setOpen] = useState(false);
@@ -1811,7 +1811,7 @@ export function Example() {
     tag: 'ACTION SHEET',
     description: 'Native action menu sheet triggered from the bottom of screen.',
     Preview: ActionSheetPreview,
-    codeSnippet: `import { ActionSheet } from '@/components/ui/action-sheet';
+    codeSnippet: `import { ActionSheet } from '../ui/action-sheet';
 
 export function Example() {
   const [open, setOpen] = useState(false);
@@ -1833,7 +1833,7 @@ export function Example() {
     tag: 'SCROLL VIEW',
     description: 'Scrollable container view with indicator controls.',
     Preview: ScrollViewPreview,
-    codeSnippet: `import { ScrollView } from '@/components/ui/scroll-view';
+    codeSnippet: `import { ScrollView } from '../ui/scroll-view';
 
 export function Example() {
   return <ScrollView><Text>Scrollable Content</Text></ScrollView>;
@@ -1847,7 +1847,7 @@ export function Example() {
     tag: 'AVOID KEYBOARD',
     description: 'Automatically adjusts viewport height to prevent keyboard overlap.',
     Preview: AvoidKeyboardPreview,
-    codeSnippet: `import { AvoidKeyboard } from '@/components/ui/avoid-keyboard';
+    codeSnippet: `import { AvoidKeyboard } from '../ui/avoid-keyboard';
 
 export function Example() {
   return <AvoidKeyboard><Input label="Chat" /></AvoidKeyboard>;
@@ -1861,7 +1861,7 @@ export function Example() {
     tag: 'PARALLAX',
     description: 'Scroll view featuring a rich parallax header image transformation.',
     Preview: ParallaxScrollViewPreview,
-    codeSnippet: `import { ParallaxScrollView } from '@/components/ui/parallax-scrollview';
+    codeSnippet: `import { ParallaxScrollView } from '../ui/parallax-scrollview';
 
 export function Example() {
   return <ParallaxScrollView headerImage={<Image source={{ uri: '...' }} />}><Text>Content</Text></ParallaxScrollView>;
@@ -1875,7 +1875,7 @@ export function Example() {
     tag: 'ONBOARDING',
     description: 'Multi-step welcome flow with animated pagination and skip controls.',
     Preview: OnboardingPreview,
-    codeSnippet: `import { Onboarding } from '@/components/ui/onboarding';
+    codeSnippet: `import { Onboarding } from '../ui/onboarding';
 
 export function Example() {
   return <Onboarding steps={[{ id: '1', title: 'Welcome', description: 'Explore the app' }]} onComplete={() => {}} />;
@@ -1891,7 +1891,7 @@ export function Example() {
     tag: 'TOOLTIP',
     description: 'Contextual overlays with helpful hints on hover or press.',
     Preview: TooltipPreview,
-    codeSnippet: `import { Tooltip } from '@/components/ui/tooltip';
+    codeSnippet: `import { Tooltip } from '../ui/tooltip';
 
 export function Example() {
   return <Tooltip content="Hint text"><Button>Hover</Button></Tooltip>;
@@ -1905,7 +1905,7 @@ export function Example() {
     tag: 'POPOVER',
     description: 'Floating rich content layer anchored to any interactive trigger.',
     Preview: PopoverPreview,
-    codeSnippet: `import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+    codeSnippet: `import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover';
 
 export function Example() {
   return (
@@ -1924,7 +1924,7 @@ export function Example() {
     tag: 'TABLE',
     description: 'Flexible data table with styled header, rows, and cells.',
     Preview: TablePreview,
-    codeSnippet: `import { Table } from '@/components/ui/table';
+    codeSnippet: `import { Table } from '../ui/table';
 
 export function Example() {
   return <Table data={[{ id: '1', name: 'Item' }]} columns={[{ id: 'name', header: 'Name', accessorKey: 'name' }]} />;
@@ -1938,7 +1938,7 @@ export function Example() {
     tag: 'TABS',
     description: 'Segmented content views with animated indicators.',
     Preview: TabsPreview,
-    codeSnippet: `import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+    codeSnippet: `import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
 
 export function Example() {
   return (
@@ -1957,7 +1957,7 @@ export function Example() {
     tag: 'CAROUSEL',
     description: 'Sliding carousel banner with indicators and gestures.',
     Preview: CarouselPreview,
-    codeSnippet: `import { Carousel } from '@/components/ui/carousel';
+    codeSnippet: `import { Carousel } from '../ui/carousel';
 
 export function Example() {
   return <Carousel showIndicators><View><Text>Slide 1</Text></View></Carousel>;
@@ -1971,7 +1971,7 @@ export function Example() {
     tag: 'THEME',
     description: 'Switch between light, dark, and system themes.',
     Preview: ModeTogglePreview,
-    codeSnippet: `import { ModeToggle } from '@/components/ui/mode-toggle';
+    codeSnippet: `import { ModeToggle } from '../ui/mode-toggle';
 
 export function Example() {
   return <ModeToggle />;
@@ -1985,7 +1985,7 @@ export function Example() {
     tag: 'SHARE',
     description: 'Triggers platform native share sheet with custom links and messages.',
     Preview: SharePreview,
-    codeSnippet: `import { ShareButton } from '@/components/ui/share';
+    codeSnippet: `import { ShareButton } from '../ui/share';
 
 export function Example() {
   return <ShareButton message="Check out BNA UI" url="https://ui.ahmedbna.com"><Button>Share</Button></ShareButton>;
@@ -2001,7 +2001,7 @@ export function Example() {
     tag: 'AUDIO PLAYER',
     description: 'Full audio player with scrubber, time duration, and track info.',
     Preview: AudioPlayerPreview,
-    codeSnippet: `import { AudioPlayer } from '@/components/ui/audio-player';
+    codeSnippet: `import { AudioPlayer } from '../ui/audio-player';
 
 export function Example() {
   return <AudioPlayer source={{ uri: 'https://example.com/audio.mp3' }} showControls />;
@@ -2015,7 +2015,7 @@ export function Example() {
     tag: 'AUDIO RECORDER',
     description: 'Records audio with visual waveform feedback and playback.',
     Preview: AudioRecorderPreview,
-    codeSnippet: `import { AudioRecorder } from '@/components/ui/audio-recorder';
+    codeSnippet: `import { AudioRecorder } from '../ui/audio-recorder';
 
 export function Example() {
   return <AudioRecorder onRecordingComplete={(uri) => console.log(uri)} />;
@@ -2029,7 +2029,7 @@ export function Example() {
     tag: 'WAVEFORM',
     description: 'Animated sound waveform visualization with scrubber position.',
     Preview: AudioWaveformPreview,
-    codeSnippet: `import { AudioWaveform } from '@/components/ui/audio-waveform';
+    codeSnippet: `import { AudioWaveform } from '../ui/audio-waveform';
 
 export function Example() {
   return <AudioWaveform progress={0.5} />;
@@ -2043,7 +2043,7 @@ export function Example() {
     tag: 'VIDEO',
     description: 'Full-featured video player with native playback controls.',
     Preview: VideoPreview,
-    codeSnippet: `import { Video } from '@/components/ui/video';
+    codeSnippet: `import { Video } from '../ui/video';
 
 export function Example() {
   return <Video source={{ uri: 'https://example.com/video.mp4' }} style={{ height: 200 }} nativeControls />;
@@ -2057,7 +2057,7 @@ export function Example() {
     tag: 'GALLERY',
     description: 'Responsive multi-image gallery with modal zoom viewer.',
     Preview: GalleryPreview,
-    codeSnippet: `import { Gallery } from '@/components/ui/gallery';
+    codeSnippet: `import { Gallery } from '../ui/gallery';
 
 export function Example() {
   return <Gallery items={[{ id: '1', uri: 'https://example.com/photo.jpg' }]} columns={3} />;
@@ -2071,7 +2071,7 @@ export function Example() {
     tag: 'CAMERA',
     description: 'Camera view with zoom controls, torch, front/back switch, and recording.',
     Preview: CameraPreview,
-    codeSnippet: `import { Camera } from '@/components/ui/camera';
+    codeSnippet: `import { Camera } from '../ui/camera';
 
 export function Example() {
   return <Camera />;
@@ -2085,7 +2085,7 @@ export function Example() {
     tag: 'CAMERA PREVIEW',
     description: 'Complete camera screen with capture button and media gallery viewer.',
     Preview: CameraPreviewPreview,
-    codeSnippet: `import { CameraPreview } from '@/components/ui/camera-preview';
+    codeSnippet: `import { CameraPreview } from '../ui/camera-preview';
 
 export function Example() {
   return <CameraPreview onMediaCaptured={(media) => console.log(media)} />;
@@ -2101,7 +2101,7 @@ export function Example() {
     tag: 'CONTAINER',
     description: 'Standard container card wrapping charts with header, subtitle, and legend.',
     Preview: ChartContainerPreview,
-    codeSnippet: `import { ChartContainer } from '@/components/charts/chart-container';
+    codeSnippet: `import { ChartContainer } from '../charts/chart-container';
 
 export function Example() {
   return <ChartContainer title="Telemetry"><Text>Chart Element</Text></ChartContainer>;
@@ -2115,7 +2115,7 @@ export function Example() {
     tag: 'BAR CHART',
     description: 'Vertical bar charts with grid lines, rounded caps, and value tooltips.',
     Preview: BarChartPreview,
-    codeSnippet: `import { BarChart } from '@/components/charts/bar-chart';
+    codeSnippet: `import { BarChart } from '../charts/bar-chart';
 
 export function Example() {
   const data = [{ label: 'Jan', value: 40 }, { label: 'Feb', value: 70 }];
@@ -2130,7 +2130,7 @@ export function Example() {
     tag: 'LINE CHART',
     description: 'Continuous smooth line chart with data points and gradient area fills.',
     Preview: LineChartPreview,
-    codeSnippet: `import { LineChart } from '@/components/charts/line-chart';
+    codeSnippet: `import { LineChart } from '../charts/line-chart';
 
 export function Example() {
   const data = [{ label: 'Mon', value: 10 }, { label: 'Tue', value: 35 }];
@@ -2145,7 +2145,7 @@ export function Example() {
     tag: 'AREA CHART',
     description: 'Smooth gradient-filled area chart for volumetric and trend metrics.',
     Preview: AreaChartPreview,
-    codeSnippet: `import { AreaChart } from '@/components/charts/area-chart';
+    codeSnippet: `import { AreaChart } from '../charts/area-chart';
 
 export function Example() {
   const data = [{ label: 'Q1', value: 100 }, { label: 'Q2', value: 250 }];
@@ -2160,7 +2160,7 @@ export function Example() {
     tag: 'PIE CHART',
     description: 'Pie charts with percentage distribution and slice highlights.',
     Preview: PieChartPreview,
-    codeSnippet: `import { PieChart } from '@/components/charts/pie-chart';
+    codeSnippet: `import { PieChart } from '../charts/pie-chart';
 
 export function Example() {
   const data = [{ label: 'A', value: 60, color: '#3b82f6' }, { label: 'B', value: 40, color: '#10b981' }];
@@ -2175,7 +2175,7 @@ export function Example() {
     tag: 'DOUGHNUT',
     description: 'Donut chart with hollow center, metric display, and legend.',
     Preview: DoughnutChartPreview,
-    codeSnippet: `import { DoughnutChart } from '@/components/charts/doughnut-chart';
+    codeSnippet: `import { DoughnutChart } from '../charts/doughnut-chart';
 
 export function Example() {
   const data = [{ label: 'Direct', value: 50, color: '#3b82f6' }, { label: 'Organic', value: 50, color: '#10b981' }];
@@ -2190,7 +2190,7 @@ export function Example() {
     tag: 'PROGRESS RING',
     description: 'Multi-ring radial progress chart for fitness and multi-goal tracking.',
     Preview: ProgressRingChartPreview,
-    codeSnippet: `import { ProgressRingChart } from '@/components/charts/progress-ring-chart';
+    codeSnippet: `import { ProgressRingChart } from '../charts/progress-ring-chart';
 
 export function Example() {
   const data = [{ label: 'Move', value: 80, color: '#ef4444' }];
@@ -2205,7 +2205,7 @@ export function Example() {
     tag: 'RADIAL BAR',
     description: 'Circular radial bar chart with gauge display and center metrics.',
     Preview: RadialBarChartPreview,
-    codeSnippet: `import { RadialBarChart } from '@/components/charts/radial-bar-chart';
+    codeSnippet: `import { RadialBarChart } from '../charts/radial-bar-chart';
 
 export function Example() {
   const data = [{ label: 'CPU', value: 75, color: '#f43f5e' }];
@@ -2220,7 +2220,7 @@ export function Example() {
     tag: 'COLUMN CHART',
     description: 'Horizontal column bars for comparing categorized values.',
     Preview: ColumnChartPreview,
-    codeSnippet: `import { ColumnChart } from '@/components/charts/column-chart';
+    codeSnippet: `import { ColumnChart } from '../charts/column-chart';
 
 export function Example() {
   const data = [{ label: 'Item 1', value: 80, color: '#3b82f6' }];
@@ -2235,7 +2235,7 @@ export function Example() {
     tag: 'BUBBLE CHART',
     description: '3D coordinate mapping chart visualizing X, Y, and magnitude size.',
     Preview: BubbleChartPreview,
-    codeSnippet: `import { BubbleChart } from '@/components/charts/bubble-chart';
+    codeSnippet: `import { BubbleChart } from '../charts/bubble-chart';
 
 export function Example() {
   const data = [{ x: 10, y: 20, size: 15, label: 'A' }];
@@ -2250,7 +2250,7 @@ export function Example() {
     tag: 'CANDLESTICK',
     description: 'Financial stock chart with Open, High, Low, and Close candles.',
     Preview: CandlestickChartPreview,
-    codeSnippet: `import { CandlestickChart } from '@/components/charts/candlestick-chart';
+    codeSnippet: `import { CandlestickChart } from '../charts/candlestick-chart';
 
 export function Example() {
   const data = [{ date: 'Mon', open: 100, high: 120, low: 95, close: 115 }];
@@ -2265,7 +2265,7 @@ export function Example() {
     tag: 'HEATMAP',
     description: 'Matrix color density map for activity levels and time distributions.',
     Preview: HeatmapChartPreview,
-    codeSnippet: `import { HeatmapChart } from '@/components/charts/heatmap-chart';
+    codeSnippet: `import { HeatmapChart } from '../charts/heatmap-chart';
 
 export function Example() {
   const data = [{ row: 'Mon', col: 'Morning', value: 40 }];
@@ -2280,7 +2280,7 @@ export function Example() {
     tag: 'POLAR AREA',
     description: 'Polar radial area chart with equal-angle variable-radius sectors.',
     Preview: PolarAreaChartPreview,
-    codeSnippet: `import { PolarAreaChart } from '@/components/charts/polar-area-chart';
+    codeSnippet: `import { PolarAreaChart } from '../charts/polar-area-chart';
 
 export function Example() {
   const data = [{ label: 'A', value: 80, color: '#3b82f6' }];
@@ -2295,7 +2295,7 @@ export function Example() {
     tag: 'RADAR CHART',
     description: 'Spider radar plot for multi-variable attribute comparison.',
     Preview: RadarChartPreview,
-    codeSnippet: `import { RadarChart } from '@/components/charts/radar-chart';
+    codeSnippet: `import { RadarChart } from '../charts/radar-chart';
 
 export function Example() {
   const data = [{ label: 'Speed', value: 90 }, { label: 'Quality', value: 80 }];
@@ -2310,7 +2310,7 @@ export function Example() {
     tag: 'SCATTER CHART',
     description: 'Scatter point chart for statistical distributions and cluster analysis.',
     Preview: ScatterChartPreview,
-    codeSnippet: `import { ScatterChart } from '@/components/charts/scatter-chart';
+    codeSnippet: `import { ScatterChart } from '../charts/scatter-chart';
 
 export function Example() {
   const data = [{ x: 5, y: 10 }, { x: 15, y: 30 }];
@@ -2325,7 +2325,7 @@ export function Example() {
     tag: 'STACKED AREA',
     description: 'Multi-series cumulative area chart for layered volume breakdown.',
     Preview: StackedAreaChartPreview,
-    codeSnippet: `import { StackedAreaChart } from '@/components/charts/stacked-area-chart';
+    codeSnippet: `import { StackedAreaChart } from '../charts/stacked-area-chart';
 
 export function Example() {
   const data = [{ x: 1, y: [20, 30], label: 'Jan' }];
@@ -2340,7 +2340,7 @@ export function Example() {
     tag: 'STACKED BAR',
     description: 'Segmented horizontal and vertical stacked bar charts.',
     Preview: StackedBarChartPreview,
-    codeSnippet: `import { StackedBarChart } from '@/components/charts/stacked-bar-chart';
+    codeSnippet: `import { StackedBarChart } from '../charts/stacked-bar-chart';
 
 export function Example() {
   const data = [{ label: 'Q1', values: [30, 20] }];
@@ -2355,7 +2355,7 @@ export function Example() {
     tag: 'TREEMAP',
     description: 'Hierarchical nested rectangles scaled proportionally by value.',
     Preview: TreemapChartPreview,
-    codeSnippet: `import { TreemapChart } from '@/components/charts/treemap-chart';
+    codeSnippet: `import { TreemapChart } from '../charts/treemap-chart';
 
 export function Example() {
   const data = [{ label: 'Engine', value: 300, color: '#3b82f6' }];
@@ -2371,7 +2371,7 @@ export function Example() {
     tag: 'THEMES',
     description: 'Dynamic theme explorer featuring 50+ curated themes, base palettes, and live mode preview.',
     Preview: AppThemesPreview,
-    codeSnippet: `import { useColorTheme } from '@/providers/color-theme-provider';
+    codeSnippet: `import { useColorTheme } from '../../providers/color-theme-provider';
 
 export function Example() {
   const { colorTheme, setColorTheme, colorThemes } = useColorTheme();
@@ -2408,7 +2408,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Master sidebar container with subtabs (Chats, Contact, Groups, Folder), search bar, category divider line with count, and a scrollable conversation list.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-sidebar' }} />,
-    codeSnippet: `import { ChatSidebar, ChatCardItem } from '@/components/chat';
+    codeSnippet: `import { ChatSidebar, ChatCardItem } from '../chat';
 
 export function Example() {
   return (
@@ -2426,7 +2426,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Conversation preview card for sidebar list. Displays contact name, pill badge (💬 Chat), timestamp, member & online counter, and last message snippet with active left accent stripe.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-card-item' }} />,
-    codeSnippet: `import { ChatCardItem } from '@/components/chat';
+    codeSnippet: `import { ChatCardItem } from '../chat';
 
 export function Example() {
   return (
@@ -2450,7 +2450,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Modern messaging pill input container with emoji picker, attachment clip, camera trigger, and circular emerald green microphone/send button.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-input' }} />,
-    codeSnippet: `import { ChatInput } from '@/components/chat';
+    codeSnippet: `import { ChatInput } from '../chat';
 
 export function Example() {
   const [msg, setMsg] = React.useState('');
@@ -2465,7 +2465,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Conversation header bar with user avatar, status/presence, and exact HeaderActions (Act on this bell, Quick Flag, and 3-dot dropdown menu).',
     Preview: () => <ChatPreviews entry={{ id: 'chat-header' }} />,
-    codeSnippet: `import { ChatHeader } from '@/components/chat';
+    codeSnippet: `import { ChatHeader } from '../chat';
 
 export function Example() {
   return (
@@ -2485,7 +2485,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Scrollable message viewport container with automatic auto-scroll to bottom, infinite scroll top loader for history, and rich bubble rendering for text, live location cards, and media attachments.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-message-list' }} />,
-    codeSnippet: `import { ChatMessageList, ChatBubble } from '@/components/chat';
+    codeSnippet: `import { ChatMessageList, ChatBubble } from '../chat';
 
 export function Example() {
   return (
@@ -2503,7 +2503,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Pure, customizable message bubble. Supports text, file/PDF attachments, location cards, status delivery receipts (sent, delivered, read), and interactive reactions.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-bubble' }} />,
-    codeSnippet: `import { ChatBubble } from '@/components/chat';
+    codeSnippet: `import { ChatBubble } from '../chat';
 
 export function Example() {
   return (
@@ -2525,7 +2525,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Smooth 3-dot pulse animation indicating live incoming message activity.',
     Preview: () => <ChatPreviews entry={{ id: 'typing-indicator' }} />,
-    codeSnippet: `import { TypingIndicator } from '@/components/chat';
+    codeSnippet: `import { TypingIndicator } from '../chat';
 
 export function Example() {
   return <TypingIndicator label="Aman is typing..." />;
@@ -2539,7 +2539,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Clean placeholder screen displayed when no conversation is selected or a message thread is empty.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-empty-state' }} />,
-    codeSnippet: `import { ChatEmptyState } from '@/components/chat';
+    codeSnippet: `import { ChatEmptyState } from '../chat';
 
 export function Example() {
   return (
@@ -2558,7 +2558,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Standalone contact management interface. Displays saved contacts with avatar initials, email, status toggle switch, and direct actions for Chat, Edit, and Delete.',
     Preview: () => <ChatPreviews entry={{ id: 'contact-manager' }} />,
-    codeSnippet: `import { ContactManager } from '@/components/chat';
+    codeSnippet: `import { ContactManager } from '../chat';
 
 export function Example() {
   return <ContactManager contacts={[{ id: '1', name: 'Aman', email: 'aman@amoga.io', initials: 'AM', isEnabled: true }]} />;
@@ -2572,7 +2572,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Group channel manager for creating, searching, and managing team chat groups with member counts and instant chat triggers.',
     Preview: () => <ChatPreviews entry={{ id: 'group-manager' }} />,
-    codeSnippet: `import { GroupManager } from '@/components/chat';
+    codeSnippet: `import { GroupManager } from '../chat';
 
 export function Example() {
   return <GroupManager groups={[{ id: 'g1', name: 'Design Team', membersCount: 4, isEnabled: true }]} />;
@@ -2586,7 +2586,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Interactive dropdown context menu for chat messages featuring Reply, Forward, Pin Message, Star, Favorite, Archive, Action This, and Delete.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-action-menu' }} />,
-    codeSnippet: `import { ChatActionMenu } from '@/components/chat';
+    codeSnippet: `import { ChatActionMenu } from '../chat';
 
 export function Example() {
   return <ChatActionMenu onSelect={(actionId) => console.log(actionId)} />;
@@ -2600,7 +2600,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Floating pill action bar for message feedback and reactions featuring Thumbs Up, Thumbs Down, Copy, Share, and More options.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-icon-bar' }} />,
-    codeSnippet: `import { ChatIconBar } from '@/components/chat';
+    codeSnippet: `import { ChatIconBar } from '../chat';
 
 export function Example() {
   return <ChatIconBar onThumbUp={() => {}} onCopy={() => {}} />;
@@ -2614,7 +2614,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Dynamic file upload progress indicator card supporting upload states (Uploading, Paused, Completed, Error), smooth percentage bar, and pause/cancel/retry controls.',
     Preview: () => <ChatPreviews entry={{ id: 'file-upload-progress' }} />,
-    codeSnippet: `import { FileUploadProgress } from '@/components/chat';
+    codeSnippet: `import { FileUploadProgress } from '../chat';
 
 export function Example() {
   return (
@@ -2636,7 +2636,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Compact attachment card displaying file type icon badge, document name, file size/extension metadata, and direct View/Preview and Download actions.',
     Preview: () => <ChatPreviews entry={{ id: 'uploaded-file-card' }} />,
-    codeSnippet: `import { UploadedFileCard } from '@/components/chat';
+    codeSnippet: `import { UploadedFileCard } from '../chat';
 
 export function Example() {
   return (
@@ -2659,7 +2659,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Interactive popup attachment menu featuring Images, Videos, Documents, Location, Image Converter, Doc Converter, Doc Scanner, Scan Document, and Extract Text.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-attachment-menu' }} />,
-    codeSnippet: `import { ChatAttachmentMenu } from '@/components/chat';
+    codeSnippet: `import { ChatAttachmentMenu } from '../chat';
 
 export function Example() {
   return <ChatAttachmentMenu onSelect={(type) => console.log(type)} selectedId="location" />;
@@ -2673,7 +2673,7 @@ export function Example() {
     tag: 'CHAT',
     description: 'Rich location sharing card with animated radar map canvas, map pin marker, coordinates, live tracking badge, and direct Navigate & View actions.',
     Preview: () => <ChatPreviews entry={{ id: 'chat-location-card' }} />,
-    codeSnippet: `import { ChatLocationCard } from '@/components/chat';
+    codeSnippet: `import { ChatLocationCard } from '../chat';
 
 export function Example() {
   return (
@@ -2683,6 +2683,32 @@ export function Example() {
       latitude={28.4595}
       longitude={77.0266}
       isLive
+    />
+  );
+}`,
+  },
+  {
+    id: 'chat-profile-modal',
+    name: 'Profile & Shared Media Drawer',
+    file: 'chat-profile-modal.tsx',
+    category: 'Chat',
+    tag: 'CHAT',
+    description: 'Telegram-style interactive profile and shared media drawer with Media, Docs, Audio, and Links tabs, instant search, audio playback, and file preview/download.',
+    Preview: () => <ChatPreviews entry={{ id: 'chat-profile-modal' }} />,
+    codeSnippet: `import { useState } from 'react';
+import { ChatProfileModal } from 'amogamobileds-v1';
+
+export function Example() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <ChatProfileModal
+      visible={open}
+      onClose={() => setOpen(false)}
+      conversation={activeConversation}
+      messages={messages}
+      onOpenMedia={(url) => console.log('Open:', url)}
+      onOpenDoc={(url) => console.log('Doc:', url)}
     />
   );
 }`,
@@ -2698,7 +2724,7 @@ export function Example() {
     tag: 'AUTH',
     description: 'Complete user authentication card with email & password inputs, password visibility toggle, active sign-in validation, forgot password link, and Google/Apple OAuth triggers.',
     Preview: SignInPreview,
-    codeSnippet: `import { SignInScreen } from '@/app/(auth)/sign-in';
+    codeSnippet: `import { SignInScreen } from '../../app/(auth)/sign-in';
 
 export function Example() {
   return <SignInScreen />;
@@ -2712,7 +2738,7 @@ export function Example() {
     tag: 'AUTH',
     description: 'User registration screen with full name, work email, password strength indicator bar, terms & privacy agreement checkbox, and account creation validation.',
     Preview: SignUpPreview,
-    codeSnippet: `import { SignUpScreen } from '@/app/(auth)/sign-up';
+    codeSnippet: `import { SignUpScreen } from '../../app/(auth)/sign-up';
 
 export function Example() {
   return <SignUpScreen />;
@@ -2726,7 +2752,7 @@ export function Example() {
     tag: 'AUTH',
     description: 'Two-factor / OTP verification screen with 6-digit verification code input blocks, automated code verification, and resend countdown timer trigger.',
     Preview: VerifyOtpPreview,
-    codeSnippet: `import { VerifyOtpScreen } from '@/app/(auth)/verify-otp';
+    codeSnippet: `import { VerifyOtpScreen } from '../../app/(auth)/verify-otp';
 
 export function Example() {
   return <VerifyOtpScreen />;
@@ -2740,7 +2766,7 @@ export function Example() {
     tag: 'AUTH',
     description: 'Password recovery card with email input, reset instructions notification banner, and back to sign in navigation action.',
     Preview: ForgotPasswordPreview,
-    codeSnippet: `import { ForgotPasswordScreen } from '@/app/(auth)/forgot-password';
+    codeSnippet: `import { ForgotPasswordScreen } from '../../app/(auth)/forgot-password';
 
 export function Example() {
   return <ForgotPasswordScreen />;

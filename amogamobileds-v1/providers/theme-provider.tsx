@@ -5,10 +5,10 @@ import {
 } from 'expo-router/react-navigation';
 import { useMemo } from 'react';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Colors } from '@/theme/colors';
-import { Mode, ModeProvider, ModeStorage } from '@/providers/mode-provider';
-import { useColorTheme } from '@/providers/color-theme-provider';
+import { useColorScheme } from '../hooks/useColorScheme';
+import { Colors } from '../theme/colors';
+import { Mode, ModeProvider, ModeStorage, useModeContext } from './mode-provider';
+import { useColorTheme } from './color-theme-provider';
 
 type Props = {
   children: React.ReactNode;
@@ -21,9 +21,6 @@ type Props = {
 /**
  * Mounts `ModeProvider` — the app-wide source of truth for light/dark/system —
  * and maps the resolved scheme onto React Navigation's theme.
- *
- * The navigation half is a separate component because it calls
- * `useColorScheme()`, which has to read that context from *inside* the provider.
  */
 export const ThemeProvider = ({
   children,
@@ -45,9 +42,6 @@ const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
   const { currentTheme } = useColorTheme();
   const dynamicPrimary = currentTheme?.preview;
 
-  // Rebuilding this on every render invalidates every useTheme() consumer
-  // app-wide, since ThemeProvider is mounted at the root — memoize on the
-  // one thing it actually depends on, and only build the active theme.
   const theme = useMemo(() => {
     if (colorScheme === 'dark') {
       return {
@@ -82,8 +76,9 @@ const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
 };
 
 export function useTheme() {
+  const modeContext = useModeContext();
   const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const isDark = (modeContext?.scheme || colorScheme) === 'dark';
   let primaryColor = isDark ? Colors.dark.primary : Colors.light.primary;
 
   try {
@@ -95,6 +90,13 @@ export function useTheme() {
 
   const baseColors = isDark ? Colors.dark : Colors.light;
 
+  const toggleMode = () => {
+    if (!modeContext) return;
+    const current = modeContext.scheme;
+    const next = current === 'dark' ? 'light' : 'dark';
+    modeContext.setMode(next);
+  };
+
   return {
     colors: {
       ...baseColors,
@@ -104,7 +106,8 @@ export function useTheme() {
     },
     resolvedMode: (isDark ? 'dark' : 'light') as 'dark' | 'light',
     isDark,
+    mode: modeContext?.mode || 'system',
+    setMode: modeContext?.setMode || (() => {}),
+    toggleMode,
   };
 }
-
-

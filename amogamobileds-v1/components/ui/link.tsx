@@ -1,4 +1,4 @@
-import { Text } from '@/components/ui/text';
+import { Text } from './text';
 import { Link as ERLink, Href } from 'expo-router';
 import { openBrowserAsync } from 'expo-web-browser';
 import { type ComponentProps } from 'react';

@@ -1,13 +1,15 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { MessageSquareDashed } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
 
 export interface ChatEmptyStateProps {
   title?: string
   description?: string
   icon?: React.ReactNode
   action?: React.ReactNode
+  actionLabel?: string
+  onAction?: () => void
   style?: any
 }
 
@@ -16,8 +18,11 @@ export function ChatEmptyState({
   description = 'Choose a chat from the sidebar or start a new conversation to begin messaging.',
   icon,
   action,
+  actionLabel,
+  onAction,
   style,
 }: ChatEmptyStateProps) {
+
   const { colors, resolvedMode } = useTheme()
   const isDark = resolvedMode === 'dark'
 

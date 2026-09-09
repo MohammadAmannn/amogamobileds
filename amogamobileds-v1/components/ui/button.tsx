@@ -1,9 +1,9 @@
-import { Icon } from '@/components/ui/icon';
-import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { useHaptics } from '@/hooks/useHaptics';
-import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { Icon } from './icon';
+import { ButtonSpinner, SpinnerVariant } from './spinner';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { useHaptics } from '../../hooks/useHaptics';
+import { CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
 import {

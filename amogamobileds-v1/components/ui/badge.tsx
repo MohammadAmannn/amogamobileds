@@ -1,7 +1,7 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { CORNERS } from '@/theme/globals';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { CORNERS } from '../../theme/globals';
 import { TextStyle, ViewStyle } from 'react-native';
 
 type BadgeVariant =

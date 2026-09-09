@@ -14,7 +14,7 @@ import {
   RotateCcw,
   Palette,
 } from 'lucide-react-native';
-import { ComponentItem } from '@/components/design-system/registry';
+import { ComponentItem } from '../design-system/registry';
 import { DeviceConfig, DeviceType, ViewMode } from './types';
 import { DeviceSelector } from './DeviceSelector.web';
 

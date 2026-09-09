@@ -1,8 +1,8 @@
-import { Icon } from '@/components/ui/icon';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { Icon } from './icon';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { Search, X } from 'lucide-react-native';
 import React, { useCallback, useRef, useState } from 'react';
 import {

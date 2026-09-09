@@ -15,7 +15,7 @@ import {
   Download,
   Check,
 } from 'lucide-react-native';
-import { useTheme } from '@/providers/theme-provider';
+import { useTheme } from '../../providers/theme-provider';
 
 export interface UploadedFileCardProps {
   fileName?: string;

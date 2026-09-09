@@ -20,8 +20,8 @@ import {
   Palette,
   Sparkles,
 } from 'lucide-react-native';
-import { useColorTheme, DEFAULT_COLOR_THEME } from '@/providers/color-theme-provider';
-import { useModeContext, Mode } from '@/providers/mode-provider';
+import { useColorTheme, DEFAULT_COLOR_THEME } from '../../providers/color-theme-provider';
+import { useModeContext, Mode } from '../../providers/mode-provider';
 
 interface ConfigDrawerProps {
   isOpen: boolean;

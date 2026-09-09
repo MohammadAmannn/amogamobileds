@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import * as Crypto from 'expo-crypto';
 import { AppState, Platform } from 'react-native';
-import type { Database } from '@/lib/database.types';
-import { LargeSecureStore } from '@/lib/large-secure-store';
+import type { Database } from './database.types';
+import { LargeSecureStore } from './large-secure-store';
 
 if (typeof globalThis.crypto !== 'object') {
   (globalThis as any).crypto = {};
@@ -19,16 +19,12 @@ if (!globalThis.crypto.subtle) {
   };
 }
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Copy .env.example to .env.local ' +
-      'and fill in EXPO_PUBLIC_SUPABASE_URL and ' +
-      'EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY from your project settings.'
-  );
-}
+const supabaseUrl =
+  process.env.EXPO_PUBLIC_SUPABASE_URL ||
+  'https://abxwugpdvhmuxoesmumq.supabase.co';
+const supabaseKey =
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  'sb_publishable_pcCZBBKAmJwf6aWLi9JdxA_IfmQ71co';
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseKey, {
   auth: {

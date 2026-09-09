@@ -1,7 +1,7 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import React from 'react';
 import { Alert as RNAlert, TextStyle, ViewStyle } from 'react-native';
 

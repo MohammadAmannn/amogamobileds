@@ -1,5 +1,5 @@
-import { useColor } from '@/hooks/useColor';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColor } from '../../hooks/useColor';
+import { useColorScheme } from '../../hooks/useColorScheme';
 import type { ReactNode } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 

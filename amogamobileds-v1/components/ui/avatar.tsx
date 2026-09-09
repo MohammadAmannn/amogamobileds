@@ -1,8 +1,8 @@
-import { Image } from '@/components/ui/image';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { FONT_SIZE } from '@/theme/globals';
+import { Image } from './image';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { FONT_SIZE } from '../../theme/globals';
 import { ImageProps, ImageSource } from 'expo-image';
 import {
   createContext,

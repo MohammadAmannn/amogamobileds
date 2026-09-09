@@ -19,7 +19,7 @@ import {
   RotateCcw,
   Sliders,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../../providers/theme-provider'
 import type { GalleryEntry } from '../../types'
 
 const MONTH_NAMES = [

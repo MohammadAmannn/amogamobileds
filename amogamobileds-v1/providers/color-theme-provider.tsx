@@ -7,9 +7,9 @@ import React, {
   useCallback,
 } from 'react';
 import { Platform } from 'react-native';
-import { colorThemes, ColorThemeDefinition } from '@/theme/color-themes';
+import { colorThemes, ColorThemeDefinition } from '../theme/color-themes';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '../hooks/useColorScheme';
 
 export interface ColorThemeContextType {
   colorTheme: string;

@@ -1,6 +1,6 @@
-import { useColor } from '@/hooks/useColor';
-import { useHaptics } from '@/hooks/useHaptics';
-import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { useColor } from '../../hooks/useColor';
+import { useHaptics } from '../../hooks/useHaptics';
+import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { ChevronDown } from 'lucide-react-native';
 import React, {
   Children,

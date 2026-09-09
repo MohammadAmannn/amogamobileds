@@ -1,10 +1,10 @@
-import { Icon } from '@/components/ui/icon';
-import { ScrollView } from '@/components/ui/scroll-view';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { useHaptics } from '@/hooks/useHaptics';
-import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { Icon } from './icon';
+import { ScrollView } from './scroll-view';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { useHaptics } from '../../hooks/useHaptics';
+import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '../../theme/globals';
 import { ChevronDown, LucideProps } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
 import {

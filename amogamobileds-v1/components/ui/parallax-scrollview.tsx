@@ -1,6 +1,6 @@
-import { View } from '@/components/ui/view';
-import { useBottomTabOverflow } from '@/hooks/useBottomTabOverflow';
-import { useColor } from '@/hooks/useColor';
+import { View } from './view';
+import { useBottomTabOverflow } from '../../hooks/useBottomTabOverflow';
+import { useColor } from '../../hooks/useColor';
 import type { PropsWithChildren, ReactElement } from 'react';
 import Animated, {
   interpolate,

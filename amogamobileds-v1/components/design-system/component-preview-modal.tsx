@@ -7,12 +7,12 @@ import {
   Platform,
   SafeAreaView,
 } from 'react-native';
-import { View } from '@/components/ui/view';
-import { Text } from '@/components/ui/text';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { View } from '../ui/view';
+import { Text } from '../ui/text';
+import { Badge } from '../ui/badge';
+import { Separator } from '../ui/separator';
 import { X, FileCode } from 'lucide-react-native';
-import { useColor } from '@/hooks/useColor';
+import { useColor } from '../../hooks/useColor';
 import { ComponentItem } from './registry';
 
 interface ComponentPreviewModalProps {

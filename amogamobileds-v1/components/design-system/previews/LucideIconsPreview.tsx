@@ -126,7 +126,7 @@ import {
   List,
   ListOrdered,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../../providers/theme-provider'
 
 interface IconItem {
   name: string

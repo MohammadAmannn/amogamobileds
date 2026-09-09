@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Text } from '@/components/ui/text';
-import { useToast } from '@/components/ui/toast';
-import { AuthScreen } from '@/components/auth/auth-screen';
-import { supabase } from '@/lib/supabase';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { Text } from '../../components/ui/text';
+import { useToast } from '../../components/ui/toast';
+import { AuthScreen } from '../../components/auth/auth-screen';
+import { supabase } from '../../lib/supabase';
 import { makeRedirectUri } from 'expo-auth-session';
 import { router } from 'expo-router';
 import { Mail } from 'lucide-react-native';

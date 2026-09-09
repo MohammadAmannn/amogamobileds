@@ -20,8 +20,8 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react-native';
-import { useAuth } from '@/providers/auth-provider';
-import { useToast } from '@/components/ui/toast';
+import { useAuth } from '../../providers/auth-provider';
+import { useToast } from '../ui/toast';
 import { useRouter } from 'expo-router';
 
 interface NavUserProps {

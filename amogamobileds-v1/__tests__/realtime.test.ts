@@ -1,5 +1,5 @@
-import { applyChange } from '@/lib/realtime';
-import type { Task } from '@/lib/database.types';
+import { applyChange } from '../lib/realtime';
+import type { Task } from '../lib/database.types';
 
 const task = (over: Partial<Task> = {}): Task => ({
   id: 'a',

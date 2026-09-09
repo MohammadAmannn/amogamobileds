@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native'
 import { Search, MessageSquare, Plus } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
 
 export interface ChatSidebarTab {
   id: string
@@ -27,6 +27,8 @@ export interface ChatSidebarProps {
   onTabChange?: (tabId: string) => void
   sectionLabel?: string
   sectionCount?: number
+  showSearch?: boolean
+  showSectionHeader?: boolean
   actions?: React.ReactNode
   onNewChat?: () => void
   children?: React.ReactNode
@@ -49,6 +51,8 @@ export function ChatSidebar({
   onTabChange,
   sectionLabel = 'CHATS',
   sectionCount = 2,
+  showSearch = true,
+  showSectionHeader = true,
   actions,
   onNewChat,
   children,
@@ -119,64 +123,68 @@ export function ChatSidebar({
         </ScrollView>
       </View>
 
-      {/* 2. Rounded Search Bar */}
-      <View style={styles.searchSection}>
-        <View
-          style={[
-            styles.searchWrapper,
-            {
-              backgroundColor: isDark ? colors.card : colors.background,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          <Search
-            size={14}
-            color={colors.mutedForeground}
-            strokeWidth={2}
-            style={styles.searchIcon}
-          />
-          <TextInput
-            value={searchValue}
-            onChangeText={onSearchChange}
-            placeholder={searchPlaceholder}
-            placeholderTextColor={colors.mutedForeground}
-            style={[styles.searchInput, { color: colors.foreground }]}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+      {/* 2. Rounded Search Bar (Optional based on prop) */}
+      {showSearch && (
+        <View style={styles.searchSection}>
+          <View
+            style={[
+              styles.searchWrapper,
+              {
+                backgroundColor: isDark ? colors.card : colors.background,
+                borderColor: colors.border,
+              },
+            ]}
+          >
+            <Search
+              size={14}
+              color={colors.mutedForeground}
+              strokeWidth={2}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              value={searchValue}
+              onChangeText={onSearchChange}
+              placeholder={searchPlaceholder}
+              placeholderTextColor={colors.mutedForeground}
+              style={[styles.searchInput, { color: colors.foreground }]}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+          </View>
         </View>
-      </View>
+      )}
 
       {/* 3. Category Section Divider (💬 CHATS ─────────── 2) */}
-      <View style={styles.sectionHeader}>
-        <MessageSquare
-          size={14}
-          color={isDark ? '#34d399' : '#059669'}
-          strokeWidth={2.2}
-        />
-        <Text
-          style={[
-            styles.sectionLabel,
-            { color: colors.mutedForeground },
-          ]}
-        >
-          {sectionLabel}
-        </Text>
-        <View
-          style={[
-            styles.sectionDivider,
-            { backgroundColor: isDark ? colors.border : '#e2e8f0' },
-          ]}
-        />
-        {typeof sectionCount === 'number' && (
+      {showSectionHeader && (
+        <View style={styles.sectionHeader}>
+          <MessageSquare
+            size={14}
+            color={isDark ? '#34d399' : '#059669'}
+            strokeWidth={2.2}
+          />
           <Text
-            style={[styles.sectionCount, { color: colors.mutedForeground }]}
+            style={[
+              styles.sectionLabel,
+              { color: colors.mutedForeground },
+            ]}
           >
-            {sectionCount}
+            {sectionLabel}
           </Text>
-        )}
-      </View>
+          <View
+            style={[
+              styles.sectionDivider,
+              { backgroundColor: isDark ? colors.border : '#e2e8f0' },
+            ]}
+          />
+          {typeof sectionCount === 'number' && (
+            <Text
+              style={[styles.sectionCount, { color: colors.mutedForeground }]}
+            >
+              {sectionCount}
+            </Text>
+          )}
+        </View>
+      )}
 
       {/* 4. Scrollable Conversations List */}
       <ScrollView
@@ -251,9 +259,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
+    gap: 8,
   },
   searchIcon: {
-    marginRight: 8,
+    opacity: 0.7,
   },
   searchInput: {
     flex: 1,
@@ -291,6 +300,7 @@ const styles = StyleSheet.create({
   listScrollContent: {
     paddingHorizontal: 8,
     paddingVertical: 6,
+    paddingBottom: 80,
     gap: 4,
   },
   footer: {

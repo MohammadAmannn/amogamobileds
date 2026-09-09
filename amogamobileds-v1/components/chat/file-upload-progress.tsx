@@ -19,7 +19,7 @@ import {
   RotateCcw,
   UploadCloud,
 } from 'lucide-react-native';
-import { useTheme } from '@/providers/theme-provider';
+import { useTheme } from '../../providers/theme-provider';
 
 export interface FileUploadProgressProps {
   fileName?: string;

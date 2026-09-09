@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { applyChange, byNewest } from '@/lib/realtime';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/auth-provider';
-import type { Task } from '@/lib/database.types';
+import { applyChange, byNewest } from '../lib/realtime';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../providers/auth-provider';
+import type { Task } from '../lib/database.types';
 
 /**
  * The signed-in user's tasks, kept live.

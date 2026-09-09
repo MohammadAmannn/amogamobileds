@@ -1,15 +1,21 @@
-import { Button } from '@/components/ui/button';
-import { Camera, CaptureSuccess } from '@/components/ui/camera';
-import { Image } from '@/components/ui/image';
-import { Text } from '@/components/ui/text';
-import { Video } from '@/components/ui/video';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import * as MediaLibrary from 'expo-media-library';
+import { Button } from './button';
+import { Camera, CaptureSuccess } from './camera';
+import { Image } from './image';
+import { Text } from './text';
+import { Video } from './video';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
 import { Download, Upload, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { Alert, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+// expo-media-library is loaded lazily to avoid crashing the module graph when
+// the native module 'ExpoMediaLibraryNext' is not registered in the current build.
+function getMediaLibrary() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('expo-media-library') as typeof import('expo-media-library');
+}
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -21,8 +27,6 @@ export function CameraPreview() {
     type: 'picture' | 'video';
   } | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [mediaLibraryPermission, requestMediaLibraryPermission] =
-    MediaLibrary.usePermissions();
 
   const backgroundColor = useColor('background');
   const cardColor = useColor('card');
@@ -62,21 +66,21 @@ export function CameraPreview() {
     if (!capturedMedia) return;
 
     try {
+      const MediaLibrary = getMediaLibrary();
+
       // Request permission if not granted
-      if (mediaLibraryPermission?.status !== 'granted') {
-        const permission = await requestMediaLibraryPermission();
-        if (!permission.granted) {
-          Alert.alert(
-            'Permission Required',
-            'Please grant permission to save media to your picture library.'
-          );
-          return;
-        }
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Permission Required',
+          'Please grant permission to save media to your picture library.'
+        );
+        return;
       }
 
       // Save to media library. SDK 56 removed `saveToLibraryAsync` — it still
       // type-checks from the root entrypoint but throws at runtime.
-      await MediaLibrary.Asset.create(capturedMedia.uri);
+      await MediaLibrary.createAssetAsync(capturedMedia.uri);
 
       Alert.alert(
         'Success!',

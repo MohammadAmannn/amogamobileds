@@ -1,8 +1,8 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useKeyboardHeight } from '@/hooks/useKeyboardHeight'; // Make sure this path is correct
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { Text } from './text';
+import { View } from './view';
+import { useKeyboardHeight } from '../../hooks/useKeyboardHeight'; // Make sure this path is correct
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import React, { useEffect } from 'react';
 import {
   Modal,

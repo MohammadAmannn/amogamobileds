@@ -5,12 +5,12 @@ import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
 import { useState } from 'react';
 import { Platform } from 'react-native';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { useToast } from '@/components/ui/toast';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { supabase } from '@/lib/supabase';
+import { Button } from '../ui/button';
+import { Text } from '../ui/text';
+import { useToast } from '../ui/toast';
+import { View } from '../ui/view';
+import { useColor } from '../../hooks/useColor';
+import { supabase } from '../../lib/supabase';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -19,7 +19,7 @@ const getRedirectUri = () => {
     return typeof window !== 'undefined' ? window.location.origin : 'http://localhost:8081';
   }
   return makeRedirectUri({
-    scheme: 'amogamobileds-v1',
+    scheme: 'amogamobiledev1',
   });
 };
 

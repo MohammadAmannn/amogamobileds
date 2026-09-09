@@ -1,9 +1,9 @@
-import { AudioWaveform } from '@/components/ui/audio-waveform';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { AudioWaveform } from './audio-waveform';
+import { Button } from './button';
+import { Progress } from './progress';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import { AudioSource, useAudioPlayer } from 'expo-audio';
 import { Pause, Play, RotateCcw, Square } from 'lucide-react-native';
 import { useCallback, useEffect, useState } from 'react';

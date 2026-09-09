@@ -1,5 +1,5 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
+import { Text } from './text';
+import { View } from './view';
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,

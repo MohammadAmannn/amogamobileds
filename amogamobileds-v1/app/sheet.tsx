@@ -1,1 +1,1 @@
-export { default } from '@/components/sheet';
+export { default } from '../components/sheet';

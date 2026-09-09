@@ -1,13 +1,13 @@
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
-import { ScrollView } from '@/components/ui/scroll-view';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import type { Task } from '@/lib/database.types';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/auth-provider';
-import { useSearch } from '@/providers/search-context';
+import { Badge } from '../../../components/ui/badge';
+import { Card } from '../../../components/ui/card';
+import { ScrollView } from '../../../components/ui/scroll-view';
+import { Skeleton } from '../../../components/ui/skeleton';
+import { Text } from '../../../components/ui/text';
+import { View } from '../../../components/ui/view';
+import type { Task } from '../../../lib/database.types';
+import { supabase } from '../../../lib/supabase';
+import { useAuth } from '../../../providers/auth-provider';
+import { useSearch } from '../../../providers/search-context';
 import { useEffect, useState } from 'react';
 
 /**

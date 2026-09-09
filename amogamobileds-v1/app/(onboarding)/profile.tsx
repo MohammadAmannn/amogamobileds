@@ -1,14 +1,14 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { MediaPicker, type MediaAsset } from '@/components/ui/media-picker';
-import { Text } from '@/components/ui/text';
-import { useToast } from '@/components/ui/toast';
-import { View } from '@/components/ui/view';
-import { AuthScreen } from '@/components/auth/auth-screen';
-import { useAvatarUpload } from '@/hooks/useAvatarUpload';
-import { useProfile } from '@/hooks/useProfile';
-import { useAuth } from '@/providers/auth-provider';
+import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import { MediaPicker, type MediaAsset } from '../../components/ui/media-picker';
+import { Text } from '../../components/ui/text';
+import { useToast } from '../../components/ui/toast';
+import { View } from '../../components/ui/view';
+import { AuthScreen } from '../../components/auth/auth-screen';
+import { useAvatarUpload } from '../../hooks/useAvatarUpload';
+import { useProfile } from '../../hooks/useProfile';
+import { useAuth } from '../../providers/auth-provider';
 import { User } from 'lucide-react-native';
 import { useState } from 'react';
 

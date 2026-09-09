@@ -1,7 +1,56 @@
 {
   "name": "amogamobileds-v1",
-  "main": "expo-router/entry",
   "version": "1.0.0",
+  "description": "Amoga Mobile UI Design System & Component Library for Expo and React Native",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "module": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts",
+      "default": "./index.ts"
+    },
+    "./ui": {
+      "types": "./components/ui/index.ts",
+      "import": "./components/ui/index.ts",
+      "default": "./components/ui/index.ts"
+    },
+    "./chat": {
+      "types": "./components/chat/index.ts",
+      "import": "./components/chat/index.ts",
+      "default": "./components/chat/index.ts"
+    },
+    "./providers": {
+      "types": "./providers/index.ts",
+      "import": "./providers/index.ts",
+      "default": "./providers/index.ts"
+    },
+    "./theme": {
+      "types": "./theme/index.ts",
+      "import": "./theme/index.ts",
+      "default": "./theme/index.ts"
+    },
+    "./hooks": {
+      "types": "./hooks/index.ts",
+      "import": "./hooks/index.ts",
+      "default": "./hooks/index.ts"
+    },
+    "./lib": {
+      "types": "./lib/index.ts",
+      "import": "./lib/index.ts",
+      "default": "./lib/index.ts"
+    }
+  },
+  "files": [
+    "components",
+    "providers",
+    "theme",
+    "hooks",
+    "lib",
+    "index.ts",
+    "README.md"
+  ],
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -77,5 +126,15 @@
     "test-renderer": "^1.2.0",
     "typescript": "~6.0.3"
   },
-  "private": true
+  "peerDependencies": {
+    "expo": "*",
+    "lucide-react-native": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-screens": "*",
+    "react-native-svg": "*"
+  }
 }

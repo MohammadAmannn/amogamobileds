@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native'
 import { Users, MoreHorizontal } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
 
 export interface ChatCardItemProps {
   id: string
@@ -148,20 +148,22 @@ export function ChatCardItem({
         ) : null}
       </View>
 
-      {/* Row 2: Members Count */}
-      <View style={styles.membersRow}>
-        <Users
-          size={13}
-          color={colors.mutedForeground}
-          strokeWidth={1.8}
-        />
-        <Text
-          style={[styles.membersText, { color: colors.mutedForeground }]}
-          numberOfLines={1}
-        >
-          {membersCount} Members • {onlineCount} Online
-        </Text>
-      </View>
+      {/* Row 2: Members Count (Groups Only) */}
+      {isGroup && (
+        <View style={styles.membersRow}>
+          <Users
+            size={13}
+            color={colors.mutedForeground}
+            strokeWidth={1.8}
+          />
+          <Text
+            style={[styles.membersText, { color: colors.mutedForeground }]}
+            numberOfLines={1}
+          >
+            {membersCount} Members • {onlineCount} Online
+          </Text>
+        </View>
+      )}
 
       {/* Row 3: Last Message Snippet */}
       {lastMessage ? (

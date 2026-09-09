@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
   Platform,
 } from 'react-native';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '../../../hooks/useColorScheme';
 import {
   Search,
   Bell,
@@ -33,17 +33,17 @@ import {
   COMPONENTS,
   ComponentItem,
   ComponentCategory,
-} from '@/components/design-system/registry';
-import { DeviceConfig, DeviceType, ViewMode } from '@/components/web/types';
-import { DEFAULT_MOBILE_DEVICE, DEFAULT_TABLET_DEVICE } from '@/components/web/devices';
-import { DeviceFrame } from '@/components/web/DeviceFrame.web';
-import { PreviewToolbar } from '@/components/web/PreviewToolbar.web';
-import { CodePanel } from '@/components/web/CodePanel.web';
-import { FullscreenModal } from '@/components/web/FullscreenModal.web';
-import { MobileEmulatorModal } from '@/components/web/MobileEmulatorModal.web';
-import { ConfigDrawer } from '@/components/web/ConfigDrawer.web';
-import { NavUser } from '@/components/web/NavUser.web';
-import { useColorTheme } from '@/providers/color-theme-provider';
+} from '../../../components/design-system/registry';
+import { DeviceConfig, DeviceType, ViewMode } from '../../../components/web/types';
+import { DEFAULT_MOBILE_DEVICE, DEFAULT_TABLET_DEVICE } from '../../../components/web/devices';
+import { DeviceFrame } from '../../../components/web/DeviceFrame.web';
+import { PreviewToolbar } from '../../../components/web/PreviewToolbar.web';
+import { CodePanel } from '../../../components/web/CodePanel.web';
+import { FullscreenModal } from '../../../components/web/FullscreenModal.web';
+import { MobileEmulatorModal } from '../../../components/web/MobileEmulatorModal.web';
+import { ConfigDrawer } from '../../../components/web/ConfigDrawer.web';
+import { NavUser } from '../../../components/web/NavUser.web';
+import { useColorTheme } from '../../../providers/color-theme-provider';
 
 interface CategoryConfig {
   name: 'All' | ComponentCategory;

@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { Button } from './button';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import { Image } from 'expo-image';
 import { Download, Share, X } from 'lucide-react-native';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';

@@ -1,5 +1,5 @@
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
+import { Text } from '../ui/text';
+import { useColor } from '../../hooks/useColor';
 import React, { useEffect, useId, useState } from 'react';
 import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import Animated, {

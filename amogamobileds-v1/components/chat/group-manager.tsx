@@ -17,8 +17,10 @@ import {
   Pencil,
   Trash2,
   X,
+  Check,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
+import type { ContactItem } from './contact-manager'
 
 export interface GroupItem {
   id: string
@@ -32,6 +34,7 @@ export interface GroupItem {
 
 export interface GroupManagerProps {
   groups?: GroupItem[]
+  contacts?: ContactItem[]
   title?: string
   description?: string
   searchPlaceholder?: string
@@ -39,7 +42,7 @@ export interface GroupManagerProps {
   onToggleStatus?: (group: GroupItem, enabled: boolean) => void
   onEditClick?: (group: GroupItem) => void
   onDeleteClick?: (group: GroupItem) => void
-  onAddGroup?: (newGroup: { name: string; description?: string }) => void
+  onAddGroup?: (newGroup: { name: string; description?: string; memberIds?: string[] }) => void
   style?: any
 }
 
@@ -70,6 +73,7 @@ function BlackToggle({
 
 export function GroupManager({
   groups = [],
+  contacts = [],
   title = 'Groups Manager',
   description = 'Manage your group channels and start team conversations.',
   searchPlaceholder = 'Search groups...',
@@ -87,6 +91,7 @@ export function GroupManager({
   const [isAddOpen, setIsAddOpen] = useState(false)
   const [groupName, setGroupName] = useState('')
   const [groupDesc, setGroupDesc] = useState('')
+  const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([])
 
   const filteredGroups = groups.filter(
     (g) =>
@@ -100,9 +105,11 @@ export function GroupManager({
     onAddGroup?.({
       name: groupName.trim(),
       description: groupDesc.trim() || undefined,
+      memberIds: selectedMemberIds,
     })
     setGroupName('')
     setGroupDesc('')
+    setSelectedMemberIds([])
     setIsAddOpen(false)
   }
 
@@ -331,6 +338,79 @@ export function GroupManager({
                   },
                 ]}
               />
+
+              {/* Member Picker */}
+              <View style={{ marginTop: 2 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                  <Text style={[styles.inputLabel, { color: colors.mutedForeground, marginBottom: 0 }]}>
+                    Select Members ({selectedMemberIds.length} selected)
+                  </Text>
+                </View>
+                {contacts.length === 0 ? (
+                  <View style={[styles.emptyPickerNotice, { borderColor: colors.border, backgroundColor: isDark ? '#27272a' : '#f8fafc' }]}>
+                    <Text style={{ color: colors.mutedForeground, fontSize: 11.5, textAlign: 'center' }}>
+                      No contacts yet. Add contacts in Contacts tab to invite them here.
+                    </Text>
+                  </View>
+                ) : (
+                  <ScrollView style={[styles.pickerScroll, { borderColor: colors.border }]} nestedScrollEnabled>
+                    {contacts.map((contact) => {
+                      const memberId = contact.contactUserId || contact.id;
+                      const isSelected = selectedMemberIds.includes(memberId);
+                      return (
+                        <Pressable
+                          key={contact.id}
+                          onPress={() => {
+                            setSelectedMemberIds((prev) =>
+                              prev.includes(memberId)
+                                ? prev.filter((id) => id !== memberId)
+                                : [...prev, memberId]
+                            );
+                          }}
+                          style={[
+                            styles.memberPickerRow,
+                            isSelected && { backgroundColor: isDark ? '#27272a' : '#eff6ff' },
+                          ]}
+                        >
+                          <View
+                            style={[
+                              styles.memberAvatarMini,
+                              { backgroundColor: isDark ? '#312e81' : '#e0e7ff' },
+                            ]}
+                          >
+                            <Text style={[styles.memberAvatarMiniText, { color: isDark ? '#818cf8' : '#4f46e5' }]}>
+                              {contact.initials || contact.name.slice(0, 2).toUpperCase() || 'U'}
+                            </Text>
+                          </View>
+                          <View style={{ flex: 1, marginLeft: 10 }}>
+                            <Text
+                              style={[styles.memberRowName, { color: colors.foreground }]}
+                              numberOfLines={1}
+                            >
+                              {contact.name}
+                            </Text>
+                            <Text
+                              style={[styles.memberRowEmail, { color: colors.mutedForeground }]}
+                              numberOfLines={1}
+                            >
+                              {contact.email}
+                            </Text>
+                          </View>
+                          <View
+                            style={[
+                              styles.checkboxBox,
+                              { borderColor: isSelected ? '#4f46e5' : colors.border },
+                              isSelected && { backgroundColor: '#4f46e5' },
+                            ]}
+                          >
+                            {isSelected && <Check size={12} color="#ffffff" strokeWidth={2.5} />}
+                          </View>
+                        </Pressable>
+                      );
+                    })}
+                  </ScrollView>
+                )}
+              </View>
             </View>
 
             <View style={styles.dialogFooter}>
@@ -582,5 +662,51 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#ffffff',
     fontFamily: 'Open Sans',
+  },
+  emptyPickerNotice: {
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 2,
+  },
+  pickerScroll: {
+    maxHeight: 140,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 2,
+  },
+  memberPickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 7,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#e2e8f0',
+  },
+  memberAvatarMini: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  memberAvatarMiniText: {
+    fontSize: 10.5,
+    fontWeight: '600',
+  },
+  memberRowName: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  memberRowEmail: {
+    fontSize: 10.5,
+  },
+  checkboxBox: {
+    width: 18,
+    height: 18,
+    borderRadius: 4,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })

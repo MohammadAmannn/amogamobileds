@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
+import { Button } from './button';
+import { Progress } from './progress';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS, FONT_SIZE } from '../../theme/globals';
 import {
   CameraMode,
   CameraRatio,

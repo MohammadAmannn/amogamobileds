@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import { View, ScrollView, Platform } from 'react-native';
-import { AlertDialog } from '@/components/ui/alert-dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { MediaPicker, type MediaAsset } from '@/components/ui/media-picker';
-import { ModeToggle } from '@/components/ui/mode-toggle';
-import { Separator } from '@/components/ui/separator';
-import { Text } from '@/components/ui/text';
-import { useToast } from '@/components/ui/toast';
-import { SignOutButton } from '@/components/auth/sign-out-button';
-import { useAvatarUpload } from '@/hooks/useAvatarUpload';
-import { useColor } from '@/hooks/useColor';
-import { useProfile } from '@/hooks/useProfile';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/auth-provider';
+import { AlertDialog } from '../../../components/ui/alert-dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '../../../components/ui/avatar';
+import { Button } from '../../../components/ui/button';
+import { Card } from '../../../components/ui/card';
+import { Input } from '../../../components/ui/input';
+import { MediaPicker, type MediaAsset } from '../../../components/ui/media-picker';
+import { ModeToggle } from '../../../components/ui/mode-toggle';
+import { Separator } from '../../../components/ui/separator';
+import { Text } from '../../../components/ui/text';
+import { useToast } from '../../../components/ui/toast';
+import { SignOutButton } from '../../../components/auth/sign-out-button';
+import { useAvatarUpload } from '../../../hooks/useAvatarUpload';
+import { useColor } from '../../../hooks/useColor';
+import { useProfile } from '../../../hooks/useProfile';
+import { supabase } from '../../../lib/supabase';
+import { useAuth } from '../../../providers/auth-provider';
 
 const initialsOf = (value: string) =>
   value

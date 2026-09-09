@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/auth-provider';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../providers/auth-provider';
 
 /** What `MediaPicker` hands back, narrowed to the fields an upload needs. */
 export interface UploadSource {

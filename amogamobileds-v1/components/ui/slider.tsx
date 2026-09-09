@@ -1,6 +1,6 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
 import React, { useState } from 'react';
 import { LayoutChangeEvent, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';

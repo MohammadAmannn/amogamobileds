@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/toast';
-import { useAuth } from '@/providers/auth-provider';
+import { Button } from '../ui/button';
+import { useToast } from '../ui/toast';
+import { useAuth } from '../../providers/auth-provider';
 import { useState } from 'react';
 
 export function SignOutButton() {

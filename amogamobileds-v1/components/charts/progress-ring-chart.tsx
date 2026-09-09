@@ -1,6 +1,6 @@
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
+import { Text } from '../ui/text';
+import { View } from '../ui/view';
+import { useColor } from '../../hooks/useColor';
 import React from 'react';
 import { ViewStyle } from 'react-native';
 import Svg, { Circle, G } from 'react-native-svg';

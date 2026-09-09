@@ -1,9 +1,9 @@
-import { AudioPlayer } from '@/components/ui/audio-player';
-import { AudioWaveform } from '@/components/ui/audio-waveform';
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { AudioPlayer } from './audio-player';
+import { AudioWaveform } from './audio-waveform';
+import { Button } from './button';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import {
   AudioModule,
   RecordingOptions,

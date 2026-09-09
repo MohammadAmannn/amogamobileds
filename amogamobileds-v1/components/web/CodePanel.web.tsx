@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { Copy, Check, FileCode } from 'lucide-react-native';
-import { ComponentItem } from '@/components/design-system/registry';
+import { ComponentItem } from '../design-system/registry';
 
 interface CodePanelProps {
   component: ComponentItem;
@@ -13,7 +13,7 @@ export function CodePanel({ component }: CodePanelProps) {
 
   const snippet =
     component.codeSnippet ||
-    `import { ${component.name.split(' ')[0]} } from '@/components/ui/${component.file.replace('.tsx', '')}';
+    `import { ${component.name.split(' ')[0]} } from '../ui/${component.file.replace('.tsx', '')}';
 
 export function Example() {
   return <${component.name.split(' ')[0]} />;

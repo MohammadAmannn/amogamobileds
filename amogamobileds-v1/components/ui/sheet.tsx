@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
+import { Button } from './button';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS, FONT_SIZE } from '../../theme/globals';
 import { X } from 'lucide-react-native';
 import React, { useEffect } from 'react';
 import {

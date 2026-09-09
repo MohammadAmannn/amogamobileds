@@ -14,13 +14,13 @@ import {
   AlertCircle,
   RefreshCw,
 } from 'lucide-react-native';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
-import { Badge } from '@/components/ui/badge';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { useColorTheme } from '@/providers/color-theme-provider';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import { Checkbox } from '../../ui/checkbox';
+import { Separator } from '../../ui/separator';
+import { Badge } from '../../ui/badge';
+import { useColorScheme } from '../../../hooks/useColorScheme';
+import { useColorTheme } from '../../../providers/color-theme-provider';
 
 // ---------------------------------------------------------------------------
 // 1. Sign In Preview

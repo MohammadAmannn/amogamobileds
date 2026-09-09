@@ -1,7 +1,7 @@
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { SearchProvider, useSearch } from '@/providers/search-context';
+import { Text } from '../../../components/ui/text';
+import { useColor } from '../../../hooks/useColor';
+import { useColorScheme } from '../../../hooks/useColorScheme';
+import { SearchProvider, useSearch } from '../../../providers/search-context';
 import { isLiquidGlassAvailable } from 'expo-glass-effect';
 import { Stack } from 'expo-router';
 import { Platform } from 'react-native';

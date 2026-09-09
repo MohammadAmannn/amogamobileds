@@ -1,4 +1,4 @@
-import { useColor } from '@/hooks/useColor';
+import { useColor } from '../../hooks/useColor';
 import React, { useEffect, useMemo } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';

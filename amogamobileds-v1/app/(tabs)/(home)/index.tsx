@@ -10,7 +10,7 @@ import {
   useWindowDimensions
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from '../../../hooks/useColorScheme';
 import {
   Search,
   Bell,
@@ -33,9 +33,9 @@ import {
   COMPONENTS,
   ComponentItem,
   ComponentCategory,
-} from '@/components/design-system/registry';
-import { ComponentPreviewModal } from '@/components/design-system/component-preview-modal';
-import { ConfigDrawer } from '@/components/web/ConfigDrawer.web';
+} from '../../../components/design-system/registry';
+import { ComponentPreviewModal } from '../../../components/design-system/component-preview-modal';
+import { ConfigDrawer } from '../../../components/web/ConfigDrawer.web';
 
 interface CategoryConfig {
   name: 'All' | ComponentCategory;

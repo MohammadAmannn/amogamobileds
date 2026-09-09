@@ -19,11 +19,11 @@ import {
   Zap,
   RotateCcw,
 } from 'lucide-react-native';
-import { useColorTheme } from '@/providers/color-theme-provider';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
+import { useColorTheme } from '../../../providers/color-theme-provider';
+import { useColorScheme } from '../../../hooks/useColorScheme';
+import { Button } from '../../ui/button';
+import { Badge } from '../../ui/badge';
+import { Switch } from '../../ui/switch';
 
 export function AppThemesPreview() {
   const { colorTheme, setColorTheme, resetColorTheme, currentTheme, colorThemes } = useColorTheme();

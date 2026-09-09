@@ -1,10 +1,10 @@
-import { Button } from '@/components/ui/button';
-import { InputOTP } from '@/components/ui/input-otp';
-import { Text } from '@/components/ui/text';
-import { useToast } from '@/components/ui/toast';
-import { View } from '@/components/ui/view';
-import { AuthScreen } from '@/components/auth/auth-screen';
-import { supabase } from '@/lib/supabase';
+import { Button } from '../../components/ui/button';
+import { InputOTP } from '../../components/ui/input-otp';
+import { Text } from '../../components/ui/text';
+import { useToast } from '../../components/ui/toast';
+import { View } from '../../components/ui/view';
+import { AuthScreen } from '../../components/auth/auth-screen';
+import { supabase } from '../../lib/supabase';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 

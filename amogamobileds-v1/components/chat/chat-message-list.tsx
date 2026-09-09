@@ -4,8 +4,10 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Keyboard,
+  Platform,
 } from 'react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
 
 export interface ChatMessageListProps {
   children?: React.ReactNode
@@ -27,11 +29,28 @@ export function ChatMessageList({
 
   useEffect(() => {
     if (autoScrollToBottom) {
-      setTimeout(() => {
-        scrollViewRef.current?.scrollToEnd({ animated: false })
-      }, 50)
+      const timer = setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true })
+      }, 60)
+      return () => clearTimeout(timer)
     }
   }, [children, autoScrollToBottom])
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener(
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      () => {
+        if (autoScrollToBottom) {
+          setTimeout(() => {
+            scrollViewRef.current?.scrollToEnd({ animated: true })
+          }, 80)
+        }
+      }
+    )
+    return () => {
+      showSub.remove()
+    }
+  }, [autoScrollToBottom])
 
   const hasChildren = React.Children.count(children) > 0
 
@@ -51,6 +70,18 @@ export function ChatMessageList({
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+          onContentSizeChange={() => {
+            if (autoScrollToBottom) {
+              scrollViewRef.current?.scrollToEnd({ animated: false })
+            }
+          }}
+          onLayout={() => {
+            if (autoScrollToBottom) {
+              scrollViewRef.current?.scrollToEnd({ animated: false })
+            }
+          }}
         >
           {children}
         </ScrollView>

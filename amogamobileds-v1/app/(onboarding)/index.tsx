@@ -1,6 +1,6 @@
-import { Icon } from '@/components/ui/icon';
-import { Onboarding } from '@/components/ui/onboarding';
-import { useColor } from '@/hooks/useColor';
+import { Icon } from '../../components/ui/icon';
+import { Onboarding } from '../../components/ui/onboarding';
+import { useColor } from '../../hooks/useColor';
 import { router } from 'expo-router';
 import { Database, ShieldCheck, Zap } from 'lucide-react-native';
 

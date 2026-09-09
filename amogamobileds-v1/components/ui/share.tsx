@@ -1,7 +1,7 @@
-import { Button, ButtonVariant } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { FONT_SIZE } from '@/theme/globals';
+import { Button, ButtonVariant } from './button';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { FONT_SIZE } from '../../theme/globals';
 import { Share as ShareIcon } from 'lucide-react-native';
 import React, { useCallback, useMemo } from 'react';
 import {

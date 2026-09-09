@@ -5,9 +5,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useColor } from '@/hooks/useColor';
+} from './card';
+import { Button } from './button';
+import { useColor } from '../../hooks/useColor';
 import React, { useEffect } from 'react';
 import {
   Modal,

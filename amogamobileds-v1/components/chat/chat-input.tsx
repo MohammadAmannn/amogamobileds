@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   Modal,
   Platform,
@@ -15,6 +15,7 @@ import {
   Mic,
   Camera,
   X,
+  Trash2,
   Image as ImageIcon,
   Video,
   FileText,
@@ -25,7 +26,9 @@ import {
   ScanLine,
   FileCode2,
 } from 'lucide-react-native'
-import { useTheme } from '@/providers/theme-provider'
+import { useTheme } from '../../providers/theme-provider'
+import { AudioWaveform } from '../ui/audio-waveform'
+import { AudioModule, RecordingPresets, useAudioRecorder } from 'expo-audio'
 
 export type AttachmentOptionType =
   | 'images'
@@ -60,6 +63,8 @@ export interface ChatInputProps {
   onEmojiClick?: () => void
   onCameraClick?: () => void
   onVoiceClick?: () => void
+  onTyping?: (isTyping: boolean) => void
+  onVoiceRecordComplete?: (uri: string, durationSec: number) => void
   customActions?: React.ReactNode
   style?: any
 }
@@ -82,6 +87,8 @@ export function ChatInput({
   onEmojiClick,
   onCameraClick,
   onVoiceClick,
+  onTyping,
+  onVoiceRecordComplete,
   customActions,
   style,
 }: ChatInputProps) {
@@ -89,7 +96,89 @@ export function ChatInput({
   const isDark = resolvedMode === 'dark'
 
   const [isAttachMenuOpen, setIsAttachMenuOpen] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [recordDuration, setRecordDuration] = useState(0)
+  const durationTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const inputRef = useRef<TextInput>(null)
+
+  const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY)
   const hasText = value.trim().length > 0
+
+  useEffect(() => {
+    return () => {
+      if (durationTimerRef.current) clearInterval(durationTimerRef.current)
+      if (typingTimerRef.current) clearTimeout(typingTimerRef.current)
+    }
+  }, [])
+
+  const handleStartVoice = async () => {
+    if (onVoiceClick) onVoiceClick()
+    try {
+      if (Platform.OS !== 'web') {
+        const status = await AudioModule.requestRecordingPermissionsAsync()
+        if (!status.granted) {
+          console.warn('Microphone permission not granted')
+          return
+        }
+      }
+      await recorder.prepareToRecordAsync(RecordingPresets.HIGH_QUALITY)
+      await recorder.record()
+      setIsRecording(true)
+      setRecordDuration(0)
+      durationTimerRef.current = setInterval(() => {
+        setRecordDuration((prev) => prev + 1)
+      }, 1000)
+    } catch (err) {
+      console.warn('Voice record start failed:', err)
+      setIsRecording(false)
+    }
+  }
+
+  const handleCancelVoice = async () => {
+    if (durationTimerRef.current) clearInterval(durationTimerRef.current)
+    try {
+      await recorder.stop()
+    } catch (e) {}
+    setIsRecording(false)
+    setRecordDuration(0)
+  }
+
+  const handleSendVoice = async () => {
+    if (durationTimerRef.current) clearInterval(durationTimerRef.current)
+    const dur = recordDuration
+    setIsRecording(false)
+    setRecordDuration(0)
+    try {
+      await recorder.stop()
+      const uri = recorder.uri
+      console.log('[voice] Recorded audio URI:', uri, 'duration:', dur)
+      if (uri) {
+        onVoiceRecordComplete?.(uri, dur)
+      } else {
+        console.warn('[voice] No URI returned from recorder.stop()')
+      }
+    } catch (e) {
+      console.warn('Voice record stop failed:', e)
+    }
+  }
+
+  const handleTextChange = (text: string) => {
+    onChange(text)
+    if (onTyping) {
+      onTyping(true)
+      if (typingTimerRef.current) clearTimeout(typingTimerRef.current)
+      typingTimerRef.current = setTimeout(() => {
+        onTyping(false)
+      }, 2000)
+    }
+  }
+
+  const formatDuration = (seconds: number) => {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
+  }
 
   const handleSelectOption = (type: AttachmentOptionType) => {
     setIsAttachMenuOpen(false)
@@ -157,111 +246,171 @@ export function ChatInput({
       ) : null}
 
       {/* Main Row */}
-      <View style={styles.mainRow}>
-        {/* Rounded Pill Input Bar */}
-        <View
-          style={[
-            styles.inputPill,
-            {
-              backgroundColor: isDark ? colors.card : colors.background,
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          {/* Emoji Button */}
-          {showEmoji ? (
-            <Pressable
-              onPress={onEmojiClick}
-              hitSlop={6}
-              style={styles.iconBtn}
-              accessibilityLabel="Emoji"
-            >
-              <Smile size={18} color={colors.mutedForeground} />
-            </Pressable>
-          ) : null}
-
-          {/* Text Input */}
-          <TextInput
-            value={value}
-            onChangeText={onChange}
-            placeholder={placeholder}
-            placeholderTextColor={colors.mutedForeground}
-            editable={!disabled && !isLoading}
-            maxLength={maxLength}
-            multiline
-            style={[
-              styles.textInput,
-              { color: colors.foreground },
-            ]}
-          />
-
-          {/* Paperclip Button */}
-          {showAttachments ? (
-            <Pressable
-              onPress={() => setIsAttachMenuOpen(true)}
-              hitSlop={6}
-              style={styles.iconBtn}
-              accessibilityLabel="Attach files"
-            >
-              <Paperclip size={18} color={colors.mutedForeground} />
-            </Pressable>
-          ) : null}
-
-          {/* Camera Button */}
-          {showCamera ? (
-            <Pressable
-              onPress={onCameraClick}
-              hitSlop={6}
-              style={styles.iconBtn}
-              accessibilityLabel="Camera"
-            >
-              <Camera size={18} color={colors.mutedForeground} />
-            </Pressable>
-          ) : null}
-
-          {customActions}
-        </View>
-
-        {/* Circular Action Button on Right (Send / Mic) */}
-        {hasText ? (
-          <Pressable
-            onPress={onSend}
-            disabled={disabled || isLoading}
-            style={({ pressed }) => [
-              styles.actionCircle,
-              { backgroundColor: '#059669' },
-              pressed && { transform: [{ scale: 0.94 }] },
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="Send message"
-          >
-            <Send size={16} color="#ffffff" />
-          </Pressable>
-        ) : showVoice ? (
-          <Pressable
-            onPress={onVoiceClick}
-            disabled={disabled || isLoading}
-            style={({ pressed }) => [
-              styles.actionCircle,
-              { backgroundColor: '#059669' },
-              pressed && { transform: [{ scale: 0.94 }] },
-            ]}
-            accessibilityRole="button"
-            accessibilityLabel="Voice message"
-          >
-            <Mic size={18} color="#ffffff" />
-          </Pressable>
-        ) : (
+      {isRecording ? (
+        <View style={styles.mainRow}>
           <View
             style={[
-              styles.actionCircle,
-              { backgroundColor: 'rgba(5, 150, 105, 0.4)' },
+              styles.recordingBar,
+              {
+                backgroundColor: isDark ? colors.card : colors.background,
+                borderColor: '#ef4444',
+              },
             ]}
           >
-            <Send size={16} color="#ffffff" />
+            <View style={styles.recordingLeft}>
+              <View style={styles.redDot} />
+              <Text style={[styles.timerText, { color: colors.foreground }]}>
+                {formatDuration(recordDuration)}
+              </Text>
+            </View>
+
+            <View style={styles.waveformWrap}>
+              <AudioWaveform
+                animated
+                isPlaying={true}
+                height={22}
+                barCount={20}
+                activeColor="#ef4444"
+                inactiveColor={isDark ? '#3f3f46' : '#e4e4e7'}
+              />
+            </View>
+
+            <Pressable
+              onPress={handleCancelVoice}
+              hitSlop={6}
+              style={styles.cancelBtn}
+              accessibilityLabel="Cancel recording"
+            >
+              <Trash2 size={18} color="#ef4444" />
+            </Pressable>
           </View>
-        )}
-      </View>
+
+          <Pressable
+            onPress={handleSendVoice}
+            style={({ pressed }) => [
+              styles.actionCircle,
+              { backgroundColor: '#059669' },
+              pressed && { transform: [{ scale: 0.94 }] },
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel="Send recording"
+          >
+            <Send size={16} color="#ffffff" />
+          </Pressable>
+        </View>
+      ) : (
+        <View style={styles.mainRow}>
+          {/* Rounded Pill Input Bar */}
+          <View
+            style={[
+              styles.inputPill,
+              {
+                backgroundColor: isDark ? colors.card : colors.background,
+                borderColor: colors.border,
+              },
+            ]}
+          >
+            {/* Emoji Button */}
+            {showEmoji ? (
+              <Pressable
+                onPress={onEmojiClick}
+                hitSlop={6}
+                style={styles.iconBtn}
+                accessibilityLabel="Emoji"
+              >
+                <Smile size={18} color={colors.mutedForeground} />
+              </Pressable>
+            ) : null}
+
+            {/* Text Input */}
+            <TextInput
+              ref={inputRef}
+              value={value}
+              onChangeText={handleTextChange}
+              placeholder={placeholder}
+              placeholderTextColor={colors.mutedForeground}
+              editable={!disabled}
+              maxLength={maxLength}
+              multiline
+              style={[
+                styles.textInput,
+                { color: colors.foreground },
+              ]}
+            />
+
+            {/* Paperclip Button */}
+            {showAttachments ? (
+              <Pressable
+                onPress={() => setIsAttachMenuOpen(true)}
+                hitSlop={6}
+                style={styles.iconBtn}
+                accessibilityLabel="Attach files"
+              >
+                <Paperclip size={18} color={colors.mutedForeground} />
+              </Pressable>
+            ) : null}
+
+            {/* Camera Button */}
+            {showCamera ? (
+              <Pressable
+                onPress={onCameraClick}
+                hitSlop={6}
+                style={styles.iconBtn}
+                accessibilityLabel="Camera"
+              >
+                <Camera size={18} color={colors.mutedForeground} />
+              </Pressable>
+            ) : null}
+
+            {customActions}
+          </View>
+
+          {/* Circular Action Button on Right (Send / Mic) */}
+          {hasText ? (
+            <Pressable
+              onPress={() => {
+                onSend();
+                setTimeout(() => {
+                  inputRef.current?.focus();
+                }, 50);
+              }}
+              disabled={disabled || isLoading}
+              style={({ pressed }) => [
+                styles.actionCircle,
+                { backgroundColor: '#059669' },
+                pressed && { transform: [{ scale: 0.94 }] },
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Send message"
+            >
+              <Send size={16} color="#ffffff" />
+            </Pressable>
+          ) : showVoice ? (
+            <Pressable
+              onPress={handleStartVoice}
+              disabled={disabled || isLoading}
+              style={({ pressed }) => [
+                styles.actionCircle,
+                { backgroundColor: '#059669' },
+                pressed && { transform: [{ scale: 0.94 }] },
+              ]}
+              accessibilityRole="button"
+              accessibilityLabel="Voice message"
+            >
+              <Mic size={18} color="#ffffff" />
+            </Pressable>
+          ) : (
+            <View
+              style={[
+                styles.actionCircle,
+                { backgroundColor: 'rgba(5, 150, 105, 0.4)' },
+              ]}
+            >
+              <Send size={16} color="#ffffff" />
+            </View>
+          )}
+        </View>
+      )}
 
       {/* Attachment Options Modal / Dropdown Menu */}
       <Modal
@@ -403,33 +552,82 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.35)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    paddingRight: 16,
+    paddingBottom: 68,
   },
   attachMenuCard: {
-    width: 240,
-    borderRadius: 16,
+    width: 210,
+    borderRadius: 14,
     borderWidth: 1,
     padding: 6,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.16,
-    shadowRadius: 16,
-    elevation: 8,
+    gap: 2,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: -4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 10,
+      },
+      default: {},
+    }),
   },
   attachMenuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 9,
-    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 8,
   },
   attachMenuText: {
     fontSize: 13,
+    fontWeight: '500',
     fontFamily: 'Open Sans',
-    fontWeight: '400',
+  },
+  recordingBar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 24,
+    borderWidth: 1.5,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    minHeight: 44,
+    gap: 8,
+  },
+  recordingLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  redDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ef4444',
+  },
+  timerText: {
+    fontSize: 13,
+    fontWeight: '600',
+    fontFamily: 'Open Sans',
+  },
+  waveformWrap: {
+    flex: 1,
+    height: 24,
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  cancelBtn: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })

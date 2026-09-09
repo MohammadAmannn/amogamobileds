@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/providers/auth-provider';
-import type { TablesUpdate } from '@/lib/database.types';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../providers/auth-provider';
+import type { TablesUpdate } from '../lib/database.types';
 
 /**
  * Writes to the signed-in user's profile row.

@@ -1,6 +1,6 @@
-import { Button, ButtonSize, ButtonVariant } from '@/components/ui/button';
-import { Icon } from '@/components/ui/icon';
-import { useModeToggle } from '@/hooks/useModeToggle';
+import { Button, ButtonSize, ButtonVariant } from './button';
+import { Icon } from './icon';
+import { useModeToggle } from '../../hooks/useModeToggle';
 import { Moon, Sun } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
 import Animated, {

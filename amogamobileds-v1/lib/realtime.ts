@@ -1,5 +1,5 @@
 import type { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
-import type { Task } from '@/lib/database.types';
+import type { Task } from './database.types';
 
 const byNewest = (a: Task, b: Task) => b.created_at.localeCompare(a.created_at);
 

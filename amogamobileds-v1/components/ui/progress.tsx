@@ -1,5 +1,5 @@
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
 import React, { useEffect } from 'react';
 import { ViewStyle } from 'react-native';
 import Animated, {

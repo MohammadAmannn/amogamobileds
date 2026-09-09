@@ -1,5 +1,5 @@
-import { useColor } from '@/hooks/useColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { useColor } from '../../hooks/useColor';
+import { BORDER_RADIUS } from '../../theme/globals';
 import { useEvent } from 'expo';
 import { useVideoPlayer, VideoSource, VideoView } from 'expo-video';
 import { Pause, Play, Volume2, VolumeX } from 'lucide-react-native';

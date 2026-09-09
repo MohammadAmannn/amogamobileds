@@ -1,4 +1,4 @@
-import { Mode, useModeContext } from '@/providers/mode-provider';
+import { Mode, useModeContext } from '../providers/mode-provider';
 
 interface UseModeToggleReturn {
   isDark: boolean;

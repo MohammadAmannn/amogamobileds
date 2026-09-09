@@ -1,4 +1,4 @@
-import { useColor } from '@/hooks/useColor';
+import { useColor } from '../../hooks/useColor';
 import { Stack } from 'expo-router';
 
 export const unstable_settings = {

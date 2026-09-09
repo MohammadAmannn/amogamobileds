@@ -1,8 +1,8 @@
-import { Button, ButtonVariant } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { CORNERS, FONT_SIZE } from '@/theme/globals';
+import { Button, ButtonVariant } from './button';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { CORNERS, FONT_SIZE } from '../../theme/globals';
 import * as DocumentPicker from 'expo-document-picker';
 import { File, Image, X } from 'lucide-react-native';
 import React, { forwardRef, useCallback, useMemo, useState } from 'react';

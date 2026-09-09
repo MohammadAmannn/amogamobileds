@@ -1,4 +1,4 @@
-import { useKeyboardHeight } from '@/hooks/useKeyboardHeight';
+import { useKeyboardHeight } from '../../hooks/useKeyboardHeight';
 import { useEffect } from 'react';
 import Animated, {
   Easing,

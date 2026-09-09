@@ -1,4 +1,4 @@
-import { LargeSecureStore } from '@/lib/large-secure-store';
+import { LargeSecureStore } from '../lib/large-secure-store';
 
 /**
  * The point of this class is that a value too large for SecureStore survives a

@@ -1,7 +1,7 @@
-import { Text } from '@/components/ui/text';
-import { useColor } from '@/hooks/useColor';
-import { useHaptics } from '@/hooks/useHaptics';
-import { BORDER_RADIUS, CORNERS, FONT_SIZE } from '@/theme/globals';
+import { Text } from './text';
+import { useColor } from '../../hooks/useColor';
+import { useHaptics } from '../../hooks/useHaptics';
+import { BORDER_RADIUS, CORNERS, FONT_SIZE } from '../../theme/globals';
 import React from 'react';
 import { TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 

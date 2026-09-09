@@ -1,8 +1,8 @@
-import { Button, ButtonSize, ButtonVariant } from '@/components/ui/button';
-import { Text } from '@/components/ui/text';
-import { View } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { CORNERS, FONT_SIZE } from '@/theme/globals';
+import { Button, ButtonSize, ButtonVariant } from './button';
+import { Text } from './text';
+import { View } from './view';
+import { useColor } from '../../hooks/useColor';
+import { CORNERS, FONT_SIZE } from '../../theme/globals';
 import { Image as ExpoImage } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { LucideProps, Video, X } from 'lucide-react-native';

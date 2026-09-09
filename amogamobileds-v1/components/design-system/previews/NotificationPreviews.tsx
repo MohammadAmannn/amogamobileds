@@ -5,8 +5,8 @@ import {
   NotificationCardItem,
   mockNotificationsData,
   type NotificationItem,
-} from '@/components/notifications'
-import { useTheme } from '@/providers/theme-provider'
+} from '../../notifications'
+import { useTheme } from '../../../providers/theme-provider'
 import type { GalleryEntry } from '../../types'
 
 interface NotificationPreviewsProps {

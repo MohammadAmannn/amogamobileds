@@ -1,9 +1,9 @@
-import { AvoidKeyboard } from '@/components/ui/avoid-keyboard';
-import { ScrollView as NativeScrollView } from '@/components/ui/scroll-view';
-import { Text as UIText } from '@/components/ui/text';
-import { View as UIView } from '@/components/ui/view';
-import { useColor } from '@/hooks/useColor';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { AvoidKeyboard } from '../ui/avoid-keyboard';
+import { ScrollView as NativeScrollView } from '../ui/scroll-view';
+import { Text as UIText } from '../ui/text';
+import { View as UIView } from '../ui/view';
+import { useColor } from '../../hooks/useColor';
+import { useColorScheme } from '../../hooks/useColorScheme';
 import type { ReactNode } from 'react';
 import { Platform, ScrollView, Text, View } from 'react-native';
 

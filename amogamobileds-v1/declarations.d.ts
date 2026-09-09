@@ -118,3 +118,49 @@ declare module 'expo-camera' {
   export function useCameraPermissions(): [any, () => Promise<any>];
   export function useMicrophonePermissions(): [any, () => Promise<any>];
 }
+
+declare module 'expo-location' {
+  export enum Accuracy {
+    Lowest = 1,
+    Low = 2,
+    Balanced = 3,
+    High = 4,
+    Highest = 5,
+    BestForNavigation = 6,
+  }
+  export interface LocationObject {
+    coords: {
+      latitude: number;
+      longitude: number;
+      altitude: number | null;
+      accuracy: number | null;
+      altitudeAccuracy: number | null;
+      heading: number | null;
+      speed: number | null;
+    };
+    timestamp: number;
+  }
+  export interface LocationPermissionResponse {
+    status: 'granted' | 'undetermined' | 'denied';
+    granted: boolean;
+    canAskAgain: boolean;
+    expires: 'never' | number;
+  }
+  export function requestForegroundPermissionsAsync(): Promise<LocationPermissionResponse>;
+  export function getCurrentPositionAsync(options?: { accuracy?: Accuracy }): Promise<LocationObject>;
+  export function reverseGeocodeAsync(location: { latitude: number; longitude: number }): Promise<Array<{
+    city?: string | null;
+    district?: string | null;
+    streetNumber?: string | null;
+    street?: string | null;
+    region?: string | null;
+    subregion?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    name?: string | null;
+    isoCountryCode?: string | null;
+    timezone?: string | null;
+    formattedAddress?: string | null;
+  }>>;
+}
+

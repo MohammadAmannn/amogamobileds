@@ -1,4 +1,4 @@
-import { Text } from '@/components/ui/text';
+import { Text } from './text';
 import { AlertCircle, Check, Info, X } from 'lucide-react-native';
 import React, {
   createContext,
