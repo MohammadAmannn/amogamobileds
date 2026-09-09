@@ -54,11 +54,12 @@ function RootNavigator() {
     );
   }
 
-  const signedIn = !!session;
+  const isWeb = Platform.OS === 'web';
+  const signedIn = isWeb ? true : !!session;
   // While the profile row is still being created by the trigger, `profile` is
   // null. Treating that as "not onboarded" would flash the onboarding screen,
   // so hold the user in the app until it arrives.
-  const needsOnboarding = signedIn && profile?.onboarded === false;
+  const needsOnboarding = !isWeb && signedIn && profile?.onboarded === false;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

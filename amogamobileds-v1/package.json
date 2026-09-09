@@ -2,7 +2,7 @@
   "name": "amogamobileds-v1",
   "version": "1.0.0",
   "description": "Amoga Mobile UI Design System & Component Library for Expo and React Native",
-  "main": "./index.ts",
+  "main": "expo-router/entry",
   "types": "./index.ts",
   "module": "./index.ts",
   "exports": {
