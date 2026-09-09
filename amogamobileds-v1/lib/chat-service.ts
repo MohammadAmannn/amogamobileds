@@ -6,7 +6,6 @@ import type {
   Profile,
 } from './database.types';
 import { Platform } from 'react-native';
-import * as FileSystem from 'expo-file-system/legacy';
 
 export interface EnrichedConversation extends Conversation {
   otherMember?: Profile | null;

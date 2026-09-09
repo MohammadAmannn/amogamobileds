@@ -31,8 +31,14 @@ Thumbs.db
 *.pem
 
 # local env files (NEVER commit secrets)
+.env
+.env*
 .env*.local
+**/.env
+**/.env*
 **/.env*.local
+!.env.example
+!**/.env.example
 
 # typescript
 *.tsbuildinfo
