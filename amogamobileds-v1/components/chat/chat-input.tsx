@@ -377,7 +377,7 @@ export function ChatInput({
               disabled={disabled || isLoading}
               style={({ pressed }) => [
                 styles.actionCircle,
-                { backgroundColor: '#059669' },
+                { backgroundColor: colors.primary },
                 pressed && { transform: [{ scale: 0.94 }] },
               ]}
               accessibilityRole="button"
@@ -391,7 +391,7 @@ export function ChatInput({
               disabled={disabled || isLoading}
               style={({ pressed }) => [
                 styles.actionCircle,
-                { backgroundColor: '#059669' },
+                { backgroundColor: colors.primary },
                 pressed && { transform: [{ scale: 0.94 }] },
               ]}
               accessibilityRole="button"
@@ -403,7 +403,7 @@ export function ChatInput({
             <View
               style={[
                 styles.actionCircle,
-                { backgroundColor: 'rgba(5, 150, 105, 0.4)' },
+                { backgroundColor: colors.primary, opacity: 0.5 },
               ]}
             >
               <Send size={16} color="#ffffff" />
@@ -534,9 +534,21 @@ const styles = StyleSheet.create({
     fontSize: 13.5,
     fontFamily: 'Open Sans',
     fontWeight: '400',
-    paddingHorizontal: 6,
-    paddingVertical: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
     maxHeight: 100,
+    borderWidth: 0,
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
+    ...Platform.select({
+      web: {
+        outlineStyle: 'none',
+        outlineWidth: 0,
+        borderWidth: 0,
+        borderStyle: 'none',
+        boxShadow: 'none',
+      } as any,
+    }),
   },
   actionCircle: {
     width: 42,

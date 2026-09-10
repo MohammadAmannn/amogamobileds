@@ -50,6 +50,10 @@ export * from './text';
 export * from './toast';
 export * from './toggle';
 export * from './tooltip';
+export * from './app-navigation-sidebar';
+export * from './app-navigation-drawer';
+export * from './coming-soon-view';
+export * from './theme-settings-drawer';
 export * from './video';
 export * from './view';
 

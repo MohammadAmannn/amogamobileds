@@ -10,6 +10,7 @@ import { Platform } from 'react-native';
 import { colorThemes, ColorThemeDefinition } from '../theme/color-themes';
 
 import { useColorScheme } from '../hooks/useColorScheme';
+import { useModeContext } from './mode-provider';
 
 export interface ColorThemeContextType {
   colorTheme: string;
@@ -39,6 +40,15 @@ function applyTokensToWeb(theme: ColorThemeDefinition, isDark: boolean) {
   } else {
     root.classList.remove('dark');
   }
+
+  const bg = isDark
+    ? (theme.colors?.[4] || '#09090b')
+    : '#ffffff';
+  const fg = isDark ? '#f8fafc' : '#09090b';
+  document.body.style.backgroundColor = bg;
+  document.body.style.color = fg;
+  root.style.backgroundColor = bg;
+  root.style.color = fg;
 }
 
 export function ColorThemeProvider({
@@ -50,8 +60,9 @@ export function ColorThemeProvider({
   defaultTheme?: string;
   isDark?: boolean;
 }) {
+  const modeContext = useModeContext();
   const scheme = useColorScheme();
-  const isDark = propIsDark !== undefined ? propIsDark : scheme === 'dark';
+  const isDark = propIsDark !== undefined ? propIsDark : ((modeContext?.scheme || scheme) === 'dark');
 
   const [colorTheme, _setColorTheme] = useState<string>(() => {
     if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {

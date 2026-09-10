@@ -1,0 +1,724 @@
+import React, { useEffect } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Pressable,
+  Modal,
+  ScrollView,
+  useWindowDimensions,
+  Platform,
+} from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+  interpolate,
+  runOnJS,
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  Command,
+  Home,
+  Mail,
+  MessageSquare,
+  Folder,
+  Calendar,
+  CheckSquare,
+  Bell,
+  X,
+  ChevronRight,
+  User as UserIcon,
+  Palette,
+  Settings,
+  LogOut,
+  LucideIcon,
+} from 'lucide-react-native';
+import { useTheme } from '../../providers/theme-provider';
+
+export interface DrawerMenuItem {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  badge?: number | string;
+}
+
+export const DEFAULT_DRAWER_ITEMS: DrawerMenuItem[] = [
+  { id: 'home', label: 'Home', icon: Home },
+  { id: 'email', label: 'Email', icon: Mail },
+  { id: 'chat', label: 'Chat', icon: MessageSquare },
+  { id: 'files', label: 'Files', icon: Folder },
+  { id: 'calendar', label: 'Calendar', icon: Calendar },
+  { id: 'tasks', label: 'Tasks', icon: CheckSquare },
+  { id: 'notification', label: 'Notification', icon: Bell },
+];
+
+export interface AppNavigationDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  activeId?: string;
+  onSelect: (id: string) => void;
+  items?: DrawerMenuItem[];
+  workspaceName?: string;
+  workspaceSubtitle?: string;
+  userName?: string;
+  userSubtitle?: string;
+  userInitials?: string;
+  onProfilePress?: () => void;
+  onThemePress?: () => void;
+  onSignOut?: () => void;
+  primaryColor?: string;
+}
+
+export function AppNavigationDrawer({
+  isOpen,
+  onClose,
+  activeId = 'chat',
+  onSelect,
+  items = DEFAULT_DRAWER_ITEMS,
+  workspaceName = 'Amoga App',
+  workspaceSubtitle = 'Workspace',
+  userName = 'Mohammed Aman',
+  userSubtitle = 'My Account',
+  userInitials = 'MA',
+  onProfilePress,
+  onThemePress,
+  onSignOut,
+  primaryColor,
+}: AppNavigationDrawerProps) {
+  const { colors, resolvedMode } = useTheme();
+  const isDark = resolvedMode === 'dark';
+  const insets = useSafeAreaInsets();
+  const { width: screenWidth } = useWindowDimensions();
+
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = React.useState(false);
+
+  const drawerWidth = Math.min(screenWidth * 0.82, 320);
+  const [mounted, setMounted] = React.useState(isOpen);
+
+  const translateX = useSharedValue(-drawerWidth);
+  const backdropOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (isOpen) {
+      setMounted(true);
+      translateX.value = withTiming(0, {
+        duration: 280,
+        easing: Easing.out(Easing.cubic),
+      });
+      backdropOpacity.value = withTiming(1, { duration: 280 });
+    } else if (mounted) {
+      translateX.value = withTiming(
+        -drawerWidth,
+        { duration: 240, easing: Easing.in(Easing.cubic) },
+        (finished) => {
+          if (finished) {
+            runOnJS(setMounted)(false);
+          }
+        }
+      );
+      backdropOpacity.value = withTiming(0, { duration: 240 });
+    }
+  }, [isOpen, drawerWidth]);
+
+  const animatedDrawerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
+  const animatedBackdropStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(backdropOpacity.value, [0, 1], [0, 0.5]),
+  }));
+
+  if (!mounted && !isOpen) return null;
+
+  const bg = isDark ? '#111115' : '#ffffff';
+  const itemHoverBg = isDark ? '#1e1e24' : '#f8fafc';
+  const activeBg = primaryColor && primaryColor !== '#18181b' && primaryColor !== '#000000'
+    ? primaryColor
+    : '#7c3aed';
+  const activeTextColor = isDark ? '#e9d5ff' : (primaryColor && primaryColor !== '#18181b' ? primaryColor : '#6d28d9');
+  const inactiveTextColor = isDark ? '#e4e4e7' : '#1e293b';
+  const mutedText = isDark ? '#94a3b8' : '#64748b';
+  const borderColor = isDark ? '#27272a' : '#f1f5f9';
+
+  return (
+    <>
+      <Modal
+        visible={mounted}
+        transparent
+        animationType="none"
+        onRequestClose={onClose}
+        statusBarTranslucent
+      >
+        <View style={styles.modalRoot}>
+          {/* Backdrop */}
+          <Animated.View style={[styles.backdrop, animatedBackdropStyle]}>
+            <Pressable style={styles.backdropPressable} onPress={onClose} />
+          </Animated.View>
+
+          {/* Drawer Panel */}
+          <Animated.View
+            style={[
+              styles.drawerContainer,
+              {
+                width: drawerWidth,
+                backgroundColor: bg,
+                paddingTop: Math.max(insets.top, 20),
+                paddingBottom: Math.max(insets.bottom, 16),
+              },
+              animatedDrawerStyle,
+            ]}
+          >
+            {/* Header: Workspace branding & Close X */}
+            <View style={styles.drawerHeader}>
+              <View style={styles.headerLeft}>
+                <View style={[styles.headerLogo, { backgroundColor: activeBg }]}>
+                  <Command size={18} color="#ffffff" strokeWidth={2.4} />
+                </View>
+                <View style={styles.headerTitles}>
+                  <Text
+                    style={[
+                      styles.workspaceTitle,
+                      { color: isDark ? '#ffffff' : '#0f172a' },
+                    ]}
+                    numberOfLines={1}
+                  >
+                    {workspaceName}
+                  </Text>
+                  <Text style={[styles.workspaceSub, { color: mutedText }]}>
+                    {workspaceSubtitle}
+                  </Text>
+                </View>
+              </View>
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onClose}
+                style={styles.closeButton}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                accessibilityRole="button"
+                accessibilityLabel="Close menu"
+              >
+                <X size={18} color={isDark ? '#e4e4e7' : '#475569'} />
+              </TouchableOpacity>
+            </View>
+
+            {/* Section Label: MENU */}
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: mutedText }]}>MENU</Text>
+            </View>
+
+            {/* Navigation Items List */}
+            <ScrollView
+              style={styles.itemsScroll}
+              contentContainerStyle={styles.itemsScrollContent}
+              showsVerticalScrollIndicator={false}
+            >
+              {items.map((item) => {
+                const isActive = activeId === item.id;
+                const IconComp = item.icon;
+
+                return (
+                  <TouchableOpacity
+                    key={item.id}
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      onSelect(item.id);
+                      onClose();
+                    }}
+                    style={[
+                      styles.menuItemRow,
+                      isActive && {
+                        backgroundColor: isDark
+                          ? 'rgba(124, 58, 237, 0.18)'
+                          : '#f5f3ff',
+                      },
+                    ]}
+                    accessibilityRole="button"
+                    accessibilityState={{ selected: isActive }}
+                  >
+                    <View style={styles.itemLeft}>
+                      <View
+                        style={[
+                          styles.iconBox,
+                          isActive
+                            ? { backgroundColor: activeBg }
+                            : { backgroundColor: 'transparent' },
+                        ]}
+                      >
+                        <IconComp
+                          size={18}
+                          color={
+                            isActive
+                              ? '#ffffff'
+                              : isDark
+                              ? '#cbd5e1'
+                              : '#475569'
+                          }
+                          strokeWidth={isActive ? 2.2 : 1.8}
+                        />
+                      </View>
+                      <Text
+                        style={[
+                          styles.itemLabel,
+                          {
+                            color: isActive
+                              ? activeTextColor
+                              : inactiveTextColor,
+                            fontWeight: isActive ? '700' : '500',
+                          },
+                        ]}
+                      >
+                        {item.label}
+                      </Text>
+                    </View>
+
+                    {/* Active right dot indicator */}
+                    {isActive && (
+                      <View
+                        style={[
+                          styles.activeDot,
+                          { backgroundColor: activeBg },
+                        ]}
+                      />
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            {/* Bottom Profile / Account Section */}
+            <View
+              style={[
+                styles.drawerFooter,
+                { borderTopColor: borderColor },
+              ]}
+            >
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setIsProfileMenuOpen(true);
+                }}
+                style={styles.profileRow}
+                accessibilityRole="button"
+                accessibilityLabel="User Account"
+              >
+                <View style={styles.profileLeft}>
+                  <View
+                    style={[
+                      styles.avatarBadge,
+                      {
+                        backgroundColor: isDark ? '#27272a' : '#f1f5f9',
+                        borderColor: isDark ? '#3f3f46' : '#e2e8f0',
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.avatarText,
+                        { color: isDark ? '#e4e4e7' : '#1e293b' },
+                      ]}
+                    >
+                      {userInitials}
+                    </Text>
+                  </View>
+
+                  <View style={styles.profileInfo}>
+                    <Text
+                      style={[
+                        styles.profileName,
+                        { color: colors.foreground },
+                      ]}
+                      numberOfLines={1}
+                    >
+                      {userName}
+                    </Text>
+                    <Text style={[styles.profileSub, { color: mutedText }]}>
+                      {userSubtitle}
+                    </Text>
+                  </View>
+                </View>
+
+                <ChevronRight
+                  size={18}
+                  color={mutedText}
+                  strokeWidth={2}
+                />
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </View>
+      </Modal>
+
+      {/* Profile Popover Modal */}
+      <Modal
+        visible={isProfileMenuOpen}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setIsProfileMenuOpen(false)}
+      >
+        <View style={styles.profileModalOverlay}>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={() => setIsProfileMenuOpen(false)}
+          />
+          <View
+            style={[
+              styles.profilePopCard,
+              {
+                backgroundColor: isDark ? '#18181b' : '#ffffff',
+                borderColor: colors.border,
+                bottom: Math.max(insets.bottom, 16) + 70,
+              },
+            ]}
+          >
+            {/* Top User Header */}
+            <View style={styles.popHeader}>
+              <View
+                style={[
+                  styles.popAvatar,
+                  {
+                    backgroundColor: isDark ? '#27272a' : '#f1f5f9',
+                    borderColor: isDark ? '#3f3f46' : '#e2e8f0',
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.popAvatarText,
+                    { color: isDark ? '#e4e4e7' : '#1e293b' },
+                  ]}
+                >
+                  {userInitials}
+                </Text>
+              </View>
+              <View style={styles.popInfo}>
+                <Text
+                  style={[styles.popUserName, { color: colors.foreground }]}
+                  numberOfLines={1}
+                >
+                  {userName}
+                </Text>
+                <Text
+                  style={[styles.popUserSub, { color: mutedText }]}
+                  numberOfLines={1}
+                >
+                  {userSubtitle}
+                </Text>
+              </View>
+            </View>
+
+            <View
+              style={[
+                styles.popDivider,
+                { backgroundColor: isDark ? '#27272a' : '#f1f5f9' },
+              ]}
+            />
+
+            {/* Menu Options */}
+            <View style={styles.popItemsList}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setIsProfileMenuOpen(false);
+                  onClose();
+                  onProfilePress?.();
+                }}
+                style={styles.popItem}
+              >
+                <UserIcon size={18} color={mutedText} strokeWidth={1.9} />
+                <Text style={[styles.popItemText, { color: colors.foreground }]}>
+                  My Profile
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setIsProfileMenuOpen(false);
+                  onClose();
+                  onThemePress?.();
+                }}
+                style={styles.popItem}
+              >
+                <Palette size={18} color={colors.primary} strokeWidth={2} />
+                <Text style={[styles.popItemText, { color: colors.foreground }]}>
+                  Theme Settings
+                </Text>
+              </TouchableOpacity>
+
+              <View
+                style={[
+                  styles.popDivider,
+                  { backgroundColor: isDark ? '#27272a' : '#f1f5f9' },
+                ]}
+              />
+
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => {
+                  setIsProfileMenuOpen(false);
+                  onClose();
+                  onSignOut?.();
+                }}
+                style={[styles.popItem, { marginTop: 2 }]}
+              >
+                <LogOut size={18} color="#ef4444" strokeWidth={1.9} />
+                <Text style={[styles.popItemText, { color: '#ef4444' }]}>
+                  Sign out
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  modalRoot: {
+    flex: 1,
+  },
+  backdrop: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: '#000000',
+  },
+  backdropPressable: {
+    flex: 1,
+  },
+  drawerContainer: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    flexDirection: 'column',
+    shadowColor: '#000000',
+    shadowOffset: { width: 4, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    elevation: 20,
+    zIndex: 100,
+  },
+  drawerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 18,
+    paddingBottom: 16,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  headerLogo: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#7c3aed',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#7c3aed',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  headerTitles: {
+    flex: 1,
+  },
+  workspaceTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    fontFamily: 'Open Sans',
+  },
+  workspaceSub: {
+    fontSize: 11,
+    fontWeight: '400',
+    fontFamily: 'Open Sans',
+    marginTop: 1,
+  },
+  closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  sectionHeader: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+    paddingBottom: 6,
+  },
+  sectionTitle: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    fontFamily: 'Open Sans',
+    textTransform: 'uppercase',
+  },
+  itemsScroll: {
+    flex: 1,
+  },
+  itemsScrollContent: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    gap: 4,
+  },
+  menuItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+  },
+  itemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    flex: 1,
+  },
+  iconBox: {
+    width: 34,
+    height: 34,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  itemLabel: {
+    fontSize: 14,
+    fontFamily: 'Open Sans',
+  },
+  activeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  drawerFooter: {
+    borderTopWidth: 1,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+  },
+  profileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+  },
+  profileLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  avatarBadge: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    fontSize: 12,
+    fontWeight: '700',
+    fontFamily: 'Open Sans',
+    letterSpacing: 0.5,
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  profileName: {
+    fontSize: 13,
+    fontWeight: '600',
+    fontFamily: 'Open Sans',
+  },
+  profileSub: {
+    fontSize: 11,
+    fontFamily: 'Open Sans',
+    marginTop: 1,
+  },
+  profileModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    paddingLeft: 16,
+    position: 'relative',
+  },
+  profilePopCard: {
+    position: 'absolute',
+    left: 16,
+    width: 250,
+    borderRadius: 16,
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.18,
+    shadowRadius: 20,
+    elevation: 12,
+    zIndex: 1000,
+  },
+  popHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    gap: 10,
+  },
+  popAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  popAvatarText: {
+    fontSize: 13,
+    fontWeight: '700',
+    fontFamily: 'Open Sans',
+  },
+  popInfo: {
+    flex: 1,
+  },
+  popUserName: {
+    fontSize: 13.5,
+    fontWeight: '700',
+    fontFamily: 'Open Sans',
+  },
+  popUserSub: {
+    fontSize: 11,
+    fontFamily: 'Open Sans',
+    marginTop: 1,
+  },
+  popDivider: {
+    height: 1,
+    marginVertical: 6,
+    marginHorizontal: 4,
+  },
+  popItemsList: {
+    gap: 2,
+  },
+  popItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    gap: 12,
+  },
+  popItemText: {
+    fontSize: 13.5,
+    fontFamily: 'Open Sans',
+    fontWeight: '500',
+  },
+});

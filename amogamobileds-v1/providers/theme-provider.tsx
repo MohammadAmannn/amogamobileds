@@ -38,12 +38,18 @@ export const ThemeProvider = ({
 );
 
 const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
+  const modeContext = useModeContext();
   const colorScheme = useColorScheme();
-  const { currentTheme } = useColorTheme();
-  const dynamicPrimary = currentTheme?.preview;
+  const isDark = (modeContext?.scheme || colorScheme) === 'dark';
+  
+  let dynamicPrimary: string | undefined = undefined;
+  try {
+    const colorThemeCtx = useColorTheme();
+    dynamicPrimary = colorThemeCtx?.currentTheme?.preview;
+  } catch {}
 
   const theme = useMemo(() => {
-    if (colorScheme === 'dark') {
+    if (isDark) {
       return {
         ...DarkTheme,
         colors: {
@@ -70,7 +76,7 @@ const NavigationTheme = ({ children }: { children: React.ReactNode }) => {
         notification: Colors.light.red,
       },
     };
-  }, [colorScheme, dynamicPrimary]);
+  }, [isDark, dynamicPrimary]);
 
   return <RNThemeProvider value={theme}>{children}</RNThemeProvider>;
 };
@@ -79,16 +85,26 @@ export function useTheme() {
   const modeContext = useModeContext();
   const colorScheme = useColorScheme();
   const isDark = (modeContext?.scheme || colorScheme) === 'dark';
-  let primaryColor = isDark ? Colors.dark.primary : Colors.light.primary;
 
+  let currentTheme: any = undefined;
   try {
-    const { currentTheme } = useColorTheme();
-    if (currentTheme?.preview) {
-      primaryColor = currentTheme.preview;
-    }
+    const colorCtx = useColorTheme();
+    currentTheme = colorCtx?.currentTheme;
   } catch {}
 
   const baseColors = isDark ? Colors.dark : Colors.light;
+  
+  // Resolve primary accent color
+  let primaryColor = currentTheme?.preview || currentTheme?.colors?.[0] || (isDark ? '#a855f7' : '#7c3aed');
+  if (isDark && (primaryColor === '#18181b' || primaryColor === '#000000')) {
+    primaryColor = '#a855f7';
+  }
+
+  const themeBg = isDark ? '#09090b' : '#ffffff';
+  const themeCard = isDark ? '#18181b' : '#f8fafc';
+  const themeBorder = isDark ? '#27272a' : '#e2e8f0';
+  const themeFg = isDark ? '#f8fafc' : '#0f172a';
+  const themeMutedFg = isDark ? '#94a3b8' : '#64748b';
 
   const toggleMode = () => {
     if (!modeContext) return;
@@ -103,6 +119,12 @@ export function useTheme() {
       primary: primaryColor,
       tint: primaryColor,
       tabIconSelected: primaryColor,
+      background: themeBg,
+      card: themeCard,
+      border: themeBorder,
+      foreground: themeFg,
+      text: themeFg,
+      mutedForeground: themeMutedFg,
     },
     resolvedMode: (isDark ? 'dark' : 'light') as 'dark' | 'light',
     isDark,

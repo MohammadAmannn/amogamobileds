@@ -285,10 +285,8 @@ export function ContactManager({
         animationType="fade"
         onRequestClose={() => setIsAddOpen(false)}
       >
-        <Pressable
-          style={styles.modalBackdrop}
-          onPress={() => setIsAddOpen(false)}
-        >
+        <View style={styles.modalBackdrop}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={() => setIsAddOpen(false)} />
           <View
             style={[
               styles.dialogCard,
@@ -318,7 +316,7 @@ export function ContactManager({
               <TextInput
                 value={newName}
                 onChangeText={setNewName}
-                placeholder="e.g. Aman"
+                placeholder="e.g. Sarah Connor"
                 placeholderTextColor={colors.mutedForeground}
                 style={[
                   styles.dialogInput,
@@ -338,7 +336,7 @@ export function ContactManager({
               <TextInput
                 value={newEmail}
                 onChangeText={setNewEmail}
-                placeholder="e.g. aman@example.com"
+                placeholder="sarah@example.com"
                 placeholderTextColor={colors.mutedForeground}
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -377,11 +375,11 @@ export function ContactManager({
                   { backgroundColor: isDark ? '#4338ca' : '#4f46e5' },
                 ]}
               >
-                <Text style={styles.confirmBtnText}>Save Contact</Text>
+                <Text style={styles.confirmBtnText}>Add Contact</Text>
               </Pressable>
             </View>
           </View>
-        </Pressable>
+        </View>
       </Modal>
     </View>
   )

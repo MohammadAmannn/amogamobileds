@@ -15,3 +15,4 @@ export * from './uploaded-file-card';
 export * from './chat-attachment-menu';
 export * from './chat-location-card';
 export * from './chat-profile-modal';
+export * from './contact-info-view';

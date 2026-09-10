@@ -270,10 +270,8 @@ export function GroupManager({
         animationType="fade"
         onRequestClose={() => setIsAddOpen(false)}
       >
-        <Pressable
-          style={styles.modalBackdrop}
-          onPress={() => setIsAddOpen(false)}
-        >
+        <View style={styles.modalBackdrop}>
+          <Pressable style={StyleSheet.absoluteFill} onPress={() => setIsAddOpen(false)} />
           <View
             style={[
               styles.dialogCard,
@@ -323,15 +321,11 @@ export function GroupManager({
               <TextInput
                 value={groupDesc}
                 onChangeText={setGroupDesc}
-                placeholder="e.g. Discussions about UI and UX"
+                placeholder="Brief purpose of this channel..."
                 placeholderTextColor={colors.mutedForeground}
-                multiline
-                numberOfLines={2}
                 style={[
                   styles.dialogInput,
                   {
-                    height: 56,
-                    paddingTop: 8,
                     backgroundColor: isDark ? '#27272a' : '#f8fafc',
                     borderColor: colors.border,
                     color: colors.foreground,
@@ -339,12 +333,28 @@ export function GroupManager({
                 ]}
               />
 
-              {/* Member Picker */}
-              <View style={{ marginTop: 2 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              {/* Members Selection Section */}
+              <View style={styles.membersSection}>
+                <View style={styles.membersHeaderRow}>
                   <Text style={[styles.inputLabel, { color: colors.mutedForeground, marginBottom: 0 }]}>
                     Select Members ({selectedMemberIds.length} selected)
                   </Text>
+                  {contacts.length > 0 && (
+                    <Pressable
+                      onPress={() => {
+                        if (selectedMemberIds.length === contacts.length) {
+                          setSelectedMemberIds([]);
+                        } else {
+                          setSelectedMemberIds(contacts.map((c) => c.contactUserId || c.id));
+                        }
+                      }}
+                      hitSlop={6}
+                    >
+                      <Text style={{ fontSize: 11, color: isDark ? '#818cf8' : '#4f46e5', fontWeight: '600' }}>
+                        {selectedMemberIds.length === contacts.length ? 'Deselect All' : 'Select All'}
+                      </Text>
+                    </Pressable>
+                  )}
                 </View>
                 {contacts.length === 0 ? (
                   <View style={[styles.emptyPickerNotice, { borderColor: colors.border, backgroundColor: isDark ? '#27272a' : '#f8fafc' }]}>
@@ -441,7 +451,7 @@ export function GroupManager({
               </Pressable>
             </View>
           </View>
-        </Pressable>
+        </View>
       </Modal>
     </View>
   )
