@@ -11,14 +11,44 @@ import {
   useWindowDimensions,
   Platform,
 } from 'react-native';
-import {
-  X,
-  Search,
-  Check,
-  RotateCcw,
-} from 'lucide-react-native';
+import Svg, { Path, Circle, Polyline } from 'react-native-svg';
 import { useTheme } from '../../providers/theme-provider';
 import { colorThemes } from '../../theme/color-themes';
+
+function SvgCheck({ size = 16, color = '#ffffff', strokeWidth = 2.5 }: { size?: number; color?: string; strokeWidth?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <Polyline points="20 6 9 17 4 12" />
+    </Svg>
+  );
+}
+
+function SvgClose({ size = 16, color = '#0f172a', strokeWidth = 2 }: { size?: number; color?: string; strokeWidth?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M18 6 6 18" />
+      <Path d="m6 6 12 12" />
+    </Svg>
+  );
+}
+
+function SvgSearch({ size = 16, color = '#64748b', strokeWidth = 2 }: { size?: number; color?: string; strokeWidth?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <Circle cx="11" cy="11" r="8" />
+      <Path d="m21 21-4.3-4.3" />
+    </Svg>
+  );
+}
+
+function SvgRotateCcw({ size = 16, color = '#64748b', strokeWidth = 2 }: { size?: number; color?: string; strokeWidth?: number }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+      <Path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+      <Path d="M3 3v5h5" />
+    </Svg>
+  );
+}
 
 export interface ThemeOption {
   name: string;
@@ -85,7 +115,7 @@ function LightMockup({ isActive }: { isActive: boolean }) {
       </View>
       {isActive && (
         <View style={styles.mockupActiveCheck}>
-          <Check size={11} color="#ffffff" strokeWidth={3} />
+          <SvgCheck size={11} color="#ffffff" strokeWidth={3} />
         </View>
       )}
     </View>
@@ -107,7 +137,7 @@ function DarkMockup({ isActive }: { isActive: boolean }) {
       </View>
       {isActive && (
         <View style={styles.mockupActiveCheck}>
-          <Check size={11} color="#ffffff" strokeWidth={3} />
+          <SvgCheck size={11} color="#ffffff" strokeWidth={3} />
         </View>
       )}
     </View>
@@ -194,7 +224,7 @@ export function ThemeSettingsView({
               accessibilityLabel="Close theme settings"
               hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              <X size={18} color={textPrimary} />
+              <SvgClose size={18} color={textPrimary} />
             </TouchableOpacity>
           )}
         </View>
@@ -306,7 +336,7 @@ export function ThemeSettingsView({
                 style={styles.refreshIconBtn}
                 accessibilityLabel="Reset theme"
               >
-                <RotateCcw size={14} color={textMuted} />
+                <SvgRotateCcw size={14} color={textMuted} />
               </TouchableOpacity>
             )}
           </View>
@@ -321,7 +351,7 @@ export function ThemeSettingsView({
               },
             ]}
           >
-            <Search size={16} color={textMuted} />
+            <SvgSearch size={16} color={textMuted} />
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -336,7 +366,7 @@ export function ThemeSettingsView({
             />
             {searchQuery.length > 0 && (
               <TouchableOpacity onPress={() => setSearchQuery('')}>
-                <X size={14} color={textMuted} />
+                <SvgClose size={14} color={textMuted} />
               </TouchableOpacity>
             )}
           </View>
@@ -396,7 +426,7 @@ export function ThemeSettingsView({
 
                   {isActive && (
                     <View style={styles.themeRowCheck}>
-                      <Check size={16} color={primaryColor} strokeWidth={2.5} />
+                      <SvgCheck size={16} color={primaryColor} strokeWidth={2.5} />
                     </View>
                   )}
                 </TouchableOpacity>
