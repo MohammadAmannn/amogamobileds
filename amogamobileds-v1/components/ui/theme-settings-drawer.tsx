@@ -152,17 +152,18 @@ export function ThemeSettingsView({
   const currentThemeName = currentColorTheme || activeTheme || 'zinc';
   const handleThemeChange = onColorThemeChange || onSelectTheme;
 
-  const themesToUse = availableThemes && availableThemes.length > 0 ? availableThemes : colorThemes;
+  const themesToUse = availableThemes && availableThemes.length > 0 ? availableThemes : (colorThemes || []);
 
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredThemes = useMemo(() => {
     if (!searchQuery.trim()) return themesToUse;
     const q = searchQuery.toLowerCase().trim();
-    return themesToUse.filter(
+    return (themesToUse || []).filter(
       (t) =>
-        t.label.toLowerCase().includes(q) ||
-        t.name.toLowerCase().includes(q)
+        t &&
+        ((t.label && t.label.toLowerCase().includes(q)) ||
+          (t.name && t.name.toLowerCase().includes(q)))
     );
   }, [themesToUse, searchQuery]);
 
@@ -501,6 +502,8 @@ const styles = StyleSheet.create({
   },
   modalRoot: {
     flex: 1,
+    width: '100%',
+    height: '100%',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
