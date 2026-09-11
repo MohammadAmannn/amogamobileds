@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Sun,
   Moon,
+  X,
 } from 'lucide-react-native'
 import { useTheme } from '../../providers/theme-provider'
 
@@ -44,6 +45,7 @@ export interface ChatHeaderProps {
   onArchive?: () => void
   onActionThis?: () => void
   onDelete?: () => void
+  onClose?: () => void
   style?: any
 }
 
@@ -67,6 +69,7 @@ export function ChatHeader({
   onArchive,
   onActionThis,
   onDelete,
+  onClose,
   style,
 }: ChatHeaderProps) {
   const { colors, resolvedMode, toggleMode } = useTheme()
@@ -214,6 +217,21 @@ export function ChatHeader({
                 strokeWidth={2}
               />
             </Pressable>
+
+            {/* Close Button on Right of 3 dots */}
+            {onClose && (
+              <Pressable
+                onPress={onClose}
+                style={({ pressed }) => [
+                  styles.actionBtn,
+                  pressed && { opacity: 0.6 },
+                ]}
+                hitSlop={8}
+                accessibilityLabel="Close"
+              >
+                <X size={17} color={colors.mutedForeground} strokeWidth={2} />
+              </Pressable>
+            )}
           </View>
         ) : null}
       </View>

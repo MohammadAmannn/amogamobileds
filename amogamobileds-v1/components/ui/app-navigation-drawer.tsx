@@ -33,6 +33,7 @@ import {
   User as UserIcon,
   Palette,
   Settings,
+  Sliders,
   LogOut,
   LucideIcon,
 } from 'lucide-react-native';
@@ -43,6 +44,8 @@ import {
   convertMenuJsonToNavItems,
   resolveMenuIcon,
   NavigationItem,
+  AppProfileMenuItemJson,
+  app_profile_menu_json,
 } from './app-navigation-sidebar';
 
 export interface DrawerMenuItem {
@@ -63,6 +66,9 @@ export interface AppNavigationDrawerProps {
   onSelect: (id: string, item?: DrawerMenuItem | AppMenuItemJson) => void;
   items?: DrawerMenuItem[];
   menuJson?: AppMenuItemJson[];
+  profileMenuItems?: AppProfileMenuItemJson[];
+  profileMenuJson?: AppProfileMenuItemJson[];
+  onProfileMenuSelect?: (id: string, item: AppProfileMenuItemJson) => void;
   workspaceName?: string;
   workspaceSubtitle?: string;
   userName?: string;
@@ -70,6 +76,10 @@ export interface AppNavigationDrawerProps {
   userInitials?: string;
   onProfilePress?: () => void;
   onThemePress?: () => void;
+  onPreferencesPress?: () => void;
+  onPreferencePress?: () => void;
+  onSettingsPress?: () => void;
+  onNotificationsPress?: () => void;
   onSignOut?: () => void;
   primaryColor?: string;
 }
@@ -81,6 +91,9 @@ export function AppNavigationDrawer({
   onSelect,
   items,
   menuJson,
+  profileMenuItems,
+  profileMenuJson,
+  onProfileMenuSelect,
   workspaceName = 'Amoga App',
   workspaceSubtitle = 'Workspace',
   userName = 'Mohammed Aman',
@@ -88,6 +101,10 @@ export function AppNavigationDrawer({
   userInitials = 'MA',
   onProfilePress,
   onThemePress,
+  onPreferencesPress,
+  onPreferencePress,
+  onSettingsPress,
+  onNotificationsPress,
   onSignOut,
   primaryColor,
 }: AppNavigationDrawerProps) {
@@ -104,6 +121,13 @@ export function AppNavigationDrawer({
     if (menuJson && menuJson.length > 0) return convertMenuJsonToNavItems(menuJson, 'mobile');
     return DEFAULT_DRAWER_ITEMS;
   }, [items, menuJson]);
+
+  // Dynamically resolve profile menu items
+  const profileList = useMemo(() => {
+    if (profileMenuItems && profileMenuItems.length > 0) return profileMenuItems;
+    if (profileMenuJson && profileMenuJson.length > 0) return profileMenuJson;
+    return app_profile_menu_json;
+  }, [profileMenuItems, profileMenuJson]);
 
   const drawerWidth = Math.min(screenWidth * 0.82, 320);
   const [mounted, setMounted] = React.useState(isOpen);
@@ -184,7 +208,7 @@ export function AppNavigationDrawer({
             {/* Header: Workspace branding & Close X */}
             <View style={styles.drawerHeader}>
               <View style={styles.headerLeft}>
-                <View style={[styles.headerLogo, { backgroundColor: activeBg }]}>
+                <View style={[styles.headerLogo, { backgroundColor: isDark ? '#27272a' : '#18181b' }]}>
                   <Command size={18} color="#ffffff" strokeWidth={2.4} />
                 </View>
                 <View style={styles.headerTitles}>
@@ -244,31 +268,24 @@ export function AppNavigationDrawer({
                     style={[
                       styles.menuItemRow,
                       isActive && {
-                        backgroundColor: isDark
-                          ? 'rgba(124, 58, 237, 0.18)'
-                          : '#f5f3ff',
+                        backgroundColor: isDark ? '#27272a' : '#e4e4e7',
                       },
                     ]}
                     accessibilityRole="button"
                     accessibilityState={{ selected: isActive }}
                   >
                     <View style={styles.itemLeft}>
-                      <View
-                        style={[
-                          styles.iconBox,
-                          isActive
-                            ? { backgroundColor: activeBg }
-                            : { backgroundColor: 'transparent' },
-                        ]}
-                      >
+                      <View style={styles.iconBox}>
                         <IconComp
                           size={18}
                           color={
                             isActive
-                              ? '#ffffff'
+                              ? isDark
+                                ? '#ffffff'
+                                : '#0f172a'
                               : isDark
-                              ? '#cbd5e1'
-                              : '#475569'
+                              ? '#94a3b8'
+                              : '#64748b'
                           }
                           strokeWidth={isActive ? 2.2 : 1.8}
                         />
@@ -278,9 +295,13 @@ export function AppNavigationDrawer({
                           styles.itemLabel,
                           {
                             color: isActive
-                              ? activeTextColor
-                              : inactiveTextColor,
-                            fontWeight: isActive ? '700' : '500',
+                              ? isDark
+                                ? '#ffffff'
+                                : '#0f172a'
+                              : isDark
+                              ? '#e4e4e7'
+                              : '#1e293b',
+                            fontWeight: isActive ? '600' : '500',
                           },
                         ]}
                       >
@@ -288,12 +309,12 @@ export function AppNavigationDrawer({
                       </Text>
                     </View>
 
-                    {/* Active right dot indicator */}
+                    {/* Active right indicator */}
                     {isActive && (
                       <View
                         style={[
                           styles.activeDot,
-                          { backgroundColor: activeBg },
+                          { backgroundColor: isDark ? '#ffffff' : '#0f172a' },
                         ]}
                       />
                     )}
@@ -430,59 +451,58 @@ export function AppNavigationDrawer({
               ]}
             />
 
-            {/* Menu Options */}
+            {/* Menu Options from JSON */}
             <View style={styles.popItemsList}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsProfileMenuOpen(false);
-                  onClose();
-                  onProfilePress?.();
-                }}
-                style={styles.popItem}
-              >
-                <UserIcon size={18} color={mutedText} strokeWidth={1.9} />
-                <Text style={[styles.popItemText, { color: colors.foreground }]}>
-                  My Profile
-                </Text>
-              </TouchableOpacity>
+              {profileList.map((item) => {
+                const IconComponent = resolveMenuIcon(item.icon);
+                const itemColor = item.isDanger
+                  ? '#ef4444'
+                  : item.id === 'theme'
+                  ? colors.primary
+                  : item.color || mutedText;
 
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsProfileMenuOpen(false);
-                  onClose();
-                  onThemePress?.();
-                }}
-                style={styles.popItem}
-              >
-                <Palette size={18} color={colors.primary} strokeWidth={2} />
-                <Text style={[styles.popItemText, { color: colors.foreground }]}>
-                  Theme Settings
-                </Text>
-              </TouchableOpacity>
-
-              <View
-                style={[
-                  styles.popDivider,
-                  { backgroundColor: isDark ? '#27272a' : '#f1f5f9' },
-                ]}
-              />
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsProfileMenuOpen(false);
-                  onClose();
-                  onSignOut?.();
-                }}
-                style={[styles.popItem, { marginTop: 2 }]}
-              >
-                <LogOut size={18} color="#ef4444" strokeWidth={1.9} />
-                <Text style={[styles.popItemText, { color: '#ef4444' }]}>
-                  Sign out
-                </Text>
-              </TouchableOpacity>
+                return (
+                  <React.Fragment key={item.id}>
+                    {item.hasDividerBefore && (
+                      <View
+                        style={[
+                          styles.popDivider,
+                          { backgroundColor: isDark ? '#27272a' : '#f1f5f9' },
+                        ]}
+                      />
+                    )}
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setIsProfileMenuOpen(false);
+                        onClose();
+                        if (item.id === 'profile') onProfilePress?.();
+                        else if (item.id === 'theme') onThemePress?.();
+                        else if (item.id === 'preferences') (onPreferencesPress || onPreferencePress)?.();
+                        else if (item.id === 'settings') onSettingsPress?.();
+                        else if (item.id === 'notifications') onNotificationsPress?.();
+                        else if (item.id === 'signout' || item.isDanger) onSignOut?.();
+                        onProfileMenuSelect?.(item.id, item);
+                      }}
+                      style={[styles.popItem, item.isDanger && { marginTop: 2 }]}
+                    >
+                      <IconComponent
+                        size={18}
+                        color={itemColor}
+                        strokeWidth={item.id === 'theme' || item.id === 'preferences' ? 2 : 1.9}
+                      />
+                      <Text
+                        style={[
+                          styles.popItemText,
+                          { color: item.isDanger ? '#ef4444' : colors.foreground },
+                        ]}
+                      >
+                        {item.label}
+                      </Text>
+                    </TouchableOpacity>
+                  </React.Fragment>
+                );
+              })}
             </View>
           </View>
         </View>
@@ -556,9 +576,7 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    padding: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },

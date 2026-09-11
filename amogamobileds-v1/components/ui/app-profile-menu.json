@@ -1,0 +1,40 @@
+[
+  {
+    "id": "profile",
+    "label": "My Profile",
+    "icon": "User",
+    "color": "#64748b"
+  },
+  {
+    "id": "theme",
+    "label": "Theme Settings",
+    "icon": "Palette",
+    "color": "#3b82f6"
+  },
+  {
+    "id": "preferences",
+    "label": "Preferences",
+    "icon": "Sliders",
+    "color": "#9333ea"
+  },
+  {
+    "id": "settings",
+    "label": "Settings",
+    "icon": "Settings",
+    "color": "#64748b"
+  },
+  {
+    "id": "notifications",
+    "label": "Notifications",
+    "icon": "Bell",
+    "color": "#64748b"
+  },
+  {
+    "id": "signout",
+    "label": "Sign out",
+    "icon": "LogOut",
+    "color": "#ef4444",
+    "isDanger": true,
+    "hasDividerBefore": true
+  }
+]

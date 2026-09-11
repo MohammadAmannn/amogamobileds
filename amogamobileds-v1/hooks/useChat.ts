@@ -588,12 +588,15 @@ export function useChat() {
       let readableUri = uri;
       if (Platform.OS !== 'web' && uri) {
         try {
-          if (!uri.startsWith('file://') && !uri.startsWith('content://') && !uri.startsWith('data:')) {
-            readableUri = `file://${uri}`;
+          const FileSystem = getFileSystemModule();
+          if (FileSystem) {
+            if (!uri.startsWith('file://') && !uri.startsWith('content://') && !uri.startsWith('data:')) {
+              readableUri = `file://${uri}`;
+            }
+            base64Data = await FileSystem.readAsStringAsync(readableUri, {
+              encoding: FileSystem.EncodingType?.Base64 || 'base64',
+            });
           }
-          base64Data = await FileSystem.readAsStringAsync(readableUri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
         } catch (readErr) {
           console.warn('Voice base64 read notice:', readErr);
         }

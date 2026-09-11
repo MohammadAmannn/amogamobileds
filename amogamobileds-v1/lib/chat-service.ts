@@ -7,6 +7,18 @@ import type {
 } from './database.types';
 import { Platform } from 'react-native';
 
+const getFileSystemModule = () => {
+  try {
+    return require('expo-file-system/legacy');
+  } catch {
+    try {
+      return require('expo-file-system');
+    } catch {
+      return null;
+    }
+  }
+};
+
 export interface EnrichedConversation extends Conversation {
   otherMember?: Profile | null;
   lastMessage?: ChatMessage | null;
@@ -308,8 +320,9 @@ export async function uploadChatAttachment(
     if (Platform.OS !== 'web' && fileUri && (fileUri.startsWith('file:') || fileUri.startsWith('content:'))) {
       const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
       const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+      const FileSystem = getFileSystemModule();
 
-      if (supabaseUrl && supabaseKey) {
+      if (FileSystem && supabaseUrl && supabaseKey) {
         try {
           const uploadEndpoint = `${supabaseUrl}/storage/v1/object/chat-files/${filePath}`;
           const uploadRes = await FileSystem.uploadAsync(uploadEndpoint, fileUri, {
@@ -319,10 +332,10 @@ export async function uploadChatAttachment(
               'Content-Type': mimeType || 'application/octet-stream',
             },
             httpMethod: 'POST',
-            uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
+            uploadType: FileSystem.FileSystemUploadType?.BINARY_CONTENT || 0,
           });
 
-          if (uploadRes.status >= 200 && uploadRes.status < 300) {
+          if (uploadRes && uploadRes.status >= 200 && uploadRes.status < 300) {
             const { data: urlData } = supabase.storage
               .from('chat-files')
               .getPublicUrl(filePath);
@@ -330,7 +343,7 @@ export async function uploadChatAttachment(
               console.log('[upload] Native FileSystem.uploadAsync success:', urlData.publicUrl);
               return urlData.publicUrl;
             }
-          } else {
+          } else if (uploadRes) {
             console.warn('[upload] Native FileSystem.uploadAsync response:', uploadRes.status, uploadRes.body);
           }
         } catch (nativeErr) {
@@ -339,10 +352,10 @@ export async function uploadChatAttachment(
       }
 
       // If uploadAsync wasn't successful, try reading file bytes into base64Data
-      if (!base64Data) {
+      if (!base64Data && FileSystem) {
         try {
           base64Data = await FileSystem.readAsStringAsync(fileUri, {
-            encoding: FileSystem.EncodingType.Base64,
+            encoding: FileSystem.EncodingType?.Base64 || 'base64',
           });
         } catch (fsReadErr) {
           console.warn('[upload] FileSystem.readAsStringAsync error:', fsReadErr);

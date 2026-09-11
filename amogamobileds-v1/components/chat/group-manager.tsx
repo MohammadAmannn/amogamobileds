@@ -719,4 +719,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  membersSection: {
+    gap: 6,
+    marginTop: 2,
+  },
+  membersHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 })

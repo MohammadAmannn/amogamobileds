@@ -29,6 +29,7 @@ import {
   ChevronRight,
   ShieldCheck,
   SlidersHorizontal,
+  Command,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -41,9 +42,7 @@ import { DeviceFrame } from '../../../components/web/DeviceFrame.web';
 import { PreviewToolbar } from '../../../components/web/PreviewToolbar.web';
 import { CodePanel } from '../../../components/web/CodePanel.web';
 import { FullscreenModal } from '../../../components/web/FullscreenModal.web';
-import { MobileEmulatorModal } from '../../../components/web/MobileEmulatorModal.web';
-import { ConfigDrawer } from '../../../components/web/ConfigDrawer.web';
-import { NavUser } from '../../../components/web/NavUser.web';
+import { useAuth } from '../../../providers/auth-provider';
 import { useColorTheme } from '../../../providers/color-theme-provider';
 import {
   AppNavigationSidebar,
@@ -104,6 +103,24 @@ export default function WebPlaygroundScreen() {
   const [isThemeDrawerOpen, setIsThemeDrawerOpen] = useState(false);
   const [mainNavId, setMainNavId] = useState<string>('home');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const { user, profile, signOut } = useAuth();
+  const userName = profile?.name || user?.email?.split('@')[0] || 'Mohammed Aman';
+  const userInitials = useMemo(() => {
+    if (profile?.name) {
+      return profile.name
+        .split(' ')
+        .filter(Boolean)
+        .map((n: string) => n[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+    }
+    if (user?.email) {
+      return user.email.slice(0, 2).toUpperCase();
+    }
+    return 'MA';
+  }, [profile, user]);
 
   const activeNavItem = useMemo(() => {
     return (
@@ -275,14 +292,6 @@ export default function WebPlaygroundScreen() {
             </View>
 
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, zIndex: 100 }}>
-              {/* Profile Menu Icon Trigger (Sign out, My Profile, Settings) */}
-              <NavUser
-                onOpenThemeSettings={() => setIsThemeDrawerOpen(true)}
-                isDark={isDark}
-                compact={true}
-                placement="bottom"
-              />
-
               {/* Theme customizer */}
               <TouchableOpacity
                 onPress={() => setIsThemeDrawerOpen(true)}
@@ -611,10 +620,11 @@ export default function WebPlaygroundScreen() {
           }}
           workspaceName="Amoga DS"
           workspaceSubtitle="Design System"
-          userName="Mohammed Aman"
+          userName={userName}
           userSubtitle="My Account"
-          userInitials="MA"
+          userInitials={userInitials}
           onThemePress={() => setIsThemeDrawerOpen(true)}
+          onSignOut={signOut}
           primaryColor={activeAccent}
         />
 
@@ -645,10 +655,11 @@ export default function WebPlaygroundScreen() {
       <AppNavigationSidebar
         activeId={mainNavId}
         onSelect={(id) => setMainNavId(id)}
-        userInitials="MA"
-        userName="Mohammed Aman"
+        userInitials={userInitials}
+        userName={userName}
         userSubtitle="Account"
         onThemePress={() => setIsThemeDrawerOpen(true)}
+        onSignOut={signOut}
         onLogoPress={() => setMainNavId('home')}
         primaryColor={activeAccent}
       />
@@ -919,22 +930,6 @@ export default function WebPlaygroundScreen() {
             </Text>
           )}
         </ScrollView>
-
-        {/* Footer with NavUser Profile Card & Popover Menu */}
-        <View
-          style={{
-            paddingHorizontal: 12,
-            paddingVertical: 10,
-            borderTopWidth: 1,
-            borderTopColor: sidebarBorder,
-            backgroundColor: sidebarBg,
-          }}
-        >
-          <NavUser
-            onOpenThemeSettings={() => setIsThemeDrawerOpen(true)}
-            isDark={isDark}
-          />
-        </View>
       </View>
 
       {/* ============================================================ */}

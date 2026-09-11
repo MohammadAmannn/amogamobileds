@@ -113,8 +113,8 @@ export function ContactInfoView({
         media.push({
           id: msg.id,
           url,
-          name: msg.file_name || 'Photo',
-          isVideo,
+          name: msg.file_name || (isVideo ? 'Video' : 'Photo'),
+          isVideo: isVideo ? true : undefined,
           createdAt: msg.created_at,
         });
       } else if (isAudio) {
@@ -122,7 +122,7 @@ export function ContactInfoView({
           id: msg.id,
           url,
           name: msg.file_name || 'Voice Message',
-          size: msg.file_size,
+          size: msg.file_size || undefined,
           createdAt: msg.created_at,
         });
       } else if (isDoc) {
@@ -130,7 +130,7 @@ export function ContactInfoView({
           id: msg.id,
           url,
           name: msg.file_name || 'Document',
-          size: msg.file_size,
+          size: msg.file_size || undefined,
           createdAt: msg.created_at,
         });
       }
@@ -146,7 +146,7 @@ export function ContactInfoView({
                 id: `${msg.id}-${u}`,
                 url: u,
                 domain: parsed.hostname.replace('www.', ''),
-                text: msg.message,
+                text: msg.message || undefined,
                 createdAt: msg.created_at,
               });
             } catch {
@@ -154,7 +154,7 @@ export function ContactInfoView({
                 id: `${msg.id}-${u}`,
                 url: u,
                 domain: u,
-                text: msg.message,
+                text: msg.message || undefined,
                 createdAt: msg.created_at,
               });
             }
@@ -193,37 +193,34 @@ export function ContactInfoView({
         style,
       ]}
     >
-      {/* Top Header Bar matching Screenshot */}
+      {/* Top Header Bar with Close on the Right */}
       <View
         style={[
           styles.topBar,
           {
             borderBottomColor: colors.border,
             backgroundColor: colors.background,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: 20,
           },
         ]}
       >
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={onClose}
-          style={[
-            styles.closeBtn,
-            {
-              backgroundColor: isDark ? '#1e293b' : '#f1f5f9',
-              borderColor: colors.border,
-            },
-          ]}
-          accessibilityRole="button"
-          accessibilityLabel="Back to chat"
-        >
-          <X size={17} color={colors.foreground} />
-        </TouchableOpacity>
-
         <Text style={[styles.topBarTitle, { color: colors.foreground }]}>
           {conversation?.is_group ? 'Group Info' : 'Contact Info'}
         </Text>
 
-        <View style={{ width: 34 }} />
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={onClose}
+          style={styles.closeBtn}
+          accessibilityRole="button"
+          accessibilityLabel="Close info"
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <X size={18} color={colors.foreground} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView
@@ -711,10 +708,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    borderWidth: 1,
+    padding: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },

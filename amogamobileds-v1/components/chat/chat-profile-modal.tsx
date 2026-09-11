@@ -219,26 +219,32 @@ export function ChatProfileModal({
           { backgroundColor: isDark ? '#09090b' : '#ffffff' },
         ]}
       >
-        {/* Top Header Bar */}
+        {/* Top Header Bar with Close on the Right */}
         <View
           style={[
             styles.topBar,
-            { borderBottomColor: isDark ? '#27272a' : '#f1f5f9' },
+            {
+              borderBottomColor: isDark ? '#27272a' : '#f1f5f9',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingHorizontal: 20,
+            },
           ]}
         >
-          <TouchableOpacity
-            onPress={onClose}
-            style={[
-              styles.closeBtn,
-              { backgroundColor: isDark ? '#18181b' : '#f1f5f9' },
-            ]}
-          >
-            <X size={20} color={colors.foreground} />
-          </TouchableOpacity>
           <Text style={[styles.topBarTitle, { color: colors.foreground }]}>
             {conversation?.is_group ? 'Group Info' : 'Contact Info'}
           </Text>
-          <View style={{ width: 36 }} />
+
+          <TouchableOpacity
+            onPress={onClose}
+            style={styles.closeBtn}
+            accessibilityRole="button"
+            accessibilityLabel="Close info"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <X size={20} color={colors.foreground} />
+          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -769,9 +775,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   closeBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    padding: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -934,10 +938,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   previewCloseBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },

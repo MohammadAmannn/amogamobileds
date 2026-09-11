@@ -15,7 +15,7 @@
     "menu_page_url": "/Email",
     "menu_page_name": "Email",
     "web": "yes",
-    "mobile": "no"
+    "mobile": "yes"
   },
   {
     "menu_icon": "MessageSquare",
@@ -33,7 +33,7 @@
     "menu_page_url": "/Files",
     "menu_page_name": "Files",
     "web": "yes",
-    "mobile": "no"
+    "mobile": "yes"
   },
   {
     "menu_icon": "Calendar",
@@ -42,7 +42,7 @@
     "menu_page_url": "/Calendar",
     "menu_page_name": "Calendar",
     "web": "yes",
-    "mobile": "no"
+    "mobile": "yes"
   },
   {
     "menu_icon": "CheckSquare",
@@ -51,7 +51,7 @@
     "menu_page_url": "/Tasks",
     "menu_page_name": "Tasks",
     "web": "yes",
-    "mobile": "no"
+    "mobile": "yes"
   },
   {
     "menu_icon": "Bell",
@@ -60,6 +60,6 @@
     "menu_page_url": "/Notification",
     "menu_page_name": "Notification",
     "web": "yes",
-    "mobile": "no"
+    "mobile": "yes"
   }
 ]

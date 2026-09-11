@@ -27,10 +27,23 @@ import {
   Layers,
   Compass,
   HelpCircle,
+  Sliders,
   LucideIcon,
 } from 'lucide-react-native';
 import { useTheme } from '../../providers/theme-provider';
 import defaultMenuData from './app-menu.json';
+import defaultProfileMenuData from './app-profile-menu.json';
+
+export interface AppProfileMenuItemJson {
+  id: string;
+  label: string;
+  icon: string;
+  color?: string;
+  isDanger?: boolean;
+  hasDividerBefore?: boolean;
+}
+
+export const app_profile_menu_json: AppProfileMenuItemJson[] = defaultProfileMenuData as AppProfileMenuItemJson[];
 
 export interface AppMenuItemJson {
   menu_icon: string;
@@ -68,9 +81,11 @@ export const ICON_REGISTRY: Record<string, LucideIcon> = {
   Tasks: CheckSquare,
   Bell,
   Notification: Bell,
+  Notifications: Bell,
   User: UserIcon,
   Palette,
   Settings,
+  Sliders,
   LogOut,
   Sparkles,
   FileText,
@@ -108,11 +123,11 @@ export function convertMenuJsonToNavItems(
         item.id ||
         (item.menu_page_name || item.menu_title || '')
           .toLowerCase()
-          .replace(/[^a-z0-9]/g, '');
+          .replace(/[-_\s]+/g, '-');
 
       return {
-        id: generatedId || 'home',
-        label: item.menu_title || item.menu_page_name || 'Menu',
+        id: generatedId || 'nav-item',
+        label: item.menu_title,
         icon: resolveMenuIcon(item.menu_icon),
         badge: item.badge,
         pageUrl: item.menu_page_url,
@@ -126,6 +141,9 @@ export const DEFAULT_NAV_ITEMS: NavigationItem[] = convertMenuJsonToNavItems(app
 export interface AppNavigationSidebarProps {
   items?: NavigationItem[];
   menuJson?: AppMenuItemJson[];
+  profileMenuItems?: AppProfileMenuItemJson[];
+  profileMenuJson?: AppProfileMenuItemJson[];
+  onProfileMenuSelect?: (id: string, item: AppProfileMenuItemJson) => void;
   activeId: string;
   onSelect: (id: string, item?: NavigationItem | AppMenuItemJson) => void;
   userInitials?: string;
@@ -133,6 +151,8 @@ export interface AppNavigationSidebarProps {
   userSubtitle?: string;
   onProfilePress?: () => void;
   onThemePress?: () => void;
+  onPreferencesPress?: () => void;
+  onPreferencePress?: () => void;
   onSettingsPress?: () => void;
   onNotificationsPress?: () => void;
   onSignOut?: () => void;
@@ -144,6 +164,9 @@ export interface AppNavigationSidebarProps {
 export function AppNavigationSidebar({
   items,
   menuJson,
+  profileMenuItems,
+  profileMenuJson,
+  onProfileMenuSelect,
   activeId = 'home',
   onSelect,
   userInitials = 'MA',
@@ -151,6 +174,8 @@ export function AppNavigationSidebar({
   userSubtitle = 'Account',
   onProfilePress,
   onThemePress,
+  onPreferencesPress,
+  onPreferencePress,
   onSettingsPress,
   onNotificationsPress,
   onSignOut,
@@ -169,6 +194,13 @@ export function AppNavigationSidebar({
     if (menuJson && menuJson.length > 0) return convertMenuJsonToNavItems(menuJson, 'web');
     return DEFAULT_NAV_ITEMS;
   }, [items, menuJson]);
+
+  // Dynamically resolve profile popover items
+  const profileList = useMemo(() => {
+    if (profileMenuItems && profileMenuItems.length > 0) return profileMenuItems;
+    if (profileMenuJson && profileMenuJson.length > 0) return profileMenuJson;
+    return app_profile_menu_json;
+  }, [profileMenuItems, profileMenuJson]);
 
   const sidebarBg = colors.background;
   const borderColor = colors.border;
@@ -196,7 +228,7 @@ export function AppNavigationSidebar({
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={onLogoPress}
-          style={[styles.logoBadge, { backgroundColor: activeColor, shadowColor: activeColor }]}
+          style={[styles.logoBadge, { backgroundColor: isDark ? '#27272a' : '#18181b', shadowColor: '#000000' }]}
           accessibilityRole="button"
           accessibilityLabel="Amoga Logo"
         >
@@ -220,85 +252,98 @@ export function AppNavigationSidebar({
           return (
             <TouchableOpacity
               key={item.id}
-              activeOpacity={0.7}
+              activeOpacity={0.75}
               onPress={() => onSelect(item.id, item)}
               style={[
-                styles.navItemBtn,
+                styles.navItemButton,
                 isActive && {
-                  backgroundColor: `${activeColor}1a`,
+                  backgroundColor: isDark ? '#27272a' : '#e4e4e7',
                 },
               ]}
               accessibilityRole="button"
               accessibilityState={{ selected: isActive }}
-              accessibilityLabel={item.label}
             >
-              {/* Active Indicator Bar on left */}
-              {isActive && (
-                <View
-                  style={[
-                    styles.activeIndicator,
-                    { backgroundColor: activeColor },
-                  ]}
-                />
-              )}
-
-              <View style={styles.iconWrapper}>
+              <View style={styles.iconWrap}>
                 <IconComp
-                  size={20}
-                  color={isActive ? activeColor : inactiveColor}
+                  size={19}
+                  color={
+                    isActive
+                      ? isDark
+                        ? '#ffffff'
+                        : '#0f172a'
+                      : isDark
+                      ? '#94a3b8'
+                      : '#64748b'
+                  }
                   strokeWidth={isActive ? 2.2 : 1.8}
                 />
               </View>
 
               <Text
                 style={[
-                  styles.navLabel,
+                  styles.navItemLabel,
                   {
-                    color: isActive ? activeColor : inactiveColor,
-                    fontWeight: isActive ? '600' : '400',
+                    color: isActive
+                      ? isDark
+                        ? '#ffffff'
+                        : '#0f172a'
+                      : isDark
+                      ? '#94a3b8'
+                      : '#64748b',
+                    fontWeight: isActive ? '600' : '500',
                   },
                 ]}
                 numberOfLines={1}
               >
                 {item.label}
               </Text>
+
+              {item.badge !== undefined && (
+                <View
+                  style={[
+                    styles.badgeContainer,
+                    { backgroundColor: activeColor },
+                  ]}
+                >
+                  <Text style={styles.badgeText}>{item.badge}</Text>
+                </View>
+              )}
             </TouchableOpacity>
           );
         })}
       </ScrollView>
 
-      {/* Bottom Profile Section */}
-      <View
-        style={[
-          styles.bottomProfileSection,
-          { borderTopColor: isDark ? '#1f1f23' : '#f1f5f9' },
-        ]}
-      >
+      {/* Bottom Profile User Button */}
+      <View style={[styles.bottomSection, { borderTopColor: borderColor }]}>
         <TouchableOpacity
           activeOpacity={0.8}
-          onPress={() => setIsDropupOpen(!isDropupOpen)}
-          style={[
-            styles.profileAvatar,
-            {
-              backgroundColor: isDark ? '#27272a' : '#f1f5f9',
-              borderColor: isDark ? '#3f3f46' : '#e2e8f0',
-            },
-          ]}
+          onPress={() => setIsDropupOpen(true)}
+          style={styles.userButton}
           accessibilityRole="button"
-          accessibilityLabel="User Profile Menu"
+          accessibilityLabel="User Account Menu"
         >
-          <Text
+          <View
             style={[
-              styles.avatarText,
-              { color: isDark ? '#e4e4e7' : '#1e293b' },
+              styles.avatarBadge,
+              {
+                backgroundColor: isDark ? '#27272a' : '#f1f5f9',
+                borderColor: isDark ? '#3f3f46' : '#e2e8f0',
+              },
             ]}
           >
-            {userInitials}
-          </Text>
+            <Text
+              style={[
+                styles.avatarText,
+                { color: isDark ? '#e4e4e7' : '#1e293b' },
+              ]}
+            >
+              {userInitials}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
 
-      {/* Profile Dropup Popover */}
+      {/* Dropup / Popover Menu matching Screenshot */}
       <Modal
         visible={isDropupOpen}
         transparent={true}
@@ -362,85 +407,57 @@ export function AppNavigationSidebar({
               ]}
             />
 
-            {/* Menu Options */}
+            {/* Dynamic Menu Options from JSON */}
             <View style={styles.menuItemsList}>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsDropupOpen(false);
-                  onProfilePress?.();
-                }}
-                style={styles.dropupItem}
-              >
-                <UserIcon size={17} color={popoverMuted} strokeWidth={1.9} />
-                <Text style={[styles.dropupItemText, { color: popoverText }]}>
-                  My Profile
-                </Text>
-              </TouchableOpacity>
+              {profileList.map((item) => {
+                const IconComponent = resolveMenuIcon(item.icon);
+                const itemColor = item.isDanger
+                  ? '#ef4444'
+                  : item.id === 'theme'
+                  ? activeColor
+                  : item.color || popoverMuted;
 
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsDropupOpen(false);
-                  onThemePress?.();
-                }}
-                style={styles.dropupItem}
-              >
-                <Palette size={17} color={activeColor} strokeWidth={2} />
-                <Text style={[styles.dropupItemText, { color: popoverText }]}>
-                  Theme Settings
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsDropupOpen(false);
-                  onSettingsPress?.();
-                }}
-                style={styles.dropupItem}
-              >
-                <Settings size={17} color={popoverMuted} strokeWidth={1.9} />
-                <Text style={[styles.dropupItemText, { color: popoverText }]}>
-                  Settings
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsDropupOpen(false);
-                  onNotificationsPress?.();
-                }}
-                style={styles.dropupItem}
-              >
-                <Bell size={17} color={popoverMuted} strokeWidth={1.9} />
-                <Text style={[styles.dropupItemText, { color: popoverText }]}>
-                  Notifications
-                </Text>
-              </TouchableOpacity>
-
-              <View
-                style={[
-                  styles.divider,
-                  { backgroundColor: isDark ? '#27272a' : '#f1f5f9' },
-                ]}
-              />
-
-              {/* Sign Out Option */}
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => {
-                  setIsDropupOpen(false);
-                  onSignOut?.();
-                }}
-                style={[styles.dropupItem, styles.signOutItem]}
-              >
-                <LogOut size={17} color="#ef4444" strokeWidth={1.9} />
-                <Text style={[styles.dropupItemText, { color: '#ef4444' }]}>
-                  Sign out
-                </Text>
-              </TouchableOpacity>
+                return (
+                  <React.Fragment key={item.id}>
+                    {item.hasDividerBefore && (
+                      <View
+                        style={[
+                          styles.divider,
+                          { backgroundColor: isDark ? '#27272a' : '#f1f5f9' },
+                        ]}
+                      />
+                    )}
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setIsDropupOpen(false);
+                        if (item.id === 'profile') onProfilePress?.();
+                        else if (item.id === 'theme') onThemePress?.();
+                        else if (item.id === 'preferences') (onPreferencesPress || onPreferencePress)?.();
+                        else if (item.id === 'settings') onSettingsPress?.();
+                        else if (item.id === 'notifications') onNotificationsPress?.();
+                        else if (item.id === 'signout' || item.isDanger) onSignOut?.();
+                        onProfileMenuSelect?.(item.id, item);
+                      }}
+                      style={[styles.dropupItem, item.isDanger && styles.signOutItem]}
+                    >
+                      <IconComponent
+                        size={17}
+                        color={itemColor}
+                        strokeWidth={item.id === 'theme' || item.id === 'preferences' ? 2 : 1.9}
+                      />
+                      <Text
+                        style={[
+                          styles.dropupItemText,
+                          { color: item.isDanger ? '#ef4444' : popoverText },
+                        ]}
+                      >
+                        {item.label}
+                      </Text>
+                    </TouchableOpacity>
+                  </React.Fragment>
+                );
+              })}
             </View>
           </View>
         </View>
@@ -492,43 +509,56 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     gap: 8,
   },
-  navItemBtn: {
+  navItemButton: {
     width: 58,
     height: 54,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    paddingVertical: 6,
+    paddingVertical: 4,
     paddingHorizontal: 2,
   },
-  activeIndicator: {
-    position: 'absolute',
-    left: -7,
-    top: 10,
-    bottom: 10,
-    width: 3.5,
-    borderTopRightRadius: 4,
-    borderBottomRightRadius: 4,
-  },
-  iconWrapper: {
-    marginBottom: 3,
+  iconWrap: {
+    marginBottom: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 6,
+    padding: 2,
   },
-  navLabel: {
+  navItemLabel: {
     fontSize: 10,
     letterSpacing: 0.1,
     textAlign: 'center',
     fontFamily: 'Open Sans',
   },
-  bottomProfileSection: {
+  badgeContainer: {
+    position: 'absolute',
+    top: 4,
+    right: 8,
+    borderRadius: 8,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    minWidth: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeText: {
+    color: '#ffffff',
+    fontSize: 9,
+    fontWeight: '700',
+  },
+  bottomSection: {
     width: '100%',
     alignItems: 'center',
     paddingTop: 12,
     borderTopWidth: 1,
   },
-  profileAvatar: {
+  userButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarBadge: {
     width: 38,
     height: 38,
     borderRadius: 19,

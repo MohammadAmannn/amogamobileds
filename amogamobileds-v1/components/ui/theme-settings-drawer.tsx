@@ -114,8 +114,22 @@ function DarkMockup({ isActive }: { isActive: boolean }) {
   );
 }
 
-export function ThemeSettingsDrawer({
-  isOpen,
+export interface ThemeSettingsViewProps {
+  onClose?: () => void;
+  appearanceMode?: 'light' | 'dark' | 'system';
+  activeMode?: 'light' | 'dark' | 'system';
+  onModeChange?: (mode: 'light' | 'dark' | 'system') => void;
+  onSelectMode?: (mode: 'light' | 'dark' | 'system') => void;
+  currentColorTheme?: string;
+  activeTheme?: string;
+  onColorThemeChange?: (name: string) => void;
+  onSelectTheme?: (name: string) => void;
+  onResetTheme?: () => void;
+  availableThemes?: ThemeOption[];
+  showHeader?: boolean;
+}
+
+export function ThemeSettingsView({
   onClose,
   appearanceMode,
   activeMode,
@@ -127,11 +141,10 @@ export function ThemeSettingsDrawer({
   onSelectTheme,
   onResetTheme,
   availableThemes = colorThemes,
-}: ThemeSettingsDrawerProps) {
+  showHeader = true,
+}: ThemeSettingsViewProps) {
   const { colors, resolvedMode, mode, setMode } = useTheme();
   const isDark = resolvedMode === 'dark';
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 768;
 
   const currentMode = appearanceMode || activeMode || mode || 'light';
   const handleModeChange = onModeChange || onSelectMode || ((m: 'light' | 'dark' | 'system') => setMode(m));
@@ -153,11 +166,285 @@ export function ThemeSettingsDrawer({
     );
   }, [themesToUse, searchQuery]);
 
-  if (!isOpen) return null;
-
   const bg = isDark ? '#0f172a' : '#ffffff';
   const textPrimary = isDark ? '#f8fafc' : '#0f172a';
   const textMuted = isDark ? '#94a3b8' : '#64748b';
+  const borderColor = isDark ? '#1e293b' : '#e2e8f0';
+
+  return (
+    <View style={[styles.viewContainer, { backgroundColor: bg }]}>
+      {showHeader && (
+        <View style={[styles.header, { borderBottomColor: borderColor }]}>
+          <View style={styles.headerTitles}>
+            <Text style={[styles.headerTitle, { color: textPrimary }]}>
+              Theme Settings
+            </Text>
+            <Text style={[styles.headerSub, { color: textMuted }]}>
+              Customize the look and feel of your dashboard.
+            </Text>
+          </View>
+
+          {onClose && (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={onClose}
+              style={styles.closeBtn}
+              accessibilityRole="button"
+              accessibilityLabel="Close theme settings"
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <X size={18} color={textPrimary} />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
+      {/* Body Scroll Area */}
+      <ScrollView
+        style={styles.scrollArea}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+      >
+        {/* Section 1: Appearance Mode (Theme) */}
+        <View style={styles.section}>
+          <Text style={[styles.sectionHeading, { color: textMuted }]}>
+            Theme
+          </Text>
+
+          <View style={styles.appearanceGrid}>
+            {/* System */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => handleModeChange('system')}
+              style={[
+                styles.appearanceCard,
+                {
+                  borderColor: currentMode === 'system' ? '#0284c7' : borderColor,
+                  borderWidth: currentMode === 'system' ? 2 : 1,
+                },
+              ]}
+            >
+              <SystemMockup />
+              <Text
+                style={[
+                  styles.appearanceLabel,
+                  {
+                    color: textPrimary,
+                    fontWeight: currentMode === 'system' ? '700' : '500',
+                  },
+                ]}
+              >
+                System
+              </Text>
+            </TouchableOpacity>
+
+            {/* Light */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => handleModeChange('light')}
+              style={[
+                styles.appearanceCard,
+                {
+                  borderColor: currentMode === 'light' ? '#0284c7' : borderColor,
+                  borderWidth: currentMode === 'light' ? 2 : 1,
+                },
+              ]}
+            >
+              <LightMockup isActive={currentMode === 'light'} />
+              <Text
+                style={[
+                  styles.appearanceLabel,
+                  {
+                    color: textPrimary,
+                    fontWeight: currentMode === 'light' ? '700' : '500',
+                  },
+                ]}
+              >
+                Light
+              </Text>
+            </TouchableOpacity>
+
+            {/* Dark */}
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => handleModeChange('dark')}
+              style={[
+                styles.appearanceCard,
+                {
+                  borderColor: currentMode === 'dark' ? '#0284c7' : borderColor,
+                  borderWidth: currentMode === 'dark' ? 2 : 1,
+                },
+              ]}
+            >
+              <DarkMockup isActive={currentMode === 'dark'} />
+              <Text
+                style={[
+                  styles.appearanceLabel,
+                  {
+                    color: textPrimary,
+                    fontWeight: currentMode === 'dark' ? '700' : '500',
+                  },
+                ]}
+              >
+                Dark
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Section 2: Color Theme */}
+        <View style={styles.section}>
+          <View style={styles.colorThemeHeaderRow}>
+            <Text style={[styles.sectionHeading, { color: textMuted }]}>
+              Color Theme
+            </Text>
+            {onResetTheme && (
+              <TouchableOpacity
+                onPress={onResetTheme}
+                hitSlop={6}
+                style={styles.refreshIconBtn}
+                accessibilityLabel="Reset theme"
+              >
+                <RotateCcw size={14} color={textMuted} />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Search Bar */}
+          <View
+            style={[
+              styles.searchContainer,
+              {
+                backgroundColor: isDark ? '#1e293b' : '#ffffff',
+                borderColor: borderColor,
+              },
+            ]}
+          >
+            <Search size={16} color={textMuted} />
+            <TextInput
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              placeholder="Search themes..."
+              placeholderTextColor={textMuted}
+              style={[
+                styles.searchInput,
+                {
+                  color: textPrimary,
+                },
+              ]}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <X size={14} color={textMuted} />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <Text style={[styles.availableCountText, { color: textMuted }]}>
+            {filteredThemes.length} available themes
+          </Text>
+
+          {/* Themes List */}
+          <View style={styles.themesList}>
+            {filteredThemes.map((theme) => {
+              const isActive = currentThemeName.toLowerCase() === theme.name.toLowerCase();
+              const primaryColor = theme.colors?.[0] || '#7c3aed';
+
+              return (
+                <TouchableOpacity
+                  key={theme.name}
+                  activeOpacity={0.75}
+                  onPress={() => handleThemeChange?.(theme.name)}
+                  style={[
+                    styles.themeRow,
+                    isActive && styles.themeRowActive,
+                    {
+                      backgroundColor: isActive
+                        ? isDark
+                          ? '#1e293b'
+                          : '#f1f5f9'
+                        : isDark
+                        ? 'transparent'
+                        : '#ffffff',
+                    },
+                  ]}
+                >
+                  <View style={styles.dotsRow}>
+                    {(theme.colors || []).slice(0, 4).map((dotColor, idx) => (
+                      <View
+                        key={idx}
+                        style={[
+                          styles.swatchDot,
+                          { backgroundColor: dotColor },
+                        ]}
+                      />
+                    ))}
+                  </View>
+
+                  <Text
+                    style={[
+                      styles.themeRowLabel,
+                      {
+                        color: textPrimary,
+                        fontWeight: isActive ? '700' : '500',
+                      },
+                    ]}
+                  >
+                    {theme.label}
+                  </Text>
+
+                  {isActive && (
+                    <View style={styles.themeRowCheck}>
+                      <Check size={16} color={primaryColor} strokeWidth={2.5} />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Footer Reset Button */}
+      {onResetTheme && (
+        <View style={[styles.footer, { borderTopColor: borderColor }]}>
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={onResetTheme}
+            style={styles.resetButtonFull}
+            accessibilityRole="button"
+            accessibilityLabel="Reset Theme"
+          >
+            <Text style={styles.resetButtonText}>Reset to Default Theme</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+}
+
+export function ThemeSettingsDrawer({
+  isOpen,
+  onClose,
+  appearanceMode,
+  activeMode,
+  onModeChange,
+  onSelectMode,
+  currentColorTheme,
+  activeTheme,
+  onColorThemeChange,
+  onSelectTheme,
+  onResetTheme,
+  availableThemes = colorThemes,
+}: ThemeSettingsDrawerProps) {
+  const { colors, resolvedMode } = useTheme();
+  const isDark = resolvedMode === 'dark';
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
+
+  if (!isOpen) return null;
+
+  const bg = isDark ? '#0f172a' : '#ffffff';
   const borderColor = isDark ? '#1e293b' : '#e2e8f0';
 
   return (
@@ -183,253 +470,20 @@ export function ThemeSettingsDrawer({
             },
           ]}
         >
-          {/* Header */}
-          <View style={[styles.header, { borderBottomColor: borderColor }]}>
-            <View style={styles.headerTitles}>
-              <Text style={[styles.headerTitle, { color: textPrimary }]}>
-                Theme Settings
-              </Text>
-              <Text style={[styles.headerSub, { color: textMuted }]}>
-                Customize the look and feel of your dashboard.
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={onClose}
-              style={[
-                styles.closeBtn,
-                {
-                  backgroundColor: isDark ? '#1e293b' : '#f1f5f9',
-                  borderColor: isDark ? '#334155' : '#e2e8f0',
-                },
-              ]}
-              accessibilityRole="button"
-              accessibilityLabel="Close theme settings"
-            >
-              <X size={16} color={textPrimary} />
-            </TouchableOpacity>
-          </View>
-
-          {/* Body Scroll Area */}
-          <ScrollView
-            style={styles.scrollArea}
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* Section 1: Appearance Mode (Theme) */}
-            <View style={styles.section}>
-              <Text style={[styles.sectionHeading, { color: textMuted }]}>
-                Theme
-              </Text>
-
-              <View style={styles.appearanceGrid}>
-                {/* System */}
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => handleModeChange('system')}
-                  style={[
-                    styles.appearanceCard,
-                    {
-                      borderColor: currentMode === 'system' ? '#0284c7' : borderColor,
-                      borderWidth: currentMode === 'system' ? 2 : 1,
-                    },
-                  ]}
-                >
-                  <SystemMockup />
-                  <Text
-                    style={[
-                      styles.appearanceLabel,
-                      {
-                        color: textPrimary,
-                        fontWeight: currentMode === 'system' ? '700' : '500',
-                      },
-                    ]}
-                  >
-                    System
-                  </Text>
-                </TouchableOpacity>
-
-                {/* Light */}
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => handleModeChange('light')}
-                  style={[
-                    styles.appearanceCard,
-                    {
-                      borderColor: currentMode === 'light' ? '#0284c7' : borderColor,
-                      borderWidth: currentMode === 'light' ? 2 : 1,
-                    },
-                  ]}
-                >
-                  <LightMockup isActive={currentMode === 'light'} />
-                  <Text
-                    style={[
-                      styles.appearanceLabel,
-                      {
-                        color: textPrimary,
-                        fontWeight: currentMode === 'light' ? '700' : '500',
-                      },
-                    ]}
-                  >
-                    Light
-                  </Text>
-                </TouchableOpacity>
-
-                {/* Dark */}
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => handleModeChange('dark')}
-                  style={[
-                    styles.appearanceCard,
-                    {
-                      borderColor: currentMode === 'dark' ? '#0284c7' : borderColor,
-                      borderWidth: currentMode === 'dark' ? 2 : 1,
-                    },
-                  ]}
-                >
-                  <DarkMockup isActive={currentMode === 'dark'} />
-                  <Text
-                    style={[
-                      styles.appearanceLabel,
-                      {
-                        color: textPrimary,
-                        fontWeight: currentMode === 'dark' ? '700' : '500',
-                      },
-                    ]}
-                  >
-                    Dark
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Section 2: Color Theme */}
-            <View style={styles.section}>
-              <View style={styles.colorThemeHeaderRow}>
-                <Text style={[styles.sectionHeading, { color: textMuted }]}>
-                  Color Theme
-                </Text>
-                {onResetTheme && (
-                  <TouchableOpacity
-                    onPress={onResetTheme}
-                    hitSlop={6}
-                    style={styles.refreshIconBtn}
-                    accessibilityLabel="Reset theme"
-                  >
-                    <RotateCcw size={14} color={textMuted} />
-                  </TouchableOpacity>
-                )}
-              </View>
-
-              {/* Search Bar */}
-              <View
-                style={[
-                  styles.searchContainer,
-                  {
-                    backgroundColor: isDark ? '#1e293b' : '#ffffff',
-                    borderColor: borderColor,
-                  },
-                ]}
-              >
-                <Search size={16} color={textMuted} />
-                <TextInput
-                  value={searchQuery}
-                  onChangeText={setSearchQuery}
-                  placeholder="Search themes..."
-                  placeholderTextColor={textMuted}
-                  style={[
-                    styles.searchInput,
-                    {
-                      color: textPrimary,
-                    },
-                  ]}
-                />
-                {searchQuery.length > 0 && (
-                  <TouchableOpacity onPress={() => setSearchQuery('')}>
-                    <X size={14} color={textMuted} />
-                  </TouchableOpacity>
-                )}
-              </View>
-
-              <Text style={[styles.availableCountText, { color: textMuted }]}>
-                {filteredThemes.length} themes available
-              </Text>
-
-              {/* Vertical Theme List matching Screenshot 1 */}
-              <View style={styles.themesList}>
-                {filteredThemes.map((theme) => {
-                  const isActive = currentThemeName === theme.name;
-                  const themeColor = theme.preview || '#0284c7';
-                  const dots = theme.colors && theme.colors.length > 0
-                    ? theme.colors.slice(0, 5)
-                    : [themeColor, '#a855f7', '#ec4899', '#22c55e', '#0f172a'];
-
-                  return (
-                    <TouchableOpacity
-                      key={theme.name}
-                      activeOpacity={0.85}
-                      onPress={() => handleThemeChange?.(theme.name)}
-                      style={[
-                        styles.themeRow,
-                        isActive && [
-                          styles.themeRowActive,
-                          { backgroundColor: themeColor },
-                        ],
-                      ]}
-                    >
-                      {/* Left: 5 Color Swatch Dots */}
-                      <View style={styles.dotsRow}>
-                        {dots.map((c, i) => (
-                          <View
-                            key={i}
-                            style={[
-                              styles.swatchDot,
-                              { backgroundColor: c },
-                            ]}
-                          />
-                        ))}
-                      </View>
-
-                      {/* Theme Name */}
-                      <Text
-                        style={[
-                          styles.themeRowLabel,
-                          {
-                            color: isActive ? '#ffffff' : textPrimary,
-                            fontWeight: isActive ? '700' : '500',
-                          },
-                        ]}
-                        numberOfLines={1}
-                      >
-                        {theme.label}
-                      </Text>
-
-                      {/* Right Checkmark if active */}
-                      {isActive && (
-                        <View style={styles.themeRowCheck}>
-                          <Check size={16} color="#ffffff" strokeWidth={2.6} />
-                        </View>
-                      )}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            </View>
-          </ScrollView>
-
-          {/* Bottom Reset Button matching Screenshot 1 */}
-          <View style={[styles.footer, { borderTopColor: borderColor }]}>
-            <TouchableOpacity
-              activeOpacity={0.85}
-              onPress={onResetTheme}
-              style={styles.resetButtonFull}
-              accessibilityRole="button"
-              accessibilityLabel="Reset Theme"
-            >
-              <Text style={styles.resetButtonText}>Reset</Text>
-            </TouchableOpacity>
-          </View>
+          <ThemeSettingsView
+            onClose={onClose}
+            appearanceMode={appearanceMode}
+            activeMode={activeMode}
+            onModeChange={onModeChange}
+            onSelectMode={onSelectMode}
+            currentColorTheme={currentColorTheme}
+            activeTheme={activeTheme}
+            onColorThemeChange={onColorThemeChange}
+            onSelectTheme={onSelectTheme}
+            onResetTheme={onResetTheme}
+            availableThemes={availableThemes}
+            showHeader={true}
+          />
         </Pressable>
       </View>
     </Modal>
@@ -437,6 +491,14 @@ export function ThemeSettingsDrawer({
 }
 
 const styles = StyleSheet.create({
+  viewContainer: {
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
   modalRoot: {
     flex: 1,
     flexDirection: 'row',
@@ -454,7 +516,11 @@ const styles = StyleSheet.create({
     }),
   },
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   },
   drawerPanel: {
     height: '100%',
@@ -502,20 +568,25 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   closeBtn: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    borderWidth: 1,
+    padding: 6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   scrollArea: {
     flex: 1,
+    height: '100%',
+    ...Platform.select({
+      web: {
+        overflowY: 'auto',
+      } as any,
+    }),
   },
   scrollContent: {
-    padding: 20,
+    padding: 24,
     gap: 24,
-    paddingBottom: 30,
+    paddingBottom: 40,
+    width: '100%',
+    maxWidth: 960,
   },
   section: {
     gap: 12,
@@ -527,10 +598,14 @@ const styles = StyleSheet.create({
   },
   appearanceGrid: {
     flexDirection: 'row',
-    gap: 10,
+    flexWrap: 'wrap',
+    gap: 12,
+    maxWidth: 680,
   },
   appearanceCard: {
     flex: 1,
+    minWidth: 140,
+    maxWidth: 220,
     borderRadius: 10,
     padding: 3,
     alignItems: 'center',
@@ -611,6 +686,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     height: 40,
     gap: 8,
+    maxWidth: 680,
   },
   searchInput: {
     flex: 1,
@@ -632,6 +708,7 @@ const styles = StyleSheet.create({
   },
   themesList: {
     gap: 4,
+    maxWidth: 680,
   },
   themeRow: {
     flexDirection: 'row',
