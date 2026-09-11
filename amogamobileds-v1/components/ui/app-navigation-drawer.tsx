@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   StyleSheet,
   View,
@@ -37,30 +37,32 @@ import {
   LucideIcon,
 } from 'lucide-react-native';
 import { useTheme } from '../../providers/theme-provider';
+import {
+  AppMenuItemJson,
+  app_menu_json,
+  convertMenuJsonToNavItems,
+  resolveMenuIcon,
+  NavigationItem,
+} from './app-navigation-sidebar';
 
 export interface DrawerMenuItem {
   id: string;
   label: string;
   icon: LucideIcon;
   badge?: number | string;
+  pageUrl?: string;
+  pageName?: string;
 }
 
-export const DEFAULT_DRAWER_ITEMS: DrawerMenuItem[] = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'email', label: 'Email', icon: Mail },
-  { id: 'chat', label: 'Chat', icon: MessageSquare },
-  { id: 'files', label: 'Files', icon: Folder },
-  { id: 'calendar', label: 'Calendar', icon: Calendar },
-  { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-  { id: 'notification', label: 'Notification', icon: Bell },
-];
+export const DEFAULT_DRAWER_ITEMS: DrawerMenuItem[] = convertMenuJsonToNavItems(app_menu_json, 'mobile');
 
 export interface AppNavigationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   activeId?: string;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, item?: DrawerMenuItem | AppMenuItemJson) => void;
   items?: DrawerMenuItem[];
+  menuJson?: AppMenuItemJson[];
   workspaceName?: string;
   workspaceSubtitle?: string;
   userName?: string;
@@ -75,9 +77,10 @@ export interface AppNavigationDrawerProps {
 export function AppNavigationDrawer({
   isOpen,
   onClose,
-  activeId = 'chat',
+  activeId = 'home',
   onSelect,
-  items = DEFAULT_DRAWER_ITEMS,
+  items,
+  menuJson,
   workspaceName = 'Amoga App',
   workspaceSubtitle = 'Workspace',
   userName = 'Mohammed Aman',
@@ -94,6 +97,13 @@ export function AppNavigationDrawer({
   const { width: screenWidth } = useWindowDimensions();
 
   const [isProfileMenuOpen, setIsProfileMenuOpen] = React.useState(false);
+
+  // Dynamically resolve drawer menu items
+  const drawerItems = useMemo(() => {
+    if (items && items.length > 0) return items;
+    if (menuJson && menuJson.length > 0) return convertMenuJsonToNavItems(menuJson, 'mobile');
+    return DEFAULT_DRAWER_ITEMS;
+  }, [items, menuJson]);
 
   const drawerWidth = Math.min(screenWidth * 0.82, 320);
   const [mounted, setMounted] = React.useState(isOpen);
@@ -216,8 +226,11 @@ export function AppNavigationDrawer({
               contentContainerStyle={styles.itemsScrollContent}
               showsVerticalScrollIndicator={false}
             >
-              {items.map((item) => {
-                const isActive = activeId === item.id;
+              {drawerItems.map((item) => {
+                const isActive =
+                  activeId?.toLowerCase() === item.id.toLowerCase() ||
+                  activeId?.toLowerCase() === item.label.toLowerCase() ||
+                  activeId?.toLowerCase() === (item.pageName || '').toLowerCase();
                 const IconComp = item.icon;
 
                 return (
@@ -225,7 +238,7 @@ export function AppNavigationDrawer({
                     key={item.id}
                     activeOpacity={0.7}
                     onPress={() => {
-                      onSelect(item.id);
+                      onSelect(item.id, item);
                       onClose();
                     }}
                     style={[

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "pref_1",
+    "preference": "Push Notifications",
+    "key": "push_notifications",
+    "description": "Receive instant real-time alerts and messages",
+    "status": "Yes"
+  },
+  {
+    "id": "pref_2",
+    "preference": "Biometric Face ID Lock",
+    "key": "biometric_face_id_lock",
+    "description": "Require Face ID or biometric scan on launch",
+    "status": "No"
+  },
+  {
+    "id": "pref_3",
+    "preference": "Dark Mode Sync",
+    "key": "dark_mode_sync",
+    "description": "Automatically match operating system appearance",
+    "status": "Yes"
+  },
+  {
+    "id": "pref_4",
+    "preference": "Sound Effects",
+    "key": "sound_effects",
+    "description": "Play audio feedback for messages and interactions",
+    "status": "Yes"
+  },
+  {
+    "id": "pref_5",
+    "preference": "Haptic Feedback",
+    "key": "haptic_feedback",
+    "description": "Vibrate on button taps and gesture completions",
+    "status": "Yes"
+  },
+  {
+    "id": "pref_6",
+    "preference": "Read Receipts",
+    "key": "read_receipts",
+    "description": "Allow contacts to see when you have read messages",
+    "status": "No"
+  },
+  {
+    "id": "pref_7",
+    "preference": "Email Notifications",
+    "key": "email_notifications",
+    "description": "Receive digest emails for missed mentions and updates",
+    "status": "No"
+  },
+  {
+    "id": "pref_8",
+    "preference": "Auto Download Media",
+    "key": "auto_download_media",
+    "description": "Download incoming photos and videos over Wi-Fi",
+    "status": "Yes"
+  },
+  {
+    "id": "pref_9",
+    "preference": "Cloud Backup",
+    "key": "cloud_backup",
+    "description": "Automatically sync chat history and assets to cloud",
+    "status": "Yes"
+  },
+  {
+    "id": "pref_10",
+    "preference": "Two-Factor Authentication",
+    "key": "two_factor_auth",
+    "description": "Enforce 2FA verification for sign-in on new devices",
+    "status": "No"
+  }
+]

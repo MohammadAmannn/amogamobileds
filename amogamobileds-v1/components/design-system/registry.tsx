@@ -115,6 +115,7 @@ import {
   VerifyOtpPreview,
   ForgotPasswordPreview,
 } from './previews/AuthPreviews';
+import { PreferencesPreview } from './previews/PreferencesPreview';
 
 export type ComponentCategory =
   | 'Primitives'
@@ -128,7 +129,8 @@ export type ComponentCategory =
   | 'Themes'
   | 'Icons'
   | 'Chat'
-  | 'Auth';
+  | 'Auth'
+  | 'Pages';
 
 export interface ComponentItem {
   id: string;
@@ -2770,6 +2772,45 @@ export function Example() {
 
 export function Example() {
   return <ForgotPasswordScreen />;
+}`,
+  },
+  /* =========================================================================
+     14. PAGES & SCREENS
+     ========================================================================= */
+  {
+    id: 'page-preference',
+    name: 'Preference',
+    file: 'app_preference_settings.json',
+    category: 'Pages',
+    tag: 'PAGE',
+    description: 'Application preference settings screen featuring 10 customizable options (Push Notifications, Biometric Face ID Lock, Dark Mode, etc.) with real-time switch toggles and dynamic JSON persistence to App_preference_settings.',
+    Preview: PreferencesPreview,
+    codeSnippet: `import React, { useState } from 'react';
+import { View, Text, Switch } from 'react-native';
+import initialPreferences from '../ui/app_preference_settings.json';
+
+export function PreferenceSettingsScreen() {
+  const [preferences, setPreferences] = useState(initialPreferences);
+
+  const togglePreference = (id: string, value: boolean) => {
+    setPreferences(prev =>
+      prev.map(item => item.id === id ? { ...item, status: value ? 'Yes' : 'No' } : item)
+    );
+  };
+
+  return (
+    <View style={{ padding: 20 }}>
+      {preferences.map(item => (
+        <View key={item.id} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12 }}>
+          <Text style={{ color: '#9333ea', fontWeight: '600' }}>{item.preference}</Text>
+          <Switch
+            value={item.status === 'Yes'}
+            onValueChange={val => togglePreference(item.id, val)}
+          />
+        </View>
+      ))}
+    </View>
+  );
 }`,
   },
 ];

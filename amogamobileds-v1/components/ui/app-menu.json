@@ -1,0 +1,65 @@
+[
+  {
+    "menu_icon": "Home",
+    "menu_title": "Home",
+    "menu_status": "yes",
+    "menu_page_url": "/(home)",
+    "menu_page_name": "Home",
+    "web": "yes",
+    "mobile": "yes"
+  },
+  {
+    "menu_icon": "Mail",
+    "menu_title": "Email",
+    "menu_status": "yes",
+    "menu_page_url": "/Email",
+    "menu_page_name": "Email",
+    "web": "yes",
+    "mobile": "no"
+  },
+  {
+    "menu_icon": "MessageSquare",
+    "menu_title": "Chat",
+    "menu_status": "yes",
+    "menu_page_url": "/Chat",
+    "menu_page_name": "Chat",
+    "web": "yes",
+    "mobile": "yes"
+  },
+  {
+    "menu_icon": "Folder",
+    "menu_title": "Files",
+    "menu_status": "yes",
+    "menu_page_url": "/Files",
+    "menu_page_name": "Files",
+    "web": "yes",
+    "mobile": "no"
+  },
+  {
+    "menu_icon": "Calendar",
+    "menu_title": "Calendar",
+    "menu_status": "yes",
+    "menu_page_url": "/Calendar",
+    "menu_page_name": "Calendar",
+    "web": "yes",
+    "mobile": "no"
+  },
+  {
+    "menu_icon": "CheckSquare",
+    "menu_title": "Tasks",
+    "menu_status": "yes",
+    "menu_page_url": "/Tasks",
+    "menu_page_name": "Tasks",
+    "web": "yes",
+    "mobile": "no"
+  },
+  {
+    "menu_icon": "Bell",
+    "menu_title": "Notification",
+    "menu_status": "yes",
+    "menu_page_url": "/Notification",
+    "menu_page_name": "Notification",
+    "web": "yes",
+    "mobile": "no"
+  }
+]

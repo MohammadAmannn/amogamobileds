@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   StyleSheet,
   View,
@@ -22,31 +22,112 @@ import {
   Palette,
   Settings,
   LogOut,
+  Sparkles,
+  FileText,
+  Layers,
+  Compass,
+  HelpCircle,
   LucideIcon,
 } from 'lucide-react-native';
 import { useTheme } from '../../providers/theme-provider';
+import defaultMenuData from './app-menu.json';
+
+export interface AppMenuItemJson {
+  menu_icon: string;
+  menu_title: string;
+  menu_status: 'yes' | 'no' | string;
+  menu_page_url: string;
+  menu_page_name: string;
+  web?: 'yes' | 'no' | string;
+  mobile?: 'yes' | 'no' | string;
+  badge?: number | string;
+  id?: string;
+}
 
 export interface NavigationItem {
   id: string;
   label: string;
   icon: LucideIcon;
   badge?: number | string;
+  pageUrl?: string;
+  pageName?: string;
 }
 
-export const DEFAULT_NAV_ITEMS: NavigationItem[] = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'email', label: 'Email', icon: Mail },
-  { id: 'chat', label: 'Chat', icon: MessageSquare },
-  { id: 'files', label: 'Files', icon: Folder },
-  { id: 'calendar', label: 'Calendar', icon: Calendar },
-  { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-  { id: 'notification', label: 'Notification', icon: Bell },
-];
+export const app_menu_json: AppMenuItemJson[] = defaultMenuData as AppMenuItemJson[];
+
+export const ICON_REGISTRY: Record<string, LucideIcon> = {
+  Home,
+  Mail,
+  Email: Mail,
+  MessageSquare,
+  Chat: MessageSquare,
+  Folder,
+  Files: Folder,
+  Calendar,
+  CheckSquare,
+  Tasks: CheckSquare,
+  Bell,
+  Notification: Bell,
+  User: UserIcon,
+  Palette,
+  Settings,
+  LogOut,
+  Sparkles,
+  FileText,
+  Layers,
+  Compass,
+  HelpCircle,
+  Command,
+};
+
+export function resolveMenuIcon(iconName: string): LucideIcon {
+  if (!iconName) return MessageSquare;
+  if (ICON_REGISTRY[iconName]) return ICON_REGISTRY[iconName];
+  const normalized = iconName.toLowerCase().replace(/[-_\s]/g, '');
+  for (const [key, comp] of Object.entries(ICON_REGISTRY)) {
+    if (key.toLowerCase() === normalized) return comp;
+  }
+  return MessageSquare;
+}
+
+export function convertMenuJsonToNavItems(
+  jsonItems: AppMenuItemJson[] = app_menu_json,
+  platform: 'web' | 'mobile' = 'web'
+): NavigationItem[] {
+  return jsonItems
+    .filter((item) => {
+      const isEnabled = item.menu_status?.toLowerCase() === 'yes';
+      const platformAllowed =
+        platform === 'web'
+          ? item.web?.toLowerCase() !== 'no'
+          : item.mobile?.toLowerCase() !== 'no';
+      return isEnabled && platformAllowed;
+    })
+    .map((item) => {
+      const generatedId =
+        item.id ||
+        (item.menu_page_name || item.menu_title || '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, '');
+
+      return {
+        id: generatedId || 'home',
+        label: item.menu_title || item.menu_page_name || 'Menu',
+        icon: resolveMenuIcon(item.menu_icon),
+        badge: item.badge,
+        pageUrl: item.menu_page_url,
+        pageName: item.menu_page_name,
+      };
+    });
+}
+
+export const DEFAULT_NAV_ITEMS: NavigationItem[] = convertMenuJsonToNavItems(app_menu_json, 'web');
 
 export interface AppNavigationSidebarProps {
   items?: NavigationItem[];
+  menuJson?: AppMenuItemJson[];
   activeId: string;
-  onSelect: (id: string) => void;
+  onSelect: (id: string, item?: NavigationItem | AppMenuItemJson) => void;
   userInitials?: string;
   userName?: string;
   userSubtitle?: string;
@@ -61,8 +142,9 @@ export interface AppNavigationSidebarProps {
 }
 
 export function AppNavigationSidebar({
-  items = DEFAULT_NAV_ITEMS,
-  activeId = 'chat',
+  items,
+  menuJson,
+  activeId = 'home',
   onSelect,
   userInitials = 'MA',
   userName = 'Mohammed Aman',
@@ -80,6 +162,13 @@ export function AppNavigationSidebar({
   const isDark = resolvedMode === 'dark';
 
   const [isDropupOpen, setIsDropupOpen] = useState(false);
+
+  // Dynamically resolve navigation items
+  const navItems = useMemo(() => {
+    if (items && items.length > 0) return items;
+    if (menuJson && menuJson.length > 0) return convertMenuJsonToNavItems(menuJson, 'web');
+    return DEFAULT_NAV_ITEMS;
+  }, [items, menuJson]);
 
   const sidebarBg = colors.background;
   const borderColor = colors.border;
@@ -121,15 +210,18 @@ export function AppNavigationSidebar({
         contentContainerStyle={styles.menuScrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {items.map((item) => {
-          const isActive = activeId === item.id;
+        {navItems.map((item) => {
+          const isActive =
+            activeId?.toLowerCase() === item.id.toLowerCase() ||
+            activeId?.toLowerCase() === item.label.toLowerCase() ||
+            activeId?.toLowerCase() === (item.pageName || '').toLowerCase();
           const IconComp = item.icon;
 
           return (
             <TouchableOpacity
               key={item.id}
               activeOpacity={0.7}
-              onPress={() => onSelect(item.id)}
+              onPress={() => onSelect(item.id, item)}
               style={[
                 styles.navItemBtn,
                 isActive && {
@@ -140,7 +232,7 @@ export function AppNavigationSidebar({
               accessibilityState={{ selected: isActive }}
               accessibilityLabel={item.label}
             >
-              {/* Active Indicator Bar on left/right */}
+              {/* Active Indicator Bar on left */}
               {isActive && (
                 <View
                   style={[
@@ -206,7 +298,7 @@ export function AppNavigationSidebar({
         </TouchableOpacity>
       </View>
 
-      {/* Profile Dropup Popover (Screenshot 2) */}
+      {/* Profile Dropup Popover */}
       <Modal
         visible={isDropupOpen}
         transparent={true}

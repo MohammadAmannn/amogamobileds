@@ -28,6 +28,7 @@ import {
   Smartphone,
   ChevronRight,
   ShieldCheck,
+  SlidersHorizontal,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -44,6 +45,13 @@ import { MobileEmulatorModal } from '../../../components/web/MobileEmulatorModal
 import { ConfigDrawer } from '../../../components/web/ConfigDrawer.web';
 import { NavUser } from '../../../components/web/NavUser.web';
 import { useColorTheme } from '../../../providers/color-theme-provider';
+import {
+  AppNavigationSidebar,
+  AppNavigationDrawer,
+  ComingSoonView,
+  DEFAULT_NAV_ITEMS,
+  app_menu_json,
+} from '../../../components/ui';
 
 interface CategoryConfig {
   name: 'All' | ComponentCategory;
@@ -65,6 +73,7 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Icons', label: 'Icons', Icon: Compass },
   { name: 'Chat', label: 'Chat', Icon: MessageSquare },
   { name: 'Auth', label: 'Auth', Icon: ShieldCheck },
+  { name: 'Pages', label: 'Pages', Icon: SlidersHorizontal },
 ];
 
 export default function WebPlaygroundScreen() {
@@ -93,6 +102,18 @@ export default function WebPlaygroundScreen() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isEmulatorModalOpen, setIsEmulatorModalOpen] = useState(false);
   const [isThemeDrawerOpen, setIsThemeDrawerOpen] = useState(false);
+  const [mainNavId, setMainNavId] = useState<string>('home');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const activeNavItem = useMemo(() => {
+    return (
+      DEFAULT_NAV_ITEMS.find(
+        (item) =>
+          item.id.toLowerCase() === mainNavId.toLowerCase() ||
+          item.label.toLowerCase() === mainNavId.toLowerCase()
+      ) || DEFAULT_NAV_ITEMS[0]
+    );
+  }, [mainNavId]);
 
   // Compute adaptive initial scale so mobile phone simulator fits viewport comfortably on 14-inch & Mac displays
   const initialScale = useMemo(() => {
@@ -186,6 +207,9 @@ export default function WebPlaygroundScreen() {
         return { bg: isDark ? '#0e3a24' : '#DCFCE7', text: isDark ? '#86efac' : '#15803D' };
       case 'AUTH':
         return { bg: isDark ? '#1e293b' : '#EDE9FE', text: isDark ? '#c084fc' : '#7c3aed' };
+      case 'PAGE':
+      case 'PAGES':
+        return { bg: isDark ? '#3b1c54' : '#F3E8FF', text: isDark ? '#d8b4fe' : '#9333EA' };
       default:
         return { bg: isDark ? '#1e293b' : '#F1F5F9', text: isDark ? '#94a3b8' : '#475569' };
     }
@@ -229,7 +253,9 @@ export default function WebPlaygroundScreen() {
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-              <View
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setIsDrawerOpen(true)}
                 style={{
                   width: 34,
                   height: 34,
@@ -238,11 +264,13 @@ export default function WebPlaygroundScreen() {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
+                accessibilityRole="button"
+                accessibilityLabel="Open Navigation Menu"
               >
-                <Text style={{ color: '#ffffff', fontSize: 18, fontWeight: '700' }}>⌘</Text>
-              </View>
+                <Command size={18} color="#ffffff" strokeWidth={2.4} />
+              </TouchableOpacity>
               <Text style={{ fontSize: 17, fontWeight: '700', color: text }}>
-                App Settings
+                {mainNavId === 'home' ? 'App Settings' : activeNavItem.label}
               </Text>
             </View>
 
@@ -275,285 +303,319 @@ export default function WebPlaygroundScreen() {
             </View>
           </View>
 
-          {/* Search Bar */}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: 38,
-              borderRadius: 8,
-              borderWidth: 1,
-              borderColor: sidebarBorder,
-              backgroundColor: isDark ? '#141721' : '#f8fafc',
-              paddingHorizontal: 10,
-              gap: 8,
-              marginBottom: 10,
-            }}
-          >
-            <Search size={15} color="#94a3b8" />
-            <TextInput
-              placeholder="Search components, files..."
-              placeholderTextColor="#94a3b8"
-              value={searchQuery}
-              onChangeText={setSearchQuery}
+        {mainNavId === 'home' ? (
+          <>
+            {/* Search Bar */}
+            <View
               style={{
-                flex: 1,
-                fontSize: 13,
-                color: text,
-                padding: 0,
+                flexDirection: 'row',
+                alignItems: 'center',
+                height: 38,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: sidebarBorder,
+                backgroundColor: isDark ? '#141721' : '#f8fafc',
+                paddingHorizontal: 10,
+                gap: 8,
+                marginBottom: 10,
               }}
-            />
-            {searchQuery.length > 0 && (
-              <TouchableOpacity onPress={() => setSearchQuery('')} style={{ padding: 2 }}>
-                <X size={14} color="#94a3b8" />
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {/* Category Filter Chips - Wrapped Vertically across rows */}
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              gap: 6,
-              paddingVertical: 2,
-            }}
-          >
-            {CATEGORY_ITEMS.map((item) => {
-              const isSelected = selectedCategory === item.name;
-              const count = categoryCounts[item.name] || 0;
-              const IconComp = item.Icon;
-
-              return (
-                <TouchableOpacity
-                  key={item.name}
-                  onPress={() => setSelectedCategory(item.name)}
-                  activeOpacity={0.8}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 5,
-                    paddingHorizontal: 9,
-                    paddingVertical: 4,
-                    borderRadius: 16,
-                    borderWidth: 1,
-                    borderColor: isSelected ? activeAccent : sidebarBorder,
-                    backgroundColor: isSelected
-                      ? isDark
-                        ? activeAccent + '30'
-                        : activeAccent + '15'
-                      : isDark
-                      ? '#141721'
-                      : '#f8fafc',
-                  }}
-                >
-                  <IconComp size={12} color={isSelected ? activeAccent : '#64748b'} />
-                  <Text
-                    style={{
-                      color: isSelected ? activeAccent : text,
-                      fontSize: 11.5,
-                      fontWeight: isSelected ? '600' : '500',
-                    }}
-                  >
-                    {item.label}
-                  </Text>
-                  <View
-                    style={{
-                      paddingHorizontal: 5,
-                      paddingVertical: 1,
-                      borderRadius: 8,
-                      backgroundColor: isSelected
-                        ? isDark
-                          ? activeAccent + '40'
-                          : activeAccent + '25'
-                        : isDark
-                        ? '#27272a'
-                        : '#e2e8f0',
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 9.5,
-                        fontWeight: '600',
-                        color: isSelected ? (isDark ? '#f4f4f5' : activeAccent) : muted,
-                      }}
-                    >
-                      {count}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Mobile View Component Cards List */}
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={{ padding: 14, paddingBottom: 90, gap: 10 }}
-          showsVerticalScrollIndicator={true}
-        >
-          {filteredComponents.map((comp) => {
-            const isCurrent = comp.id === activeComponent.id;
-            const badge = getBadgeColors(comp.tag);
-
-            return (
-              <TouchableOpacity
-                key={comp.id}
-                onPress={() => handleCardClick(comp)}
-                activeOpacity={0.7}
+            >
+              <Search size={15} color="#94a3b8" />
+              <TextInput
+                placeholder="Search components, files..."
+                placeholderTextColor="#94a3b8"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
                 style={{
-                  padding: 14,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor: isCurrent ? activeAccent : cardBorder,
-                  backgroundColor: cardBg,
-                  borderLeftWidth: isCurrent ? 4 : 1,
-                  borderLeftColor: isCurrent ? activeAccent : cardBorder,
+                  flex: 1,
+                  fontSize: 13,
+                  color: text,
+                  padding: 0,
                 }}
-              >
-                {/* Title & Tag */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 4,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      fontWeight: '600',
-                      color: isCurrent ? (isDark ? '#f8fafc' : activeAccent) : text,
-                      flex: 1,
-                      paddingRight: 8,
-                    }}
-                    numberOfLines={1}
-                  >
-                    {comp.name}
-                  </Text>
-                  <View
-                    style={{
-                      paddingHorizontal: 7,
-                      paddingVertical: 2.5,
-                      borderRadius: 10,
-                      backgroundColor: badge.bg,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 9.5,
-                        fontWeight: '700',
-                        color: badge.text,
-                        letterSpacing: 0.4,
-                      }}
-                    >
-                      {comp.tag}
-                    </Text>
-                  </View>
-                </View>
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity onPress={() => setSearchQuery('')} style={{ padding: 2 }}>
+                  <X size={14} color="#94a3b8" />
+                </TouchableOpacity>
+              )}
+            </View>
 
-                {/* Description */}
-                <Text
-                  style={{
-                    fontSize: 12.5,
-                    color: muted,
-                    lineHeight: 17,
-                    marginBottom: 6,
-                  }}
-                  numberOfLines={2}
-                >
-                  {comp.description}
-                </Text>
+            {/* Category Filter Chips - Wrapped Vertically across rows */}
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+                gap: 6,
+                paddingVertical: 2,
+              }}
+            >
+              {CATEGORY_ITEMS.map((item) => {
+                const isSelected = selectedCategory === item.name;
+                const count = categoryCounts[item.name] || 0;
+                const IconComp = item.Icon;
 
-                {/* Bottom Row: File + Live Preview Button */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginTop: 4,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 11,
-                      fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-                      color: muted,
-                    }}
-                  >
-                    {comp.file}
-                  </Text>
-
-                  <View
+                return (
+                  <TouchableOpacity
+                    key={item.name}
+                    onPress={() => setSelectedCategory(item.name)}
+                    activeOpacity={0.8}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
-                      gap: 4,
+                      gap: 5,
+                      paddingHorizontal: 9,
+                      paddingVertical: 4,
+                      borderRadius: 16,
+                      borderWidth: 1,
+                      borderColor: isSelected ? activeAccent : sidebarBorder,
+                      backgroundColor: isSelected
+                        ? isDark
+                          ? activeAccent + '30'
+                          : activeAccent + '15'
+                        : isDark
+                        ? '#141721'
+                        : '#f8fafc',
                     }}
                   >
-                    <Smartphone size={12} color={activeAccent} />
+                    <IconComp size={12} color={isSelected ? activeAccent : '#64748b'} />
                     <Text
                       style={{
+                        color: isSelected ? activeAccent : text,
                         fontSize: 11.5,
-                        fontWeight: '600',
-                        color: activeAccent,
+                        fontWeight: isSelected ? '600' : '500',
                       }}
                     >
-                      Preview
+                      {item.label}
                     </Text>
-                    <ChevronRight size={12} color={activeAccent} />
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                    <View
+                      style={{
+                        paddingHorizontal: 5,
+                        paddingVertical: 1,
+                        borderRadius: 8,
+                        backgroundColor: isSelected
+                          ? isDark
+                            ? activeAccent + '40'
+                            : activeAccent + '25'
+                          : isDark
+                          ? '#27272a'
+                          : '#e2e8f0',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 9.5,
+                          fontWeight: '600',
+                          color: isSelected ? (isDark ? '#f4f4f5' : activeAccent) : muted,
+                        }}
+                      >
+                        {count}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </>
+        ) : null}
+        </View>
 
-          {filteredComponents.length === 0 && (
-            <Text style={{ padding: 24, textAlign: 'center', color: muted, fontSize: 13 }}>
-              {`No components matching "${searchQuery}"`}
-            </Text>
-          )}
-        </ScrollView>
+        {mainNavId === 'home' ? (
+          <>
+            {/* Mobile View Component Cards List */}
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ padding: 14, paddingBottom: 90, gap: 10 }}
+              showsVerticalScrollIndicator={true}
+            >
+              {filteredComponents.map((comp) => {
+                const isCurrent = comp.id === activeComponent.id;
+                const badge = getBadgeColors(comp.tag);
 
-        {/* Floating Action Button: Purple Preview Pill (Matching Screenshot 2) */}
-        <TouchableOpacity
-          onPress={() => setIsEmulatorModalOpen(true)}
-          activeOpacity={0.85}
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 7,
-            paddingHorizontal: 16,
-            paddingVertical: 10,
-            borderRadius: 24,
-            backgroundColor: activeAccent,
-            zIndex: 50,
-            ...Platform.select({
-              web: {
-                boxShadow: `0 6px 20px ${activeAccent}60`,
-                cursor: 'pointer',
-              } as any,
-            }),
+                return (
+                  <TouchableOpacity
+                    key={comp.id}
+                    onPress={() => handleCardClick(comp)}
+                    activeOpacity={0.7}
+                    style={{
+                      padding: 14,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: isCurrent ? activeAccent : cardBorder,
+                      backgroundColor: cardBg,
+                      borderLeftWidth: isCurrent ? 4 : 1,
+                      borderLeftColor: isCurrent ? activeAccent : cardBorder,
+                    }}
+                  >
+                    {/* Title & Tag */}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: 4,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          fontWeight: '600',
+                          color: isCurrent ? (isDark ? '#f8fafc' : activeAccent) : text,
+                          flex: 1,
+                          paddingRight: 8,
+                        }}
+                        numberOfLines={1}
+                      >
+                        {comp.name}
+                      </Text>
+                      <View
+                        style={{
+                          paddingHorizontal: 7,
+                          paddingVertical: 2.5,
+                          borderRadius: 10,
+                          backgroundColor: badge.bg,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 9.5,
+                            fontWeight: '700',
+                            color: badge.text,
+                            letterSpacing: 0.4,
+                          }}
+                        >
+                          {comp.tag}
+                        </Text>
+                      </View>
+                    </View>
+
+                    {/* Description */}
+                    <Text
+                      style={{
+                        fontSize: 12.5,
+                        color: muted,
+                        lineHeight: 17,
+                        marginBottom: 6,
+                      }}
+                      numberOfLines={2}
+                    >
+                      {comp.description}
+                    </Text>
+
+                    {/* Bottom Row: File + Live Preview Button */}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginTop: 4,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 11,
+                          fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+                          color: muted,
+                        }}
+                      >
+                        {comp.file}
+                      </Text>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          gap: 4,
+                        }}
+                      >
+                        <Smartphone size={12} color={activeAccent} />
+                        <Text
+                          style={{
+                            fontSize: 11.5,
+                            fontWeight: '600',
+                            color: activeAccent,
+                          }}
+                        >
+                          Preview
+                        </Text>
+                        <ChevronRight size={12} color={activeAccent} />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+
+              {filteredComponents.length === 0 && (
+                <Text style={{ padding: 24, textAlign: 'center', color: muted, fontSize: 13 }}>
+                  {`No components matching "${searchQuery}"`}
+                </Text>
+              )}
+            </ScrollView>
+
+            {/* Floating Action Button: Purple Preview Pill */}
+            <TouchableOpacity
+              onPress={() => setIsEmulatorModalOpen(true)}
+              activeOpacity={0.85}
+              style={{
+                position: 'absolute',
+                bottom: 20,
+                right: 20,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 7,
+                paddingHorizontal: 16,
+                paddingVertical: 10,
+                borderRadius: 24,
+                backgroundColor: activeAccent,
+                zIndex: 50,
+                ...Platform.select({
+                  web: {
+                    boxShadow: `0 6px 20px ${activeAccent}60`,
+                    cursor: 'pointer',
+                  } as any,
+                }),
+              }}
+              accessibilityLabel="Preview in mobile emulator"
+            >
+              <Smartphone size={16} color="#ffffff" />
+              <Text style={{ color: '#ffffff', fontSize: 13.5, fontWeight: '700' }}>
+                Preview
+              </Text>
+            </TouchableOpacity>
+
+            {/* Live Mobile Emulator Modal */}
+            <MobileEmulatorModal
+              isOpen={isEmulatorModalOpen}
+              onClose={() => setIsEmulatorModalOpen(false)}
+              component={activeComponent}
+              isDark={isDark}
+            />
+          </>
+        ) : (
+          <View style={{ flex: 1, height: '100%' }}>
+            <ComingSoonView
+              title={activeNavItem.label}
+              icon={activeNavItem.icon}
+              onGoToChat={() => setMainNavId('home')}
+            />
+          </View>
+        )}
+
+        {/* Mobile Navigation Drawer */}
+        <AppNavigationDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          activeId={mainNavId}
+          onSelect={(id) => {
+            setMainNavId(id);
+            setIsDrawerOpen(false);
           }}
-          accessibilityLabel="Preview in mobile emulator"
-        >
-          <Smartphone size={16} color="#ffffff" />
-          <Text style={{ color: '#ffffff', fontSize: 13.5, fontWeight: '700' }}>
-            Preview
-          </Text>
-        </TouchableOpacity>
-
-        {/* Live Mobile Emulator Modal (Matching Screenshot 1) */}
-        <MobileEmulatorModal
-          isOpen={isEmulatorModalOpen}
-          onClose={() => setIsEmulatorModalOpen(false)}
-          component={activeComponent}
-          isDark={isDark}
+          workspaceName="Amoga DS"
+          workspaceSubtitle="Design System"
+          userName="Mohammed Aman"
+          userSubtitle="My Account"
+          userInitials="MA"
+          onThemePress={() => setIsThemeDrawerOpen(true)}
+          primaryColor={activeAccent}
         />
 
         {/* Theme Settings Drawer */}
@@ -568,18 +630,31 @@ export default function WebPlaygroundScreen() {
 
   // =========================================================================
   // DESKTOP / TABLET PLAYGROUND VIEW (Screen width >= 768px)
-  // Reverted exactly as it was: Left Sidebar + Right Canvas / Simulator Toolbar
   // =========================================================================
   return (
     <View
       style={{
         flexDirection: 'row',
         width: '100%',
-        height: '100%',
+        height: '100vh' as any,
         backgroundColor: canvasBg,
         overflow: 'hidden',
       }}
     >
+      {/* ──────────────── Left Navigation Sidebar (72px) ──────────────── */}
+      <AppNavigationSidebar
+        activeId={mainNavId}
+        onSelect={(id) => setMainNavId(id)}
+        userInitials="MA"
+        userName="Mohammed Aman"
+        userSubtitle="Account"
+        onThemePress={() => setIsThemeDrawerOpen(true)}
+        onLogoPress={() => setMainNavId('home')}
+        primaryColor={activeAccent}
+      />
+
+      {mainNavId === 'home' ? (
+        <>
       {/* ============================================================ */}
       {/* LEFT SIDEBAR (~320px) - Independently Scrollable              */}
       {/* ============================================================ */}
@@ -1004,6 +1079,17 @@ export default function WebPlaygroundScreen() {
           </DeviceFrame>
         )}
       </FullscreenModal>
+        </>
+      ) : (
+        /* ──────────────── Coming Soon View for Other Menu Items (Desktop) ──────────────── */
+        <View style={{ flex: 1, height: '100%', backgroundColor: canvasBg }}>
+          <ComingSoonView
+            title={activeNavItem.label}
+            icon={activeNavItem.icon}
+            onGoToChat={() => setMainNavId('home')}
+          />
+        </View>
+      )}
 
       {/* Tweakcn Theme Settings Drawer */}
       <ConfigDrawer

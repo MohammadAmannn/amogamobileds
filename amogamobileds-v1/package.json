@@ -5,6 +5,9 @@
   "main": "expo-router/entry",
   "types": "./index.ts",
   "module": "./index.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./index.ts",
@@ -74,6 +77,7 @@
     "@react-native-async-storage/async-storage": "2.2.0",
     "@supabase/supabase-js": "^2.111.0",
     "aes-js": "^3.1.2",
+    "debug": "^4.4.3",
     "expo": "~57.0.8",
     "expo-asset": "~57.0.7",
     "expo-audio": "~57.0.4",
@@ -103,15 +107,15 @@
     "expo-system-ui": "~57.0.1",
     "expo-video": "~57.0.3",
     "expo-web-browser": "~57.0.2",
-    "lucide-react-native": "^1.27.0",
-    "react": "19.2.3",
+    "lucide-react-native": "*",
+    "react": "*",
     "react-dom": "19.2.3",
-    "react-native": "0.86.3",
-    "react-native-gesture-handler": "~2.32.0",
-    "react-native-reanimated": "4.5.1",
-    "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "~4.26.0",
-    "react-native-svg": "15.15.4",
+    "react-native": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-screens": "*",
+    "react-native-svg": "*",
     "react-native-web": "~0.21.0",
     "react-native-webview": "13.16.1",
     "react-native-worklets": "0.10.1"
