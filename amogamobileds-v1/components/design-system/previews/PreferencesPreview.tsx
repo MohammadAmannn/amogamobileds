@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Switch, TouchableOpacity } from 'react-native';
-import { Sliders } from 'lucide-react-native';
+import { View, Text, Switch } from 'react-native';
 import { useColorScheme } from '../../../hooks/useColorScheme';
 import initialPreferences from '../../ui/app_preference_settings.json';
-import { PreferencesDrawer, PreferenceItem } from '../../ui/preferences-drawer';
+import type { PreferenceItem } from '../../ui/preferences-drawer';
 
-export { type PreferenceItem };
+export type { PreferenceItem };
 
 export function PreferencesPreview() {
   const isDark = useColorScheme() === 'dark';
   const purpleText = isDark ? '#c084fc' : '#9333ea';
   const textMuted = isDark ? '#94a3b8' : '#71717a';
 
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [preferences, setPreferences] = useState<PreferenceItem[]>(
     initialPreferences as PreferenceItem[]
   );
@@ -27,27 +25,6 @@ export function PreferencesPreview() {
 
   return (
     <View style={{ width: '100%', gap: 16 }}>
-      {/* Drawer Trigger Button */}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => setIsDrawerOpen(true)}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#9333ea',
-          paddingVertical: 10,
-          paddingHorizontal: 16,
-          borderRadius: 8,
-          gap: 8,
-        }}
-      >
-        <Sliders size={16} color="#ffffff" />
-        <Text style={{ color: '#ffffff', fontWeight: '600', fontSize: 13.5 }}>
-          Open Preferences Drawer
-        </Text>
-      </TouchableOpacity>
-
       {/* 10 Preference Switch Items */}
       <View style={{ gap: 16 }}>
         {preferences.map((item) => {
@@ -105,15 +82,6 @@ export function PreferencesPreview() {
           );
         })}
       </View>
-
-      {/* Modal/Drawer Component */}
-      <PreferencesDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        preferences={preferences}
-        onPreferenceChange={handleToggle}
-        onResetPreferences={() => setPreferences(initialPreferences as PreferenceItem[])}
-      />
     </View>
   );
 }
