@@ -42,6 +42,7 @@ import { DeviceFrame } from '../../../components/web/DeviceFrame.web';
 import { PreviewToolbar } from '../../../components/web/PreviewToolbar.web';
 import { CodePanel } from '../../../components/web/CodePanel.web';
 import { FullscreenModal } from '../../../components/web/FullscreenModal.web';
+import { ConfigDrawer } from '../../../components/web/ConfigDrawer.web';
 import { useAuth } from '../../../providers/auth-provider';
 import { useColorTheme } from '../../../providers/color-theme-provider';
 import {
