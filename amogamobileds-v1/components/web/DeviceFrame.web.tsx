@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Platform } from 'react-native';
-import { Wifi, Signal } from 'lucide-react-native';
+import { View, Text, ScrollView, Platform, TouchableOpacity } from 'react-native';
+import { Wifi, Signal, X } from 'lucide-react-native';
 import { DeviceConfig } from './types';
 
 interface DeviceFrameProps {
   device: DeviceConfig;
   scale?: number;
   simulatorTheme?: 'light' | 'dark';
+  title?: string;
+  onClose?: () => void;
+  showTopBar?: boolean;
   children: React.ReactNode;
 }
 
@@ -14,6 +17,9 @@ export function DeviceFrame({
   device,
   scale = 0.78,
   simulatorTheme = 'light',
+  title,
+  onClose,
+  showTopBar = true,
   children,
 }: DeviceFrameProps) {
   const [timeStr, setTimeStr] = useState('9:41');
@@ -257,6 +263,49 @@ export function DeviceFrame({
             showsVerticalScrollIndicator={true}
             keyboardShouldPersistTaps="handled"
           >
+            {/* Common Page Header Top Bar with Title and Right X Button */}
+            {showTopBar && title && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingBottom: 12,
+                  marginBottom: 16,
+                  borderBottomWidth: 1,
+                  borderBottomColor: isDark ? '#27272a' : '#f1f5f9',
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: 'OpenSans_600SemiBold, OpenSans_500Medium, var(--font-open-sans), "Open Sans", sans-serif',
+                    fontSize: 18,
+                    fontWeight: '700',
+                    color: isDark ? '#f4f4f5' : '#09090b',
+                    letterSpacing: -0.3,
+                  }}
+                >
+                  {title}
+                </Text>
+
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={onClose}
+                  accessibilityLabel="Close"
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: 16,
+                    backgroundColor: isDark ? '#18181b' : '#f4f4f5',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <X size={18} color={isDark ? '#a1a1aa' : '#71717a'} />
+                </TouchableOpacity>
+              </View>
+            )}
+
             {children}
           </ScrollView>
 

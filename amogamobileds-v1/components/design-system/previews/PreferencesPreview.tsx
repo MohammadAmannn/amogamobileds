@@ -29,8 +29,9 @@ export function PreferencesPreview() {
   };
 
   return (
-    <View style={{ width: '100%', paddingTop: 4 }}>
-      <View style={{ gap: 22 }}>
+    <View style={{ width: '100%' }}>
+      {/* 10 Preference Switch Items */}
+      <View style={{ gap: 20 }}>
         {preferences.map((item) => {
           const isEnabled = item.status === 'Yes';
 

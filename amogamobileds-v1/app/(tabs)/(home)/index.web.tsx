@@ -1041,6 +1041,7 @@ export default function WebPlaygroundScreen() {
               device={selectedDevice}
               scale={scale}
               simulatorTheme={simulatorTheme}
+              title={activeComponent.name}
             >
               <PreviewComponent />
             </DeviceFrame>
@@ -1074,6 +1075,7 @@ export default function WebPlaygroundScreen() {
             device={selectedDevice}
             scale={scale}
             simulatorTheme={simulatorTheme}
+            title={activeComponent.name}
           >
             <PreviewComponent />
           </DeviceFrame>

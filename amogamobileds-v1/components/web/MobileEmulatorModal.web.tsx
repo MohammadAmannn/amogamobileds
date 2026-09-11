@@ -483,6 +483,8 @@ export function MobileEmulatorModal({
               device={selectedDevice}
               scale={deviceScale}
               simulatorTheme={simulatorTheme}
+              title={component.name}
+              onClose={onClose}
             >
               <PreviewComponent />
             </DeviceFrame>

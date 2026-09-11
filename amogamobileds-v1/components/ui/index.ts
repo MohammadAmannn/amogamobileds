@@ -54,6 +54,7 @@ export * from './app-navigation-sidebar';
 export * from './app-navigation-drawer';
 export * from './coming-soon-view';
 export * from './theme-settings-drawer';
+export * from './page-header';
 export * from './video';
 export * from './view';
 export { default as app_preference_settings } from './app_preference_settings.json';
