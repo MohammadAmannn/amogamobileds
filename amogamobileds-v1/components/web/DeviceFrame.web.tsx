@@ -252,62 +252,72 @@ export function DeviceFrame({
             </View>
           </View>
 
-          {/* Interactive Screen Scroll Area */}
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{
-              paddingHorizontal: 20,
-              paddingVertical: 16,
-              paddingBottom: 40,
-            }}
-            showsVerticalScrollIndicator={true}
-            keyboardShouldPersistTaps="handled"
-          >
-            {/* Common Page Header Top Bar with Title and Right X Button */}
-            {showTopBar && title && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingBottom: 12,
-                  marginBottom: 16,
-                  borderBottomWidth: 1,
-                  borderBottomColor: isDark ? '#27272a' : '#f1f5f9',
-                }}
-              >
-                <Text
+          {/* Interactive Screen Area (Full-bleed for maps, calendars, and full-page components) */}
+          {title === 'Full Page Maps' ||
+          title === 'Map' ||
+          title?.toLowerCase().includes('map') ||
+          title?.toLowerCase().includes('calendar') ||
+          title?.toLowerCase().includes('full page') ? (
+            <View style={{ flex: 1, width: '100%', height: '100%', overflow: 'hidden' }}>
+              {children}
+            </View>
+          ) : (
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{
+                paddingHorizontal: 20,
+                paddingVertical: 16,
+                paddingBottom: 40,
+              }}
+              showsVerticalScrollIndicator={true}
+              keyboardShouldPersistTaps="handled"
+            >
+              {/* Common Page Header Top Bar with Title and Right X Button */}
+              {showTopBar && title && (
+                <View
                   style={{
-                    fontFamily: 'OpenSans_600SemiBold, OpenSans_500Medium, var(--font-open-sans), "Open Sans", sans-serif',
-                    fontSize: 18,
-                    fontWeight: '700',
-                    color: isDark ? '#f4f4f5' : '#09090b',
-                    letterSpacing: -0.3,
-                  }}
-                >
-                  {title}
-                </Text>
-
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={onClose}
-                  accessibilityLabel="Close"
-                  style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
-                    backgroundColor: isDark ? '#18181b' : '#f4f4f5',
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: 12,
+                    marginBottom: 16,
+                    borderBottomWidth: 1,
+                    borderBottomColor: isDark ? '#27272a' : '#f1f5f9',
                   }}
                 >
-                  <X size={18} color={isDark ? '#a1a1aa' : '#71717a'} />
-                </TouchableOpacity>
-              </View>
-            )}
+                  <Text
+                    style={{
+                      fontFamily: 'OpenSans_600SemiBold, OpenSans_500Medium, var(--font-open-sans), "Open Sans", sans-serif',
+                      fontSize: 18,
+                      fontWeight: '700',
+                      color: isDark ? '#f4f4f5' : '#09090b',
+                      letterSpacing: -0.3,
+                    }}
+                  >
+                    {title}
+                  </Text>
 
-            {children}
-          </ScrollView>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={onClose}
+                    accessibilityLabel="Close"
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: isDark ? '#18181b' : '#f4f4f5',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <X size={18} color={isDark ? '#a1a1aa' : '#71717a'} />
+                  </TouchableOpacity>
+                </View>
+              )}
+
+              {children}
+            </ScrollView>
+          )}
 
           {/* Home Indicator */}
           {device.homeBar && (

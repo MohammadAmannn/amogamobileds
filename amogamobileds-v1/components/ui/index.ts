@@ -56,6 +56,8 @@ export * from './coming-soon-view';
 export * from './theme-settings-drawer';
 export * from './preferences-drawer';
 export * from './page-header';
+export * from './full-page-map';
+export * from './full-page-calendar';
 export * from './video';
 export * from './view';
 export { default as app_preference_settings } from './app_preference_settings.json';

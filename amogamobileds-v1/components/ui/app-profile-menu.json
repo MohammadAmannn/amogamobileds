@@ -6,6 +6,12 @@
     "color": "#64748b"
   },
   {
+    "id": "map",
+    "label": "My Map",
+    "icon": "MapPin",
+    "color": "#2563eb"
+  },
+  {
     "id": "theme",
     "label": "Theme Settings",
     "icon": "Palette",

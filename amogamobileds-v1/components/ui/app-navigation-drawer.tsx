@@ -35,6 +35,8 @@ import {
   Settings,
   Sliders,
   LogOut,
+  MapPin,
+  Map,
   LucideIcon,
 } from 'lucide-react-native';
 import { useTheme } from '../../providers/theme-provider';
@@ -75,6 +77,7 @@ export interface AppNavigationDrawerProps {
   userSubtitle?: string;
   userInitials?: string;
   onProfilePress?: () => void;
+  onMapPress?: () => void;
   onThemePress?: () => void;
   onPreferencesPress?: () => void;
   onPreferencePress?: () => void;
@@ -100,6 +103,7 @@ export function AppNavigationDrawer({
   userSubtitle = 'My Account',
   userInitials = 'MA',
   onProfilePress,
+  onMapPress,
   onThemePress,
   onPreferencesPress,
   onPreferencePress,
@@ -477,6 +481,7 @@ export function AppNavigationDrawer({
                         setIsProfileMenuOpen(false);
                         onClose();
                         if (item.id === 'profile') onProfilePress?.();
+                        else if (item.id === 'map') onMapPress?.();
                         else if (item.id === 'theme') onThemePress?.();
                         else if (item.id === 'preferences') (onPreferencesPress || onPreferencePress)?.();
                         else if (item.id === 'settings') onSettingsPress?.();

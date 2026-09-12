@@ -39,6 +39,7 @@ import {
 import { DeviceConfig, DeviceType, ViewMode } from '../../../components/web/types';
 import { DEFAULT_MOBILE_DEVICE, DEFAULT_TABLET_DEVICE } from '../../../components/web/devices';
 import { DeviceFrame } from '../../../components/web/DeviceFrame.web';
+import { MobileEmulatorModal } from '../../../components/web/MobileEmulatorModal.web';
 import { PreviewToolbar } from '../../../components/web/PreviewToolbar.web';
 import { CodePanel } from '../../../components/web/CodePanel.web';
 import { FullscreenModal } from '../../../components/web/FullscreenModal.web';
@@ -624,6 +625,14 @@ export default function WebPlaygroundScreen() {
           userName={userName}
           userSubtitle="My Account"
           userInitials={userInitials}
+          onMapPress={() => {
+            const mapComp = COMPONENTS.find((c) => c.id === 'page-full-maps');
+            if (mapComp) {
+              setActiveComponent(mapComp);
+              setMainNavId('home');
+              setIsDrawerOpen(false);
+            }
+          }}
           onThemePress={() => setIsThemeDrawerOpen(true)}
           onSignOut={signOut}
           primaryColor={activeAccent}
@@ -659,6 +668,13 @@ export default function WebPlaygroundScreen() {
         userInitials={userInitials}
         userName={userName}
         userSubtitle="Account"
+        onMapPress={() => {
+          const mapComp = COMPONENTS.find((c) => c.id === 'page-full-maps');
+          if (mapComp) {
+            setActiveComponent(mapComp);
+            setMainNavId('home');
+          }
+        }}
         onThemePress={() => setIsThemeDrawerOpen(true)}
         onSignOut={signOut}
         onLogoPress={() => setMainNavId('home')}
@@ -985,7 +1001,7 @@ export default function WebPlaygroundScreen() {
             <View
               style={{
                 width: '100%',
-                maxWidth: 960,
+                maxWidth: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? 1180 : 960,
                 backgroundColor: simulatorTheme === 'dark' ? '#09090b' : '#ffffff',
                 borderRadius: 14,
                 borderWidth: 1,
@@ -1025,7 +1041,12 @@ export default function WebPlaygroundScreen() {
               </View>
 
               {/* Component Canvas */}
-              <View style={{ padding: 28 }}>
+              <View
+                style={{
+                  padding: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? 0 : 28,
+                  height: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? 660 : undefined,
+                }}
+              >
                 <PreviewComponent />
               </View>
             </View>
@@ -1056,12 +1077,14 @@ export default function WebPlaygroundScreen() {
           <View
             style={{
               width: '100%',
-              maxWidth: 960,
+              maxWidth: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? '100%' : 960,
               backgroundColor: simulatorTheme === 'dark' ? '#09090b' : '#ffffff',
-              borderRadius: 14,
+              borderRadius: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? 8 : 14,
               borderWidth: 1,
               borderColor: sidebarBorder,
-              padding: 32,
+              padding: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? 0 : 32,
+              height: (activeComponent.tag === 'PAGE' || activeComponent.id === 'page-full-maps' || activeComponent.id === 'page-full-calendar') ? 760 : undefined,
+              overflow: 'hidden',
             }}
           >
             <PreviewComponent />
@@ -1098,3 +1121,4 @@ export default function WebPlaygroundScreen() {
     </View>
   );
 }
+

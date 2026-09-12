@@ -28,6 +28,7 @@ import {
   Compass,
   MessageSquare,
   ShieldCheck,
+  SlidersHorizontal,
 } from 'lucide-react-native';
 import {
   COMPONENTS,
@@ -57,6 +58,7 @@ const CATEGORY_ITEMS: CategoryConfig[] = [
   { name: 'Icons', label: 'Icons', Icon: Compass },
   { name: 'Chat', label: 'Chat', Icon: MessageSquare },
   { name: 'Auth', label: 'Auth', Icon: ShieldCheck },
+  { name: 'Pages', label: 'Pages', Icon: SlidersHorizontal },
 ];
 
 export default function DesignSystemScreen() {

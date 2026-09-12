@@ -116,6 +116,8 @@ import {
   ForgotPasswordPreview,
 } from './previews/AuthPreviews';
 import { PreferencesPreview } from './previews/PreferencesPreview';
+import { MapPreviews } from './previews/MapPreviews';
+import { CalendarKitPreviews } from './previews/CalendarKitPreviews';
 
 export type ComponentCategory =
   | 'Primitives'
@@ -2809,6 +2811,59 @@ export function PreferenceSettingsScreen() {
           />
         </View>
       ))}
+    </View>
+  );
+}`,
+  },
+  {
+    id: 'page-full-maps',
+    name: 'Full Page Maps',
+    file: 'full-page-map.tsx',
+    category: 'Pages',
+    tag: 'PAGE',
+    description: 'Full-width interactive map page featuring CARTO Positron / OpenStreetMap light & dark tiles, live GPS geolocation with permission flow, search filter bar, custom pin markers, explore cards with top gradient accents, reverse geocoding, and zoom controls.',
+    Preview: MapPreviews,
+    codeSnippet: `import React from 'react';
+import { View } from 'react-native';
+import { FullPageMap, DEFAULT_MAP_MARKERS } from 'amogamobileds-v1';
+
+export function FullPageMapScreen() {
+  return (
+    <View style={{ flex: 1, width: '100%', height: '100%' }}>
+      <FullPageMap
+        markers={DEFAULT_MAP_MARKERS}
+        defaultCenter={[23.2599, 77.4126]}
+        defaultZoom={4}
+        onMarkerSelect={(marker) => console.log('Selected:', marker)}
+        onExplore={(marker) => console.log('Explore:', marker)}
+      />
+    </View>
+  );
+}`,
+  },
+  {
+    id: 'page-full-calendar',
+    name: 'Full Page Calendar',
+    file: 'full-page-calendar.tsx',
+    category: 'Pages',
+    tag: 'PAGE',
+    description: 'Comprehensive calendar kit supporting 6 view modes: Day timeline with live current-time indicator, 3-Days timeline, Week grid, Month matrix, Agenda schedule, and Resource multi-staff scheduling with event creation, search filtering, and event detail popups.',
+    Preview: CalendarKitPreviews,
+    codeSnippet: `import React from 'react';
+import { View } from 'react-native';
+import { FullPageCalendar, DEFAULT_CALENDAR_EVENTS, DEFAULT_CALENDAR_RESOURCES } from 'amogamobileds-v1';
+
+export function FullPageCalendarScreen() {
+  return (
+    <View style={{ flex: 1, width: '100%', height: '100%' }}>
+      <FullPageCalendar
+        initialDate={new Date(2026, 8, 12)}
+        initialViewMode="week"
+        events={DEFAULT_CALENDAR_EVENTS}
+        resources={DEFAULT_CALENDAR_RESOURCES}
+        onEventClick={(event) => console.log('Clicked event:', event)}
+        onAddEvent={(event) => console.log('Added event:', event)}
+      />
     </View>
   );
 }`,

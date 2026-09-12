@@ -28,6 +28,8 @@ import {
   Compass,
   HelpCircle,
   Sliders,
+  MapPin,
+  Map,
   LucideIcon,
 } from 'lucide-react-native';
 import { useTheme } from '../../providers/theme-provider';
@@ -93,6 +95,8 @@ export const ICON_REGISTRY: Record<string, LucideIcon> = {
   Compass,
   HelpCircle,
   Command,
+  MapPin,
+  Map,
 };
 
 export function resolveMenuIcon(iconName: string): LucideIcon {
@@ -150,6 +154,7 @@ export interface AppNavigationSidebarProps {
   userName?: string;
   userSubtitle?: string;
   onProfilePress?: () => void;
+  onMapPress?: () => void;
   onThemePress?: () => void;
   onPreferencesPress?: () => void;
   onPreferencePress?: () => void;
@@ -173,6 +178,7 @@ export function AppNavigationSidebar({
   userName = 'Mohammed Aman',
   userSubtitle = 'Account',
   onProfilePress,
+  onMapPress,
   onThemePress,
   onPreferencesPress,
   onPreferencePress,
@@ -432,6 +438,7 @@ export function AppNavigationSidebar({
                       onPress={() => {
                         setIsDropupOpen(false);
                         if (item.id === 'profile') onProfilePress?.();
+                        else if (item.id === 'map') onMapPress?.();
                         else if (item.id === 'theme') onThemePress?.();
                         else if (item.id === 'preferences') (onPreferencesPress || onPreferencePress)?.();
                         else if (item.id === 'settings') onSettingsPress?.();
